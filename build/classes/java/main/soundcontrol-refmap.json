@@ -1,0 +1,20 @@
+{
+  "mappings": {
+    "soundcontrol/mixin/AbstractSoundInstanceMixin": {
+      "getVolume": "Lnet/minecraft/class_1102;method_4781()F"
+    },
+    "soundcontrol/mixin/SoundTrackerMixin": {
+      "play": "Lnet/minecraft/class_1144;method_4873(Lnet/minecraft/class_1113;)Lnet/minecraft/class_1140$class_11518;"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "soundcontrol/mixin/AbstractSoundInstanceMixin": {
+        "getVolume": "Lnet/minecraft/class_1102;method_4781()F"
+      },
+      "soundcontrol/mixin/SoundTrackerMixin": {
+        "play": "Lnet/minecraft/class_1144;method_4873(Lnet/minecraft/class_1113;)Lnet/minecraft/class_1140$class_11518;"
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "soundcontrol",
+  "version": "1.2.2-1.21.9",
+  "name": "Sound Control",
+  "description": "Advanced sound control for individual sounds and mobs.",
+  "authors": ["lilaktt"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/soundcontrol/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "soundcontrol.SoundControl"
+    ]
+  },
+  "mixins": [
+    "soundcontrol.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "minecraft": "~1.21",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
