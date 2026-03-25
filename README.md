@@ -16,10 +16,6 @@ Tired of a specific mob being too loud? Want to mute nether portal noises but ke
 * 🌍 **Client-Side Only:** You can use this mod on any vanilla or modded server. It doesn't need to be installed on the server to work.
 * 🌐 **Fully Localized:** Supports 12+ languages thanks to community contributions!
 
-## 📸 Screenshots
-
-*(Add screenshots or GIFs of your mod menu here to show players how it looks!)*
-> Example: `![Menu UI](link-to-image)`
 
 ## 🎮 How to Use
 
