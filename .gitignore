@@ -1,0 +1,10 @@
+.gradle
+build
+bin
+.vscode
+.idea
+push_to_github.bat
+cleanup_repository.bat
+*.log
+run/
+.DS_Store
