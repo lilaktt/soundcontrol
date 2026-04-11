@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/26648319/README.md)
 # 🎧 Sound Control (v1.21 - 1.21.3)
 
 ![Fabric](https://img.shields.io/badge/Modloader-Fabric-lightgrey?style=flat-square)
