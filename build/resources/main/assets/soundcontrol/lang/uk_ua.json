@@ -26,5 +26,10 @@
   "text.soundcontrol.filter.edited": "Лише змінені",
   "text.soundcontrol.global.hostile_ambient": "ВСІ ЗВУКИ ІСНУВАННЯ (ВОРОЖІ)",
   "text.soundcontrol.global.passive_ambient": "ВСІ ЗВУКИ ІСНУВАННЯ (МИРНІ)",
-  "text.soundcontrol.filter.favorites": "Тільки Обрані"
+  "text.soundcontrol.filter.favorites": "Тільки Обрані",
+  "text.soundcontrol.button.radar_position": "Позиція радара",
+  "text.soundcontrol.radar_position.title": "Змінити розташування радара",
+  "text.soundcontrol.radar_position.help": "Затисніть та перетягніть радар мишкою",
+  "gui.save": "Зберегти",
+  "gui.cancel": "Вийти"
 }

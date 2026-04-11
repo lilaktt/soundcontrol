@@ -1,6 +1,6 @@
 package soundcontrol.mixin;
 
-import net.minecraft.client.sound.AbstractSoundInstance;
+import net.minecraft.client.resources.sounds.AbstractSoundInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,7 +11,7 @@ import soundcontrol.SoundConfig;
 public class AbstractSoundInstanceMixin {
     @Inject(method = "getVolume", at = @At("RETURN"), cancellable = true)
     private void modifyVolume(CallbackInfoReturnable<Float> cir) {
-        String id = ((AbstractSoundInstance) (Object) this).getId().toString();
+        String id = ((AbstractSoundInstance) (Object) this).getIdentifier().toString();
         float modifier = SoundConfig.getVolumeModifier(id);
         cir.setReturnValue(cir.getReturnValue() * modifier);
     }

@@ -2,47 +2,41 @@ package soundcontrol;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 public class SoundControl implements ClientModInitializer {
-    private static KeyBinding openMenuKey;
-    private static KeyBinding toggleOverlayKey;
+    public static final KeyMapping.Category SOUND_CONTROL = KeyMapping.Category.register(Identifier.parse("soundcontrol:main"));
+    public static KeyMapping openMenuKey;
+    public static KeyMapping toggleOverlayKey;
 
     @Override
     public void onInitializeClient() {
         SoundConfig.load();
 
-        KeyBinding.Category category = new KeyBinding.Category(Identifier.of("soundcontrol", "main"));
-
-        openMenuKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        openMenuKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.soundcontrol.open",
                 GLFW.GLFW_KEY_V,
-                category
+                SOUND_CONTROL
         ));
 
-        toggleOverlayKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        toggleOverlayKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.soundcontrol.toggle_overlay",
                 GLFW.GLFW_KEY_Y,
-                category
+                SOUND_CONTROL
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (openMenuKey.wasPressed()) {
-                if (client.currentScreen == null) {
+            while (openMenuKey.consumeClick()) {
+                if (client.screen == null) {
                     client.setScreen(new SoundControlScreen());
                 }
             }
-            while (toggleOverlayKey.wasPressed()) {
+            while (toggleOverlayKey.consumeClick()) {
                 SoundTracker.showOverlay = !SoundTracker.showOverlay;
             }
-        });
-
-        HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
-            SoundTracker.render(drawContext);
         });
     }
 }

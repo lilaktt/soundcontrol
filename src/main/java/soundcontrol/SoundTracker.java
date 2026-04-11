@@ -1,7 +1,7 @@
 package soundcontrol;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -21,23 +21,46 @@ public class SoundTracker {
         }
     }
 
-    public static void render(DrawContext context) {
+    public static void render(GuiGraphicsExtractor context) {
         if (!showOverlay) return;
 
-        MinecraftClient client = MinecraftClient.getInstance();
         long currentTime = System.currentTimeMillis();
-        int yOffset = 5;
+        Minecraft client = Minecraft.getInstance();
+        var font = client.font;
+
+        int x = SoundConfig.getRadarX();
+        int y = SoundConfig.getRadarY();
+        if (y == -1) {
+            y = context.guiHeight() / 2 - 50;
+        }
 
         synchronized (activeSounds) {
-            Iterator<Map.Entry<String, Long>> iterator = activeSounds.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Long> entry = iterator.next();
-                if (currentTime > entry.getValue()) {
-                    iterator.remove();
-                } else {
-                    context.drawTextWithShadow(client.textRenderer, entry.getKey(), 5, yOffset, 0xFF00FF00);
-                    yOffset += 10;
+            Iterator<Map.Entry<String, Long>> it = activeSounds.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Long> entry = it.next();
+                long endTime = entry.getValue();
+                if (currentTime > endTime) {
+                    it.remove();
+                    continue;
                 }
+
+                long remaining = endTime - currentTime;
+                float alpha = Math.clamp(remaining / 500.0f, 0.0f, 1.0f); // Quick fade out in last 500ms
+                
+                int alphaInt = (int) (alpha * 255);
+                if (alphaInt < 10) alphaInt = 10; // Keep slightly visible
+                
+                int color = (alphaInt << 24) | 0xFFFFFF;
+                
+                String soundId = entry.getKey();
+                // Simple cleanup of ID for display
+                String displayName = soundId.substring(soundId.indexOf(':') + 1);
+                
+                context.text(font, "» " + displayName, x, y, color, true);
+                y += 10;
+                
+                // Limit overlay entries
+                if (y > context.guiHeight() - 20) break;
             }
         }
     }
