@@ -1,39 +1,32 @@
-# 🎧 Sound Control
+# 🎧 Sound Control (26.1-26.1.2)
 
 ![Fabric](https://img.shields.io/badge/Modloader-Fabric-lightgrey?style=flat-square)
-![Minecraft Versions](https://img.shields.io/badge/Minecraft-1.20.1%20|%201.21+-brightgreen?style=flat-square)
+![Minecraft Version](https://img.shields.io/badge/Minecraft-26.1-brightgreen?style=flat-square)
 
-**Sound Control** is a client-side Fabric utility mod that gives you complete, granular control over every single sound in Minecraft. 
-
-Tired of a specific mob being too loud? Want to mute nether portal noises but keep ambient sounds? Need to figure out what is making that annoying noise near your base? This mod has you covered.
+**Sound Control** is a client-side Fabric utility mod that gives you complete, granular control over every single sound in Minecraft. This version is specifically modernized for Minecraft 26.1.
 
 ## ✨ Features
 
+* 🛰️ **Interactive Radar:** Features a dedicated screen to drag and position the sound radar anywhere on your interface.
 * 🎚️ **Individual Volume Control:** Adjust the volume or completely mute *any* specific sound in the game independently.
 * ⭐ **Favorites System:** Pin your most frequently tweaked sounds to the top of the list for quick and easy access.
-* 🔍 **Smart Search & Filters:** Quickly find the exact sound you are looking for using the built-in search bar, or filter by categories (Mobs, Blocks, All, Edited, Favorites).
-* 👀 **Live Sound Tracker:** Toggle an on-screen overlay to see exactly which sound IDs are currently playing around you in real-time. Perfect for identifying unknown or annoying noises!
-* 🌍 **Client-Side Only:** You can use this mod on any vanilla or modded server. It doesn't need to be installed on the server to work.
-* 🌐 **Fully Localized:** Supports 12+ languages thanks to community contributions!
-
+* 🏆 **Gold Global Entries:** Important global sound groups (like break, place, step) are highlighted in gold for better visibility.
+* 🔍 **Smart Search & Filters:** Quickly find sounds using the search bar or filter by Categories (Mobs, Blocks, All) and Status (Edited, Favorites).
+* 👀 **Live Sound Tracker:** Toggle an on-screen overlay to see which sound IDs are currently playing around you.
+* 🌐 **Fully Localized:** Supports 12+ languages including English, Ukrainian, German, Spanish, and more.
 
 ## 🎮 How to Use
 
-* **`V`** - Open the main Sound Control GUI (can be changed in standard Minecraft controls).
-* **`Y`** - Toggle the Live Sound Tracker overlay on/off.
-* In the menu, simply click the **Play (▶)** button to preview a sound, the **Mute** button to silence it, or the **Star (★)** to add it to your Favorites.
+* **`V`** - Open the main Sound Control GUI.
+* **`Y`** - Toggle the Live Sound Tracker overlay.
+* In the menu, click the **Play (▶)** button to preview, **Mute** to silence, or the **Star (★)** to add to Favorites.
+* Use the **Radar Position** button to enter the interactive drag-and-drop mode for the radar.
 
 ## 📦 Installation
 
 1. Install the [Fabric Loader](https://fabricmc.net/).
-2. Download the [Fabric API](https://modrinth.com/mod/fabric-api) and place it in your `mods` folder.
-3. Download the latest version of **Sound Control** from the Releases tab (or CurseForge/Modrinth) and place it in your `mods` folder.
-4. Launch the game!
-
-## 🤝 Contributing & Translation
-
-Feel free to open Issues for bug reports or feature requests. 
-If you want to help translate the mod into your language, pull requests with updates to the `.json` files in the `lang` folder are always welcome!
+2. Download the latest version of **Sound Control** for 26.1 and place it in your `mods` folder.
+3. Launch the game!
 
 ---
 *Created with ❤️ for the Minecraft community.*
