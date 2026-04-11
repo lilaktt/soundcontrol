@@ -1,0 +1,4 @@
+*.html linguist-documentation=true
+*.bat linguist-documentation=true
+build/** linguist-vendored=true
+.gradle/** linguist-vendored=true
