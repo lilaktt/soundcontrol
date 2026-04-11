@@ -45,21 +45,19 @@ public class SoundTracker {
                 }
 
                 long remaining = endTime - currentTime;
-                float alpha = Math.clamp(remaining / 500.0f, 0.0f, 1.0f); // Quick fade out in last 500ms
+                float alpha = Math.clamp(remaining / 500.0f, 0.0f, 1.0f);
                 
                 int alphaInt = (int) (alpha * 255);
-                if (alphaInt < 10) alphaInt = 10; // Keep slightly visible
+                if (alphaInt < 10) alphaInt = 10;
                 
                 int color = (alphaInt << 24) | 0xFFFFFF;
                 
                 String soundId = entry.getKey();
-                // Simple cleanup of ID for display
                 String displayName = soundId.substring(soundId.indexOf(':') + 1);
                 
                 context.text(font, "» " + displayName, x, y, color, true);
                 y += 10;
                 
-                // Limit overlay entries
                 if (y > context.guiHeight() - 20) break;
             }
         }

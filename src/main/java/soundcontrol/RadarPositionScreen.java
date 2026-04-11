@@ -20,7 +20,7 @@ public class RadarPositionScreen extends Screen {
         this.radarX = SoundConfig.getRadarX();
         this.radarY = SoundConfig.getRadarY();
         if (this.radarY == -1) {
-            this.radarY = 100; // Default for dragging
+            this.radarY = 100;
         }
     }
 
@@ -44,7 +44,6 @@ public class RadarPositionScreen extends Screen {
         context.centeredText(this.font, this.title, this.width / 2, 20, 0xFFFFFFFF);
         context.centeredText(this.font, Component.translatable("text.soundcontrol.radar_position.help"), this.width / 2, 35, 0xFFAAAAAA);
 
-        // Preview radar
         int previewX = this.radarX;
         int previewY = this.radarY;
 
@@ -52,7 +51,6 @@ public class RadarPositionScreen extends Screen {
         context.text(this.font, "» [Preview Sound 2]", previewX, previewY + 10, 0xFFFFFFFF, true);
         context.text(this.font, "» [Preview Sound 3]", previewX, previewY + 20, 0xFFFFFFFF, true);
         
-        // Draw frame around preview
         context.outline(previewX - 2, previewY - 2, 120, 34, 0x88FFFFFF);
     }
 
@@ -79,7 +77,6 @@ public class RadarPositionScreen extends Screen {
             this.radarX = (int) (event.x() - this.dragStartX);
             this.radarY = (int) (event.y() - this.dragStartY);
             
-            // Constrain to screen
             this.radarX = Math.clamp(this.radarX, 0, this.width - 100);
             this.radarY = Math.clamp(this.radarY, 0, this.height - 50);
             return true;

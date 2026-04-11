@@ -198,7 +198,7 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
             int x = this.getX();
             int y = this.getY();
 
-            // Draw sound name text
+
             net.minecraft.client.gui.Font font = Minecraft.getInstance().font;
 
             String displayText = this.soundId;
@@ -211,7 +211,7 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
             if (this.soundId.equals("#global:hostile_ambient")) displayText = Component.translatable("text.soundcontrol.global.hostile_ambient").getString();
             if (this.soundId.equals("#global:passive_ambient")) displayText = Component.translatable("text.soundcontrol.global.passive_ambient").getString();
 
-            // Truncate if too long
+
             int maxTextWidth = this.entryWidth - 220;
             String truncated = displayText;
             if (font.width(truncated) > maxTextWidth) {
@@ -223,17 +223,17 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
 
             int color = 0xFFFFFFFF;
             if (this.soundId.startsWith("#global:")) {
-                color = 0xFFFFAA00; // Gold (&6)
+                color = 0xFFFFAA00;
             }
             context.text(font, truncated, x + 2, y + 5, color);
 
-            // Update play button icon if sound finished
+
             if (this.playingInstance != null && !Minecraft.getInstance().getSoundManager().isActive(this.playingInstance)) {
                 this.playingInstance = null;
                 this.playButton.setMessage(Component.literal("▶"));
             }
 
-            // Draw buttons
+
             this.playButton.setX(x + this.entryWidth - 210);
             this.playButton.setY(y);
             this.playButton.extractRenderState(context, mouseX, mouseY, tickDelta);

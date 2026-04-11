@@ -17,7 +17,7 @@ public class SoundControlScreen extends Screen {
     private int viewMode = 0;
     private String selectedMod = "";
 
-    // Наша єдина правильна змінна! 0 = Всі, 1 = Змінені, 2 = Обрані
+
     private int filterMode = 0;
 
     public SoundControlScreen() {
