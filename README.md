@@ -10,7 +10,6 @@
 * 🛰️ **Interactive Radar:** Features a dedicated screen to drag and position the sound radar anywhere on your interface.
 * 🎚️ **Individual Volume Control:** Adjust the volume or completely mute *any* specific sound in the game independently.
 * ⭐ **Favorites System:** Pin your most frequently tweaked sounds to the top of the list for quick and easy access.
-* 🏆 **Gold Global Entries:** Important global sound groups (like break, place, step) are highlighted in gold for better visibility.
 * 🔍 **Smart Search & Filters:** Quickly find sounds using the search bar or filter by Categories (Mobs, Blocks, All) and Status (Edited, Favorites).
 * 👀 **Live Sound Tracker:** Toggle an on-screen overlay to see which sound IDs are currently playing around you.
 * 🌐 **Fully Localized:** Supports 12+ languages including English, Ukrainian, German, Spanish, and more.
