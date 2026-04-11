@@ -3,7 +3,9 @@ build
 bin
 .vscode
 .idea
-*.bat
+push_to_github.bat
+cleanup_repository.bat
+push_legacy_to_github.bat
 *.log
 run/
 .DS_Store
