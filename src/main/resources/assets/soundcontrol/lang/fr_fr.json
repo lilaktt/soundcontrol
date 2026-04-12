@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Contrôle du Son",
   "key.soundcontrol.open": "Ouvrir les paramètres audio",
   "key.soundcontrol.toggle_overlay": "Basculer l'affichage du son",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "TOUS LES SONS DE PLACEMENT",
   "text.soundcontrol.global.step": "TOUS LES SONS DE PAS",
   "text.soundcontrol.global.hit": "TOUS LES SONS DE FRAPPE",
-  "text.soundcontrol.global.hostile_hurt": "TOUS LES SONS DE DOULEUR HOSTILES",
-  "text.soundcontrol.global.passive_hurt": "TOUS LES SONS DE DOULEUR PASSIFS",
+  "text.soundcontrol.global.hostile_hurt": "TOUS LES SONS DE DOULEUR & MORT HOSTILES",
+  "text.soundcontrol.global.passive_hurt": "TOUS LES SONS DE DOULEUR & MORT PASSIFS",
   "text.soundcontrol.tooltip.advanced_only": "Uniquement disponible en mode avancé",
   "text.soundcontrol.filter.all": "Tous les sons",
   "text.soundcontrol.filter.edited": "Modifiés seulement",

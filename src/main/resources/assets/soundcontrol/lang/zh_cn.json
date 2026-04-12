@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "声音控制",
   "key.soundcontrol.open": "打开声音设置",
   "key.soundcontrol.toggle_overlay": "切换声音叠加",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "所有方块放置声",
   "text.soundcontrol.global.step": "所有脚步声",
   "text.soundcontrol.global.hit": "所有打击声",
-  "text.soundcontrol.global.hostile_hurt": "所有敌对生物受伤声",
-  "text.soundcontrol.global.passive_hurt": "所有被动生物受伤声",
+  "text.soundcontrol.global.hostile_hurt": "所有敌对生物受伤与死亡声",
+  "text.soundcontrol.global.passive_hurt": "所有被动生物受伤与死亡声",
   "text.soundcontrol.tooltip.advanced_only": "仅在高级模式下可用",
   "text.soundcontrol.filter.all": "所有声音",
   "text.soundcontrol.filter.edited": "仅已编辑",

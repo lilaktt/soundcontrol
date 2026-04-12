@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "サウンドコントロール",
   "key.soundcontrol.open": "サウンド設定を開く",
   "key.soundcontrol.toggle_overlay": "サウンドオーバーレイを切り替え",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "すべてのブロック設置音",
   "text.soundcontrol.global.step": "すべての足音",
   "text.soundcontrol.global.hit": "すべてのヒット音",
-  "text.soundcontrol.global.hostile_hurt": "すべての敵対的モブのダメージ音",
-  "text.soundcontrol.global.passive_hurt": "すべての友好的モブのダメージ音",
+  "text.soundcontrol.global.hostile_hurt": "すべての敵対的モブのダメージ・死亡音",
+  "text.soundcontrol.global.passive_hurt": "すべての友好的モブのダメージ・死亡音",
   "text.soundcontrol.tooltip.advanced_only": "詳細モードでのみ利用可能",
   "text.soundcontrol.filter.all": "すべてのサウンド",
   "text.soundcontrol.filter.edited": "編集済みのみ",

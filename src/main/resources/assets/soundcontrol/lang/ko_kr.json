@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "사운드 컨트롤",
   "key.soundcontrol.open": "사운드 설정 열기",
   "key.soundcontrol.toggle_overlay": "사운드 오버레이 토글",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "모든 블록 배치 소리",
   "text.soundcontrol.global.step": "모든 발소리",
   "text.soundcontrol.global.hit": "모든 타격 소리",
-  "text.soundcontrol.global.hostile_hurt": "모든 적대적 몹 피해 소리",
-  "text.soundcontrol.global.passive_hurt": "모든 평화적 몹 피해 소리",
+  "text.soundcontrol.global.hostile_hurt": "모든 적대적 몹 피해 및 사망 소리",
+  "text.soundcontrol.global.passive_hurt": "모든 평화적 몹 피해 및 사망 소리",
   "text.soundcontrol.tooltip.advanced_only": "고급 모드에서만 사용 가능",
   "text.soundcontrol.filter.all": "전체 사운드",
   "text.soundcontrol.filter.edited": "편집됨만",

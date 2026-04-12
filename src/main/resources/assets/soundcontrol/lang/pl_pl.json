@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Kontrola Dźwięku",
   "key.soundcontrol.open": "Otwórz ustawienia dźwięku",
   "key.soundcontrol.toggle_overlay": "Przełącz nakładkę dźwiękową",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "WSZYSTKIE DŹWIĘKI STAWIANIA",
   "text.soundcontrol.global.step": "WSZYSTKIE DŹWIĘKI KROKÓW",
   "text.soundcontrol.global.hit": "WSZYSTKIE DŹWIĘKI UDERZEŃ",
-  "text.soundcontrol.global.hostile_hurt": "WSZYSTKIE DŹWIĘKI OBRAŻEŃ WROGÓW",
-  "text.soundcontrol.global.passive_hurt": "WSZYSTKIE DŹWIĘKI OBRAŻEŃ PASYWNYCH",
+  "text.soundcontrol.global.hostile_hurt": "WSZYSTKIE DŹWIĘKI OBRAŻEŃ I ŚMIERCI WROGÓW",
+  "text.soundcontrol.global.passive_hurt": "WSZYSTKIE DŹWIĘKI OBRAŻEŃ I ŚMIERCI PASYWNYCH",
   "text.soundcontrol.tooltip.advanced_only": "Dostępne tylko w trybie zaawansowanym",
   "text.soundcontrol.filter.all": "Wszystkie dźwięki",
   "text.soundcontrol.filter.edited": "Tylko edytowane",

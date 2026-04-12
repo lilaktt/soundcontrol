@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound-Steuerung",
   "key.soundcontrol.open": "Sound-Einstellungen öffnen",
   "key.soundcontrol.toggle_overlay": "Sound-Overlay umschalten",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "ALLE BLOCK-PLATZIER-SOUNDS",
   "text.soundcontrol.global.step": "ALLE SCHRITT-SOUNDS",
   "text.soundcontrol.global.hit": "ALLE TREFFER-SOUNDS",
-  "text.soundcontrol.global.hostile_hurt": "ALLE FEINDLICHEN SCHMERZSOUNDS",
-  "text.soundcontrol.global.passive_hurt": "ALLE PASSIVEN SCHMERZSOUNDS",
+  "text.soundcontrol.global.hostile_hurt": "ALLE SCHADENS- & TODESSOUNDS FEINDLICHER MOBS",
+  "text.soundcontrol.global.passive_hurt": "ALLE SCHADENS- & TODESSOUNDS PASSIVER MOBS",
   "text.soundcontrol.tooltip.advanced_only": "Nur im fortgeschrittenen Modus verfügbar",
   "text.soundcontrol.filter.all": "Alle Sounds",
   "text.soundcontrol.filter.edited": "Nur bearbeitete",

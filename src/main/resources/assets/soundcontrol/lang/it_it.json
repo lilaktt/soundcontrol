@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Controllo del Suono",
   "key.soundcontrol.open": "Apri impostazioni audio",
   "key.soundcontrol.toggle_overlay": "Attiva/disattiva overlay audio",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "TUTTI I SUONI DI POSIZIONAMENTO",
   "text.soundcontrol.global.step": "TUTTI I SUONI DI PASSI",
   "text.soundcontrol.global.hit": "TUTTI I SUONI DI COLPI",
-  "text.soundcontrol.global.hostile_hurt": "TUTTI I SUONI DI DANNO OSTILI",
-  "text.soundcontrol.global.passive_hurt": "TUTTI I SUONI DI DANNO PASSIVI",
+  "text.soundcontrol.global.hostile_hurt": "TUTTI I SUONI DI DANNO E MORTE DEI MOB OSTILI",
+  "text.soundcontrol.global.passive_hurt": "TUTTI I SUONI DI DANNO E MORTE DEI MOB PASSIVI",
   "text.soundcontrol.tooltip.advanced_only": "Disponibile solo in modalità avanzata",
   "text.soundcontrol.filter.all": "Tutti i suoni",
   "text.soundcontrol.filter.edited": "Solo modificati",

@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Контроль Звуку",
   "key.soundcontrol.open": "Відкрити Налаштування Звуку",
   "key.soundcontrol.toggle_overlay": "Відображення звуків на екрані",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "ВСІ ЗВУКИ СТАВЛЕННЯ БЛОКІВ",
   "text.soundcontrol.global.step": "ВСІ ЗВУКИ КРОКІВ",
   "text.soundcontrol.global.hit": "ВСІ ЗВУКИ УДАРІВ",
-  "text.soundcontrol.global.hostile_hurt": "ВСІ ЗВУКИ УРОНУ ЗЛИХ МОБІВ",
-  "text.soundcontrol.global.passive_hurt": "ВСІ ЗВУКИ УРОНУ ДОБРИХ МОБІВ",
+  "text.soundcontrol.global.hostile_hurt": "ВСІ ЗВУКИ УРОНУ ТА СМЕРТІ ВОРОЖИХ",
+  "text.soundcontrol.global.passive_hurt": "ВСІ ЗВУКИ УРОНУ ТА СМЕРТІ МИРНИХ",
   "text.soundcontrol.tooltip.advanced_only": "Доступно лише в Просунутому режимі",
   "text.soundcontrol.filter.all": "Всі звуки",
   "text.soundcontrol.filter.edited": "Лише змінені",

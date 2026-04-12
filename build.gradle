@@ -1,6 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
-    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.141'
 }
 
 version = project.mod_version
@@ -10,36 +9,70 @@ base {
     archivesName = project.archives_base_name
 }
 
-repositories {
-    maven { url = "https://maven.terraformersmc.com/" }
-}
+neoForge {
+    version = project.neo_version
 
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-}
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+    }
 
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
+    mods {
+        "${project.mod_id}" {
+            sourceSet sourceSets.main
+        }
     }
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        name = "NeoForged"
+        url = "https://maven.neoforged.net/releases"
+    }
+    maven {
+        name = "Mojang"
+        url = "https://libraries.minecraft.net/"
+    }
+}
+
+configurations {
+    runtimeClasspath.extendsFrom library
+}
+
+dependencies {
+    // NeoForge dependencies are handled by the plugin via the version property
+}
+
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 25
+    options.encoding = 'UTF-8'
+    options.release = 25
 }
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_25
-    targetCompatibility = JavaVersion.VERSION_25
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
 }
 
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}"}
+tasks.withType(ProcessResources).configureEach {
+    def expandProps = [
+            "version": project.mod_version,
+            "mod_name": project.mod_name,
+            "group": project.maven_group,
+            "minecraft_version": project.minecraft_version,
+            "neo_version": project.neo_version
+    ]
+    inputs.properties expandProps
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand expandProps
     }
 }

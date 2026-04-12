@@ -3,7 +3,7 @@ package soundcontrol;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.fabricmc.loader.api.FabricLoader;
+import net.neoforged.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.io.FileReader;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SoundConfig {
-    private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "soundcontrol.json");
+    private static final File CONFIG_FILE = new File(FMLPaths.CONFIGDIR.get().toFile(), "soundcontrol.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     
     public static class ConfigData {
@@ -135,7 +135,7 @@ public class SoundConfig {
                 String mobName = parts[1];
                 boolean isHostile = HOSTILE_MOBS.contains(mobName);
 
-                if (id.contains(".hurt")) {
+                if (id.contains(".hurt") || id.contains(".death")) {
                     if (isHostile && SOUNDS.containsKey("#global:hostile_hurt")) {
                         return getSettingsVolume(SOUNDS.get("#global:hostile_hurt"));
                     } else if (!isHostile && SOUNDS.containsKey("#global:passive_hurt")) {

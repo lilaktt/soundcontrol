@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Open Sound Settings",
   "key.soundcontrol.toggle_overlay": "Toggle Sound Overlay",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "ALL BLOCK PLACE SOUNDS",
   "text.soundcontrol.global.step": "ALL FOOTSTEP SOUNDS",
   "text.soundcontrol.global.hit": "ALL HIT SOUNDS",
-  "text.soundcontrol.global.hostile_hurt": "ALL HOSTILE MOB HURT SOUNDS",
-  "text.soundcontrol.global.passive_hurt": "ALL PASSIVE MOB HURT SOUNDS",
+  "text.soundcontrol.global.hostile_hurt": "ALL HOSTILE MOB HURT & DEATH SOUNDS",
+  "text.soundcontrol.global.passive_hurt": "ALL PASSIVE MOB HURT & DEATH SOUNDS",
   "text.soundcontrol.tooltip.advanced_only": "Only available in Advanced Mode",
   "text.soundcontrol.filter.all": "All Sounds",
   "text.soundcontrol.filter.edited": "Edited Only",
