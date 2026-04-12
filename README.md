@@ -34,5 +34,9 @@
 
 Looking for the Fabric version? Check the [`master`](https://github.com/lilaktt/soundcontrol/tree/master) branch.
 
+## 🤝 Contributing & Translation
+
+Feel free to open an **Issue** for bug reports or feature requests. If you'd like to help translate the mod into your language, pull requests updating the `.json` files in the `lang` folder are always welcome!
+
 ---
 *Created with ❤️ for the Minecraft community.*
