@@ -2,6 +2,7 @@ package soundcontrol;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -20,20 +21,19 @@ public class SoundControl {
         NeoForge.EVENT_BUS.addListener(this::onClientTick);
     }
 
-    public static final net.minecraft.client.KeyMapping.Category CATEGORY = net.minecraft.client.KeyMapping.Category.register(
-            net.minecraft.resources.Identifier.tryParse("soundcontrol:main")
-    );
-
     private void registerKeys(RegisterKeyMappingsEvent event) {
+        KeyMapping.Category category = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("soundcontrol", "main"));
+
         openMenuKey = new KeyMapping(
                 "key.soundcontrol.open",
                 GLFW.GLFW_KEY_V,
-                CATEGORY
+                category
         );
+
         toggleOverlayKey = new KeyMapping(
                 "key.soundcontrol.toggle_overlay",
                 GLFW.GLFW_KEY_Y,
-                CATEGORY
+                category
         );
 
         event.register(openMenuKey);

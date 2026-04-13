@@ -17,11 +17,6 @@ neoForge {
             client()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
-        server {
-            server()
-            programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
     }
 
     mods {
@@ -33,41 +28,30 @@ neoForge {
 
 repositories {
     mavenCentral()
-    maven {
-        name = "NeoForged"
-        url = "https://maven.neoforged.net/releases"
-    }
-    maven {
-        name = "Mojang"
-        url = "https://libraries.minecraft.net/"
-    }
-}
-
-configurations {
-    runtimeClasspath.extendsFrom library
 }
 
 dependencies {
-    // NeoForge dependencies are handled by the plugin via the version property
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
-    options.release = 25
+    options.release = 21
 }
 
 java {
     withSourcesJar()
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
 tasks.withType(ProcessResources).configureEach {
-    def expandProps = [
+    var expandProps = [
             "version": project.mod_version,
             "mod_name": project.mod_name,
-            "group": project.maven_group,
+            "mod_id": project.mod_id,
+            "mod_authors": project.mod_authors,
+            "mod_description": project.mod_description,
             "minecraft_version": project.minecraft_version,
             "neo_version": project.neo_version
     ]

@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Управление звуком",
   "key.soundcontrol.open": "Открыть настройки звука",
   "key.soundcontrol.toggle_overlay": "Отображение звуков на экране",
@@ -19,17 +19,12 @@
   "text.soundcontrol.global.place": "ВСЕ ЗВУКИ УСТАНОВКИ БЛОКОВ",
   "text.soundcontrol.global.step": "ВСЕ ЗВУКИ ШАГОВ",
   "text.soundcontrol.global.hit": "ВСЕ ЗВУКИ УДАРОВ",
-  "text.soundcontrol.global.hostile_hurt": "ВСЕ ЗВУКИ УРОНА И СМЕРТИ ВРАЖДЕБНЫХ",
-  "text.soundcontrol.global.passive_hurt": "ВСЕ ЗВУКИ УРОНА И СМЕРТИ МИРНЫХ",
+  "text.soundcontrol.global.hostile_hurt": "ВСЕ ЗВУКИ УРОНА ЗЛЫХ МОБОВ",
+  "text.soundcontrol.global.passive_hurt": "ВСЕ ЗВУКИ УРОНА ДОБРЫХ МОБОВ",
   "text.soundcontrol.tooltip.advanced_only": "Доступно только в Продвинутом режиме",
   "text.soundcontrol.filter.all": "Все звуки",
   "text.soundcontrol.filter.edited": "Только измененные",
   "text.soundcontrol.global.hostile_ambient": "ВСЕ ЗВУКИ ПРИСУТСТВИЯ (ВРАЖДЕБНЫЕ)",
   "text.soundcontrol.global.passive_ambient": "ВСЕ ЗВУКИ ПРИСУТСТВИЯ (МИРНЫЕ)",
-  "text.soundcontrol.filter.favorites": "Только избранные",
-  "text.soundcontrol.button.radar_position": "Позиция радара",
-  "text.soundcontrol.radar_position.title": "Изменить расположение радара",
-  "text.soundcontrol.radar_position.help": "Зажмите и перетащите радар мышкой",
-  "gui.save": "Сохранить",
-  "gui.cancel": "Выход"
+  "text.soundcontrol.filter.favorites": "Только избранные"
 }

@@ -17,22 +17,7 @@ import java.util.Set;
 public class SoundConfig {
     private static final File CONFIG_FILE = new File(FMLPaths.CONFIGDIR.get().toFile(), "soundcontrol.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    
-    public static class ConfigData {
-        public int radarX = 10;
-        public int radarY = -1;
-        public Map<String, SoundSettings> sounds = new HashMap<>();
-    }
-
-    private static ConfigData DATA = new ConfigData();
-    public static Map<String, SoundSettings> SOUNDS = DATA.sounds;
-
-    public static int getRadarX() { return DATA.radarX; }
-    public static int getRadarY() { return DATA.radarY; }
-    public static void setRadarPos(int x, int y) {
-        DATA.radarX = x;
-        DATA.radarY = y;
-    }
+    public static Map<String, SoundSettings> SOUNDS = new HashMap<>();
 
     private static final Set<String> HOSTILE_MOBS = Set.of(
             "zombie", "creeper", "skeleton", "spider", "enderman", "witch", "slime", "ghast",
@@ -52,30 +37,19 @@ public class SoundConfig {
     public static void load() {
         if (CONFIG_FILE.exists()) {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
-                DATA = GSON.fromJson(reader, ConfigData.class);
-                if (DATA == null) DATA = new ConfigData();
-                if (DATA.sounds == null) DATA.sounds = new HashMap<>();
-                SOUNDS = DATA.sounds;
+                Type type = new TypeToken<Map<String, SoundSettings>>(){}.getType();
+                SOUNDS = GSON.fromJson(reader, type);
+                if (SOUNDS == null) SOUNDS = new HashMap<>();
             } catch (Exception e) {
-
-                try (FileReader reader = new FileReader(CONFIG_FILE)) {
-                    Type type = new TypeToken<Map<String, SoundSettings>>(){}.getType();
-                    Map<String, SoundSettings> oldSounds = GSON.fromJson(reader, type);
-                    if (oldSounds != null) {
-                        DATA = new ConfigData();
-                        DATA.sounds = oldSounds;
-                        SOUNDS = DATA.sounds;
-                    }
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
+                System.err.println("[Sound Control] Failed to load config file, resetting to defaults: " + e.getMessage());
+                SOUNDS = new HashMap<>();
             }
         }
     }
 
     public static void save() {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
-            GSON.toJson(DATA, writer);
+            GSON.toJson(SOUNDS, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,9 +1,0 @@
-.gradle
-build
-bin
-.vscode
-.idea
-*.bat
-*.log
-run/
-.DS_Store

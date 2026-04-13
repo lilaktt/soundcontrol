@@ -11,9 +11,9 @@ import soundcontrol.SoundTracker;
 @Mixin(SoundManager.class)
 public class SoundTrackerMixin {
     @Inject(method = "play", at = @At("HEAD"))
-    private void onPlaySound(SoundInstance sound, CallbackInfoReturnable<?> cir) {
-        if (sound != null && sound.getIdentifier() != null) {
-            SoundTracker.recordSound(sound.getIdentifier().toString());
+    private void soundcontrol_onPlay(SoundInstance sound, CallbackInfoReturnable<?> ci) {
+        if (sound != null && sound.getLocation() != null) {
+            SoundTracker.recordSound(sound.getLocation().toString());
         }
     }
 }
