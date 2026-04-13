@@ -3,7 +3,8 @@ package soundcontrol;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.resources.Identifier;
+import net.neoforged.fml.loading.FMLPaths;
 
 import java.io.File;
 import java.io.FileReader;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class SoundConfig {
-    private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "soundcontrol.json");
+    private static final File CONFIG_FILE = new File(FMLPaths.CONFIGDIR.get().toFile(), "soundcontrol.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static Map<String, SoundSettings> SOUNDS = new HashMap<>();
 
@@ -40,8 +41,9 @@ public class SoundConfig {
                 Type type = new TypeToken<Map<String, SoundSettings>>(){}.getType();
                 SOUNDS = GSON.fromJson(reader, type);
                 if (SOUNDS == null) SOUNDS = new HashMap<>();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+                System.err.println("[Sound Control] Failed to load config file, resetting to defaults: " + e.getMessage());
+                SOUNDS = new HashMap<>();
             }
         }
     }
@@ -54,14 +56,11 @@ public class SoundConfig {
         }
     }
 
-    // НОВИЙ МЕТОД ДЛЯ РОЗУМНОГО СКИДАННЯ
     public static void resetSettings() {
         SOUNDS.entrySet().removeIf(entry -> {
             SoundSettings s = entry.getValue();
             s.volume = 1.0f;
             s.muted = false;
-            // Якщо звук НЕ в обраному - видаляємо його з конфігу (щоб не смітив).
-            // Якщо в обраному - залишаємо (removeIf поверне false).
             return !s.favorite;
         });
         save();
@@ -111,7 +110,7 @@ public class SoundConfig {
                 String mobName = parts[1];
                 boolean isHostile = HOSTILE_MOBS.contains(mobName);
 
-                if (id.contains(".hurt")) {
+                if (id.contains(".hurt") || id.contains(".death")) {
                     if (isHostile && SOUNDS.containsKey("#global:hostile_hurt")) {
                         return getSettingsVolume(SOUNDS.get("#global:hostile_hurt"));
                     } else if (!isHostile && SOUNDS.containsKey("#global:passive_hurt")) {

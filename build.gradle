@@ -1,6 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11.+'
-    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.141'
 }
 
 version = project.mod_version
@@ -10,37 +9,54 @@ base {
     archivesName = project.archives_base_name
 }
 
-repositories {
-    maven { url = "https://maven.terraformersmc.com/" }
-}
+neoForge {
+    version = project.neo_version
 
-dependencies {
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-}
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+    }
 
-processResources {
-    inputs.property "version", project.version
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
+    mods {
+        "${project.mod_id}" {
+            sourceSet sourceSets.main
+        }
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    options.encoding = 'UTF-8'
+    options.release = 21
 }
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.base.archivesName.get()}"}
+tasks.withType(ProcessResources).configureEach {
+    var expandProps = [
+            "version": project.mod_version,
+            "mod_name": project.mod_name,
+            "mod_id": project.mod_id,
+            "mod_authors": project.mod_authors,
+            "mod_description": project.mod_description,
+            "minecraft_version": project.minecraft_version,
+            "neo_version": project.neo_version
+    ]
+    inputs.properties expandProps
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand expandProps
     }
 }

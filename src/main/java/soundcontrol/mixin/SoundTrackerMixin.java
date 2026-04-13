@@ -1,7 +1,7 @@
 package soundcontrol.mixin;
 
-import net.minecraft.client.sound.SoundInstance;
-import net.minecraft.client.sound.SoundManager;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,9 +11,9 @@ import soundcontrol.SoundTracker;
 @Mixin(SoundManager.class)
 public class SoundTrackerMixin {
     @Inject(method = "play", at = @At("HEAD"))
-    private void onPlaySound(SoundInstance sound, CallbackInfoReturnable<?> cir) {
-        if (sound != null && sound.getId() != null) {
-            SoundTracker.recordSound(sound.getId().toString());
+    private void soundcontrol_onPlay(SoundInstance sound, CallbackInfoReturnable<?> ci) {
+        if (sound != null && sound.getIdentifier() != null) {
+            SoundTracker.recordSound(sound.getIdentifier().toString());
         }
     }
 }
