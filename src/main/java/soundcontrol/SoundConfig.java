@@ -54,14 +54,12 @@ public class SoundConfig {
         }
     }
 
-    // НОВИЙ МЕТОД ДЛЯ РОЗУМНОГО СКИДАННЯ
     public static void resetSettings() {
         SOUNDS.entrySet().removeIf(entry -> {
             SoundSettings s = entry.getValue();
             s.volume = 1.0f;
             s.muted = false;
-            // Якщо звук НЕ в обраному - видаляємо його з конфігу (щоб не смітив).
-            // Якщо в обраному - залишаємо (removeIf поверне false).
+
             return !s.favorite;
         });
         save();
