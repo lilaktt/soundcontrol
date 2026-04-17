@@ -58,7 +58,7 @@ public class ModListWidget extends ContainerObjectSelectionList<ModListWidget.Mo
 
     @Override
     protected void renderListBackground(GuiGraphics guiGraphics) {
-        // Handled in renderWidget to ensure it's below items but above sound list
+
     }
 
     @Override
