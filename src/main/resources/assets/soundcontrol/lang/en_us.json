@@ -31,5 +31,6 @@
   "text.soundcontrol.radar_position.title": "Change Radar Position",
   "text.soundcontrol.radar_position.help": "Click and drag the radar preview to move it",
   "gui.save": "Save",
-  "gui.cancel": "Exit"
+  "gui.cancel": "Exit",
+  "text.soundcontrol.tooltip.reset": "Reset to Default"
 }

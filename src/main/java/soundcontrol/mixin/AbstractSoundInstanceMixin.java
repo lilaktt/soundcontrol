@@ -9,10 +9,14 @@ import soundcontrol.SoundConfig;
 
 @Mixin(AbstractSoundInstance.class)
 public class AbstractSoundInstanceMixin {
+
+
     @Inject(method = "getVolume", at = @At("RETURN"), cancellable = true)
     private void modifyVolume(CallbackInfoReturnable<Float> cir) {
         String id = ((AbstractSoundInstance) (Object) this).getIdentifier().toString();
         float modifier = SoundConfig.getVolumeModifier(id);
-        cir.setReturnValue(cir.getReturnValue() * modifier);
+        float original = cir.getReturnValue();
+        float newVal = original * modifier;
+        cir.setReturnValue(newVal);
     }
 }

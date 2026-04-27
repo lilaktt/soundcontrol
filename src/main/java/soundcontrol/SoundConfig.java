@@ -111,9 +111,16 @@ public class SoundConfig {
         return s.muted ? 0.0f : s.volume;
     }
 
+    private static boolean isDefault(SoundSettings s) {
+        return !s.muted && Math.abs(s.volume - 1.0f) < 0.01f;
+    }
+
     public static float getVolumeModifier(String id) {
         if (SOUNDS.containsKey(id)) {
-            return getSettingsVolume(SOUNDS.get(id));
+            SoundSettings s = SOUNDS.get(id);
+            if (!isDefault(s)) {
+                return getSettingsVolume(s);
+            }
         }
 
         if (id.contains(".break") && SOUNDS.containsKey("#global:break")) {
@@ -155,7 +162,10 @@ public class SoundConfig {
 
         String group = getSoundGroup(id);
         if (SOUNDS.containsKey(group)) {
-            return getSettingsVolume(SOUNDS.get(group));
+            SoundSettings s = SOUNDS.get(group);
+            if (!isDefault(s)) {
+                return getSettingsVolume(s);
+            }
         }
 
         return 1.0f;

@@ -5,7 +5,9 @@
   "client": [
     "AbstractSoundInstanceMixin",
     "SoundTrackerMixin",
-    "GuiMixin"
+    "GuiMixin",
+    "SoundEngineMixin",
+    "ChannelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

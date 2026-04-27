@@ -1,5 +1,5 @@
 {
-  "key.category.soundcontrol.main": "Контроль Звуку",
+  "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Відкрити Налаштування Звуку",
   "key.soundcontrol.toggle_overlay": "Відображення звуків на екрані",
   "text.soundcontrol.title": "Контроль Звуку",
@@ -31,5 +31,6 @@
   "text.soundcontrol.radar_position.title": "Змінити розташування радара",
   "text.soundcontrol.radar_position.help": "Затисніть та перетягніть радар мишкою",
   "gui.save": "Зберегти",
-  "gui.cancel": "Вийти"
+  "gui.cancel": "Вийти",
+  "text.soundcontrol.tooltip.reset": "Скинути до стандартних"
 }
