@@ -17,7 +17,22 @@ import java.util.Set;
 public class SoundConfig {
     private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "soundcontrol.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static Map<String, SoundSettings> SOUNDS = new HashMap<>();
+    
+    public static class ConfigData {
+        public int radarX = 10;
+        public int radarY = -1;
+        public Map<String, SoundSettings> sounds = new HashMap<>();
+    }
+
+    private static ConfigData DATA = new ConfigData();
+    public static Map<String, SoundSettings> SOUNDS = DATA.sounds;
+
+    public static int getRadarX() { return DATA.radarX; }
+    public static int getRadarY() { return DATA.radarY; }
+    public static void setRadarPos(int x, int y) {
+        DATA.radarX = x;
+        DATA.radarY = y;
+    }
 
     private static final Set<String> HOSTILE_MOBS = Set.of(
             "zombie", "creeper", "skeleton", "spider", "enderman", "witch", "slime", "ghast",
@@ -31,26 +46,49 @@ public class SoundConfig {
     public static class SoundSettings {
         public float volume = 1.0f;
         public boolean muted = false;
+        public boolean favorite = false;
     }
 
     public static void load() {
         if (CONFIG_FILE.exists()) {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
-                Type type = new TypeToken<Map<String, SoundSettings>>(){}.getType();
-                SOUNDS = GSON.fromJson(reader, type);
-                if (SOUNDS == null) SOUNDS = new HashMap<>();
-            } catch (IOException e) {
-                e.printStackTrace();
+                DATA = GSON.fromJson(reader, ConfigData.class);
+                if (DATA == null) DATA = new ConfigData();
+                if (DATA.sounds == null) DATA.sounds = new HashMap<>();
+                SOUNDS = DATA.sounds;
+            } catch (Exception e) {
+
+                try (FileReader reader = new FileReader(CONFIG_FILE)) {
+                    Type type = new TypeToken<Map<String, SoundSettings>>(){}.getType();
+                    Map<String, SoundSettings> oldSounds = GSON.fromJson(reader, type);
+                    if (oldSounds != null) {
+                        DATA = new ConfigData();
+                        DATA.sounds = oldSounds;
+                        SOUNDS = DATA.sounds;
+                    }
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
             }
         }
     }
 
     public static void save() {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
-            GSON.toJson(SOUNDS, writer);
+            GSON.toJson(DATA, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void resetSettings() {
+        SOUNDS.entrySet().removeIf(entry -> {
+            SoundSettings s = entry.getValue();
+            s.volume = 1.0f;
+            s.muted = false;
+            return !s.favorite;
+        });
+        save();
     }
 
     public static String getSoundGroup(String soundId) {
@@ -73,9 +111,25 @@ public class SoundConfig {
         return s.muted ? 0.0f : s.volume;
     }
 
+        private static boolean isDefault(SoundSettings s) {
+        if (s == null) return true;
+        return !s.muted && Math.abs(s.volume - 1.0f) < 0.01f;
+    }
+
     public static float getVolumeModifier(String id) {
         if (SOUNDS.containsKey(id)) {
-            return getSettingsVolume(SOUNDS.get(id));
+            SoundSettings s = SOUNDS.get(id);
+            if (!isDefault(s)) {
+                return getSettingsVolume(s);
+            }
+        }
+
+        String group = getSoundGroup(id);
+        if (SOUNDS.containsKey(group)) {
+            SoundSettings s = SOUNDS.get(group);
+            if (!isDefault(s)) {
+                return getSettingsVolume(s);
+            }
         }
 
         if (id.contains(".break") && SOUNDS.containsKey("#global:break")) {
@@ -91,21 +145,28 @@ public class SoundConfig {
             return getSettingsVolume(SOUNDS.get("#global:hit"));
         }
 
-        if (id.startsWith("minecraft:entity.") && id.contains(".hurt")) {
+        if (id.startsWith("minecraft:entity.")) {
             String[] parts = id.split("\\.");
             if (parts.length >= 2) {
                 String mobName = parts[1];
-                if (HOSTILE_MOBS.contains(mobName) && SOUNDS.containsKey("#global:hostile_hurt")) {
-                    return getSettingsVolume(SOUNDS.get("#global:hostile_hurt"));
-                } else if (!HOSTILE_MOBS.contains(mobName) && SOUNDS.containsKey("#global:passive_hurt")) {
-                    return getSettingsVolume(SOUNDS.get("#global:passive_hurt"));
+                boolean isHostile = HOSTILE_MOBS.contains(mobName);
+
+                if (id.contains(".hurt")) {
+                    if (isHostile && SOUNDS.containsKey("#global:hostile_hurt")) {
+                        return getSettingsVolume(SOUNDS.get("#global:hostile_hurt"));
+                    } else if (!isHostile && SOUNDS.containsKey("#global:passive_hurt")) {
+                        return getSettingsVolume(SOUNDS.get("#global:passive_hurt"));
+                    }
+                }
+
+                if (id.contains(".ambient")) {
+                    if (isHostile && SOUNDS.containsKey("#global:hostile_ambient")) {
+                        return getSettingsVolume(SOUNDS.get("#global:hostile_ambient"));
+                    } else if (!isHostile && SOUNDS.containsKey("#global:passive_ambient")) {
+                        return getSettingsVolume(SOUNDS.get("#global:passive_ambient"));
+                    }
                 }
             }
-        }
-
-        String group = getSoundGroup(id);
-        if (SOUNDS.containsKey(group)) {
-            return getSettingsVolume(SOUNDS.get(group));
         }
 
         return 1.0f;

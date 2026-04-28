@@ -13,6 +13,8 @@ public class AbstractSoundInstanceMixin {
     private void modifyVolume(CallbackInfoReturnable<Float> cir) {
         String id = ((AbstractSoundInstance) (Object) this).getId().toString();
         float modifier = SoundConfig.getVolumeModifier(id);
-        cir.setReturnValue(cir.getReturnValue() * modifier);
+        float original = cir.getReturnValue();
+        float newVal = original * modifier;
+        cir.setReturnValue(newVal);
     }
 }

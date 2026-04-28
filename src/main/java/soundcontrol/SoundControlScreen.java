@@ -14,11 +14,18 @@ public class SoundControlScreen extends Screen {
     private ModListWidget modList;
     private SoundCategory currentCategory = SoundCategory.ALL;
     private int viewMode = 0;
+    public int getViewMode() { return this.viewMode; }
     private String selectedMod = "";
-    private boolean showEditedOnly = false;
+    private int filterMode = 0;
 
     public SoundControlScreen() {
         super(Text.translatable("text.soundcontrol.title"));
+    }
+
+    private Text getFilterText() {
+        if (this.filterMode == 1) return Text.translatable("text.soundcontrol.filter.edited");
+        if (this.filterMode == 2) return Text.translatable("text.soundcontrol.filter.favorites");
+        return Text.translatable("text.soundcontrol.filter.all");
     }
 
     @Override
@@ -29,11 +36,15 @@ public class SoundControlScreen extends Screen {
         this.addSelectableChild(this.searchBox);
 
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable(this.showEditedOnly ? "text.soundcontrol.filter.edited" : "text.soundcontrol.filter.all"), button -> {
-            this.showEditedOnly = !this.showEditedOnly;
-            button.setMessage(Text.translatable(this.showEditedOnly ? "text.soundcontrol.filter.edited" : "text.soundcontrol.filter.all"));
-            this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.showEditedOnly);
-        }).dimensions(this.width / 2 + 50, 22, 90, 20).build());
+        this.addDrawableChild(ButtonWidget.builder(getFilterText(), button -> {
+            this.filterMode = (this.filterMode + 1) % 3;
+            button.setMessage(getFilterText());
+            this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
+        }).dimensions(this.width / 2 + 50, 22, 100, 20).build());
+
+                this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.button.radar_position"), button -> {
+            this.client.setScreen(new RadarPositionScreen(this));
+        }).dimensions(this.width - 110, 5, 100, 20).build());
 
         int buttonWidth = 60;
         int startX = this.width / 2 - (buttonWidth * 3 + 10) / 2;
@@ -58,32 +69,31 @@ public class SoundControlScreen extends Screen {
             String modeKey = this.viewMode == 0 ? "basic" : (this.viewMode == 1 ? "advanced" : "mods");
             button.setMessage(Text.translatable("text.soundcontrol.mode." + modeKey));
             this.soundList.loadEntries(this.viewMode);
-            this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.showEditedOnly);
+            this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
         }).dimensions(this.width / 2 - 160, this.height - 28, 100, 20).build());
 
         this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> this.close())
                 .dimensions(this.width / 2 - 50, this.height - 28, 100, 20).build());
 
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.button.reset"), button -> {
-            SoundConfig.SOUNDS.clear();
-            SoundConfig.save();
+            SoundConfig.resetSettings();
             this.soundList.loadEntries(this.viewMode);
-            this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.showEditedOnly);
+            this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
         }).dimensions(this.width / 2 + 60, this.height - 28, 100, 20).build());
 
         this.setInitialFocus(this.searchBox);
         this.soundList.loadEntries(this.viewMode);
-        this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.showEditedOnly);
+        this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
     }
 
     private void setCategory(SoundCategory category) {
         this.currentCategory = category;
-        this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.showEditedOnly);
+        this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
     }
 
     public void setSelectedMod(String modId) {
         this.selectedMod = modId;
-        this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.showEditedOnly);
+        this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
     }
 
     public String getSelectedMod() {
@@ -92,7 +102,7 @@ public class SoundControlScreen extends Screen {
 
     private void onSearch(String query) {
         if (this.soundList != null) {
-            this.soundList.filter(query, this.currentCategory, this.selectedMod, this.viewMode, this.showEditedOnly);
+            this.soundList.filter(query, this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
         }
     }
 
@@ -107,6 +117,28 @@ public class SoundControlScreen extends Screen {
 
         this.searchBox.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFF);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (this.viewMode == 2 && this.modList != null && this.modList.isMouseOver(mouseX, mouseY)) {
+            if (this.modList.mouseClicked(mouseX, mouseY, button)) {
+                this.setFocused(this.modList);
+                if (button == 0) this.setDragging(true);
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (this.viewMode == 2 && this.modList != null && this.modList.isMouseOver(mouseX, mouseY)) {
+            if (this.modList.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)) {
+                return true;
+            }
+        }
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Override
