@@ -26,5 +26,12 @@
   "text.soundcontrol.filter.edited": "Edited Only",
   "text.soundcontrol.global.hostile_ambient": "ALL HOSTILE MOB AMBIENT SOUNDS",
   "text.soundcontrol.global.passive_ambient": "ALL PASSIVE MOB AMBIENT SOUNDS",
-  "text.soundcontrol.filter.favorites": "Favorites Only"
+  "text.soundcontrol.filter.favorites": "Favorites Only",
+  "text.soundcontrol.button.radar_position": "Radar Position",
+  "text.soundcontrol.radar_position.title": "Change Radar Position",
+  "text.soundcontrol.radar_position.help": "Click and drag the radar preview to move it",
+  "gui.save": "Save",
+  "gui.cancel": "Exit",
+  "text.soundcontrol.tooltip.reset": "Reset to Default",
+  "tooltip.soundcontrol.favorite": "Add to favorites"
 }

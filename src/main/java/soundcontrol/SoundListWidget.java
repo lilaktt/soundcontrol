@@ -36,7 +36,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
             }
             Collections.sort(rawIds);
             for (String id : rawIds) {
-                this.allEntries.add(new SoundEntry(id, viewMode, this.getRowWidth()));
+                this.allEntries.add(new SoundEntry(id, viewMode, this.getRowWidth(), this));
             }
         } else {
             Set<String> uniqueGroups = new HashSet<>();
@@ -49,17 +49,17 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
             List<String> sortedGroups = new ArrayList<>(uniqueGroups);
             Collections.sort(sortedGroups);
 
-            this.allEntries.add(new SoundEntry("#global:break", viewMode, this.getRowWidth()));
-            this.allEntries.add(new SoundEntry("#global:place", viewMode, this.getRowWidth()));
-            this.allEntries.add(new SoundEntry("#global:step", viewMode, this.getRowWidth()));
-            this.allEntries.add(new SoundEntry("#global:hit", viewMode, this.getRowWidth()));
-            this.allEntries.add(new SoundEntry("#global:hostile_hurt", viewMode, this.getRowWidth()));
-            this.allEntries.add(new SoundEntry("#global:passive_hurt", viewMode, this.getRowWidth()));
-            this.allEntries.add(new SoundEntry("#global:hostile_ambient", viewMode, this.getRowWidth()));
-            this.allEntries.add(new SoundEntry("#global:passive_ambient", viewMode, this.getRowWidth()));
+            this.allEntries.add(new SoundEntry("#global:break", viewMode, this.getRowWidth(), this));
+            this.allEntries.add(new SoundEntry("#global:place", viewMode, this.getRowWidth(), this));
+            this.allEntries.add(new SoundEntry("#global:step", viewMode, this.getRowWidth(), this));
+            this.allEntries.add(new SoundEntry("#global:hit", viewMode, this.getRowWidth(), this));
+            this.allEntries.add(new SoundEntry("#global:hostile_hurt", viewMode, this.getRowWidth(), this));
+            this.allEntries.add(new SoundEntry("#global:passive_hurt", viewMode, this.getRowWidth(), this));
+            this.allEntries.add(new SoundEntry("#global:hostile_ambient", viewMode, this.getRowWidth(), this));
+            this.allEntries.add(new SoundEntry("#global:passive_ambient", viewMode, this.getRowWidth(), this));
 
             for (String group : sortedGroups) {
-                this.allEntries.add(new SoundEntry(group, viewMode, this.getRowWidth()));
+                this.allEntries.add(new SoundEntry(group, viewMode, this.getRowWidth(), this));
             }
         }
     }
@@ -74,13 +74,27 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         return this.width / 2 + 195;
     }
 
+    private String lastQuery = "";
+    private SoundCategory lastCategory = SoundCategory.ALL;
+    private String lastSelectedMod = "";
+    private int lastViewMode = 0;
+    private int lastFilterMode = 0;
+
     public void filter(String query, SoundCategory category, String selectedMod, int viewMode, int filterMode) {
+        this.lastQuery = query;
+        this.lastCategory = category;
+        this.lastSelectedMod = selectedMod;
+        this.lastViewMode = viewMode;
+        this.lastFilterMode = filterMode;
+
         this.clearEntries();
         String lowerQuery = query.toLowerCase();
         for (SoundEntry entry : this.allEntries) {
 
-            if (filterMode == 1 && !SoundConfig.SOUNDS.containsKey(entry.soundId)) {
-                continue;
+            if (filterMode == 1) {
+                if (!SoundConfig.SOUNDS.containsKey(entry.soundId)) continue;
+                SoundConfig.SoundSettings s = SoundConfig.SOUNDS.get(entry.soundId);
+                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f) continue;
             }
 
             if (filterMode == 2) {
@@ -91,7 +105,10 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
 
             boolean matchCategory = false;
 
-            if (viewMode == 2) {
+            if (filterMode == 2) {
+                // Favorites are global — show in any category/view
+                matchCategory = true;
+            } else if (viewMode == 2) {
                 if (selectedMod != null && !selectedMod.isEmpty()) {
                     if (selectedMod.equals("all")) {
                         matchCategory = !entry.soundId.startsWith("minecraft:") && !entry.soundId.startsWith("#global:");
@@ -117,18 +134,26 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         }
     }
 
+    public void refilter() {
+        filter(lastQuery, lastCategory, lastSelectedMod, lastViewMode, lastFilterMode);
+    }
+
     public static class SoundEntry extends ElementListWidget.Entry<SoundEntry> {
         final String soundId;
         private final ButtonWidget playButton;
         private final ButtonWidget muteButton;
         private final SliderWidget volumeSlider;
         private final ButtonWidget favoriteButton;
+        private final ButtonWidget resetButton;
+        private final ButtonWidget textHoverButton;
         private PositionedSoundInstance playingInstance;
         private final int entryWidth;
+        private final SoundListWidget parent;
 
-        public SoundEntry(String soundId, int viewMode, int entryWidth) {
+        public SoundEntry(String soundId, int viewMode, int entryWidth, SoundListWidget parent) {
             this.soundId = soundId;
             this.entryWidth = entryWidth;
+            this.parent = parent;
 
             boolean initialMuted = false;
             float initialVolume = 1.0f;
@@ -167,10 +192,18 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
                 SoundConfig.SoundSettings s = SoundConfig.SOUNDS.computeIfAbsent(this.soundId, k -> new SoundConfig.SoundSettings());
                 s.muted = !s.muted;
                 button.setMessage(Text.translatable(s.muted ? "text.soundcontrol.button.unmute" : "text.soundcontrol.button.mute"));
+                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) {
+                    SoundConfig.SOUNDS.remove(this.soundId);
+                }
                 SoundConfig.save();
+                parent.refilter();
             }).dimensions(0, 0, 50, 20).build();
 
-            this.volumeSlider = new SliderWidget(0, 0, 100, 20, Text.translatable("text.soundcontrol.slider.volume", (int)(initialVolume * 100)), initialVolume / 2.0f) {
+            class VolumeSlider extends SliderWidget {
+                public VolumeSlider(int x, int y, int width, int height, Text message, double value) {
+                    super(x, y, width, height, message, value);
+                }
+
                 @Override
                 protected void updateMessage() {
                     this.setMessage(Text.translatable("text.soundcontrol.slider.volume", (int)(this.value * 200)));
@@ -180,16 +213,54 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
                 protected void applyValue() {
                     SoundConfig.SoundSettings s = SoundConfig.SOUNDS.computeIfAbsent(soundId, k -> new SoundConfig.SoundSettings());
                     s.volume = (float) (this.value * 2.0f);
+                    if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.SOUNDS.remove(soundId);
                     SoundConfig.save();
                 }
-            };
+
+                public void resetValue() {
+                    this.value = 0.5;
+                    this.updateMessage();
+                }
+            }
+
+            this.volumeSlider = new VolumeSlider(0, 0, 100, 20, Text.translatable("text.soundcontrol.slider.volume", (int)(initialVolume * 100)), initialVolume / 2.0f);
 
             this.favoriteButton = ButtonWidget.builder(Text.literal(initialFavorite ? "★" : "☆"), button -> {
                 SoundConfig.SoundSettings s = SoundConfig.SOUNDS.computeIfAbsent(this.soundId, k -> new SoundConfig.SoundSettings());
                 s.favorite = !s.favorite;
                 button.setMessage(Text.literal(s.favorite ? "★" : "☆"));
+                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) {
+                    SoundConfig.SOUNDS.remove(this.soundId);
+                }
                 SoundConfig.save();
-            }).dimensions(0, 0, 20, 20).build();
+                parent.refilter();
+            })
+            .dimensions(0, 0, 20, 20)
+            .tooltip(Tooltip.of(Text.translatable("tooltip.soundcontrol.favorite")))
+            .build();
+
+            this.resetButton = ButtonWidget.builder(Text.literal("⟲"), button -> {
+                SoundConfig.SoundSettings current = SoundConfig.SOUNDS.get(this.soundId);
+                boolean wasFavorite = current != null && current.favorite;
+                if (wasFavorite) {
+                    current.volume = 1.0f;
+                    current.muted = false;
+                } else {
+                    SoundConfig.SOUNDS.remove(this.soundId);
+                }
+                SoundConfig.save();
+                this.muteButton.setMessage(Text.translatable("text.soundcontrol.button.mute"));
+                ((VolumeSlider) this.volumeSlider).resetValue();
+                parent.refilter();
+            })
+            .dimensions(0, 0, 20, 20)
+            .tooltip(Tooltip.of(Text.translatable("text.soundcontrol.tooltip.reset")))
+            .build();
+
+            this.textHoverButton = ButtonWidget.builder(Text.empty(), button -> {})
+                .dimensions(0, 0, this.entryWidth - 235, 20)
+                .build();
+            this.textHoverButton.setAlpha(0.0f);
         }
 
         public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
@@ -217,29 +288,42 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
 
             context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, trimmedText, x + 5, y + 6, color);
 
-            this.playButton.setX(x + this.entryWidth - 210);
+            if (!textStr.equals(trimmedText)) {
+                this.textHoverButton.setTooltip(Tooltip.of(displayIdText));
+            } else {
+                this.textHoverButton.setTooltip(null);
+            }
+            this.textHoverButton.setX(x + 5);
+            this.textHoverButton.setY(y);
+            this.textHoverButton.render(context, mouseX, mouseY, tickDelta);
+
+            this.playButton.setX(x + this.entryWidth - 230);
             this.playButton.setY(y);
             this.playButton.render(context, mouseX, mouseY, tickDelta);
 
-            this.muteButton.setX(x + this.entryWidth - 185);
+            this.muteButton.setX(x + this.entryWidth - 205);
             this.muteButton.setY(y);
             this.muteButton.render(context, mouseX, mouseY, tickDelta);
 
-            this.volumeSlider.setX(x + this.entryWidth - 130);
+            this.volumeSlider.setX(x + this.entryWidth - 150);
             this.volumeSlider.setY(y);
             this.volumeSlider.render(context, mouseX, mouseY, tickDelta);
 
-            this.favoriteButton.setX(x + this.entryWidth - 25);
+            this.favoriteButton.setX(x + this.entryWidth - 45);
             this.favoriteButton.setY(y);
             this.favoriteButton.render(context, mouseX, mouseY, tickDelta);
+
+            this.resetButton.setX(x + this.entryWidth - 20);
+            this.resetButton.setY(y);
+            this.resetButton.render(context, mouseX, mouseY, tickDelta);
         }
 
         public List<? extends net.minecraft.client.gui.Element> children() {
-            return List.of(this.playButton, this.muteButton, this.volumeSlider, this.favoriteButton);
+            return List.of(this.playButton, this.muteButton, this.volumeSlider, this.favoriteButton, this.resetButton, this.textHoverButton);
         }
 
         public List<? extends net.minecraft.client.gui.Selectable> selectableChildren() {
-            return List.of(this.playButton, this.muteButton, this.volumeSlider, this.favoriteButton);
+            return List.of(this.playButton, this.muteButton, this.volumeSlider, this.favoriteButton, this.resetButton);
         }
     }
 }

@@ -42,6 +42,10 @@ public class SoundControlScreen extends Screen {
             this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
         }).dimensions(this.width / 2 + 50, 22, 100, 20).build());
 
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.button.radar_position"), button -> {
+            this.client.setScreen(new RadarPositionScreen(this));
+        }).dimensions(this.width - 110, 5, 100, 20).build());
+
         int buttonWidth = 60;
         int startX = this.width / 2 - (buttonWidth * 3 + 10) / 2;
 
