@@ -1,8 +1,9 @@
 {
-  "category.soundcontrol.main": "Контроль Звука",
-  "key.soundcontrol.open": "Открыть Настройки Звука",
+  "key.category.soundcontrol.main": "Sound Control",
+  "category.soundcontrol.main": "Sound Control",
+  "key.soundcontrol.open": "Открыть настройки звука",
   "key.soundcontrol.toggle_overlay": "Отображение звуков на экране",
-  "text.soundcontrol.title": "Контроль Звука",
+  "text.soundcontrol.title": "Управление звуком",
   "text.soundcontrol.category.all": "Все",
   "text.soundcontrol.category.mobs": "Мобы",
   "text.soundcontrol.category.blocks": "Блоки",
@@ -15,7 +16,7 @@
   "text.soundcontrol.button.unmute": "Вкл",
   "text.soundcontrol.slider.volume": "Громкость: %s%%",
   "text.soundcontrol.modlist.all": "Все моды",
-  "text.soundcontrol.global.break": "ВСЕ ЗВУКИ ЛОМАНИЯ БЛОКОВ",
+  "text.soundcontrol.global.break": "ВСЕ ЗВУКИ ПОЛОМКИ БЛОКОВ",
   "text.soundcontrol.global.place": "ВСЕ ЗВУКИ УСТАНОВКИ БЛОКОВ",
   "text.soundcontrol.global.step": "ВСЕ ЗВУКИ ШАГОВ",
   "text.soundcontrol.global.hit": "ВСЕ ЗВУКИ УДАРОВ",
@@ -23,5 +24,15 @@
   "text.soundcontrol.global.passive_hurt": "ВСЕ ЗВУКИ УРОНА ДОБРЫХ МОБОВ",
   "text.soundcontrol.tooltip.advanced_only": "Доступно только в Продвинутом режиме",
   "text.soundcontrol.filter.all": "Все звуки",
-  "text.soundcontrol.filter.edited": "Только измененные"
+  "text.soundcontrol.filter.edited": "Только измененные",
+  "text.soundcontrol.global.hostile_ambient": "ВСЕ ЗВУКИ ПРИСУТСТВИЯ (ВРАЖДЕБНЫЕ)",
+  "text.soundcontrol.global.passive_ambient": "ВСЕ ЗВУКИ ПРИСУТСТВИЯ (МИРНЫЕ)",
+  "text.soundcontrol.filter.favorites": "Только избранные",
+  "text.soundcontrol.button.radar_position": "Позиция радара",
+  "text.soundcontrol.radar_position.title": "Изменить расположение радара",
+  "text.soundcontrol.radar_position.help": "Зажмите и перетащите радар мышкой",
+  "gui.save": "Сохранить",
+  "gui.cancel": "Выход",
+  "text.soundcontrol.tooltip.reset": "Сбросить до стандартных",
+  "tooltip.soundcontrol.favorite": "Добавить в избранное"
 }
