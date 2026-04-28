@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AbstractSoundInstanceMixin",
-    "SoundTrackerMixin"
+    "SoundTrackerMixin",
+    "SoundEngineMixin",
+    "ChannelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
