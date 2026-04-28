@@ -31,5 +31,7 @@
   "text.soundcontrol.radar_position.title": "レーダーの位置を変更",
   "text.soundcontrol.radar_position.help": "プレビューをドラッグして移動",
   "gui.save": "保存",
-  "gui.cancel": "終了"
+  "gui.cancel": "終了",
+  "text.soundcontrol.tooltip.reset": "デフォルトにリセット",
+  "tooltip.soundcontrol.favorite": "お気に入りに追加"
 }

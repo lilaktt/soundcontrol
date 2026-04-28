@@ -32,5 +32,6 @@
   "text.soundcontrol.radar_position.help": "Затисніть та перетягніть радар мишкою",
   "gui.save": "Зберегти",
   "gui.cancel": "Вийти",
-  "text.soundcontrol.tooltip.reset": "Скинути до стандартних"
+  "text.soundcontrol.tooltip.reset": "Скинути до стандартних",
+  "tooltip.soundcontrol.favorite": "Додати до обраних"
 }

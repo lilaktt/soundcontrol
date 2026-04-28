@@ -31,5 +31,7 @@
   "text.soundcontrol.radar_position.title": "레이더 위치 변경",
   "text.soundcontrol.radar_position.help": "미리보기를 드래그하여 이동",
   "gui.save": "저장",
-  "gui.cancel": "나가기"
+  "gui.cancel": "나가기",
+  "text.soundcontrol.tooltip.reset": "기본값으로 재설정",
+  "tooltip.soundcontrol.favorite": "즐겨찾기에 추가"
 }

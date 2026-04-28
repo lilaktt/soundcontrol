@@ -31,5 +31,7 @@
   "text.soundcontrol.radar_position.title": "Изменить расположение радара",
   "text.soundcontrol.radar_position.help": "Зажмите и перетащите радар мышкой",
   "gui.save": "Сохранить",
-  "gui.cancel": "Выход"
+  "gui.cancel": "Выход",
+  "text.soundcontrol.tooltip.reset": "Сбросить до стандартных",
+  "tooltip.soundcontrol.favorite": "Добавить в избранное"
 }

@@ -31,5 +31,7 @@
   "text.soundcontrol.radar_position.title": "Modifier la position du radar",
   "text.soundcontrol.radar_position.help": "Cliquez et faites glisser l'aperçu pour déplacer",
   "gui.save": "Enregistrer",
-  "gui.cancel": "Quitter"
+  "gui.cancel": "Quitter",
+  "text.soundcontrol.tooltip.reset": "Réinitialiser",
+  "tooltip.soundcontrol.favorite": "Ajouter aux favoris"
 }
