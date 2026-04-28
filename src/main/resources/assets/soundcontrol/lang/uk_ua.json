@@ -1,5 +1,6 @@
 {
-  "category.soundcontrol.main": "Контроль Звуку",
+  "key.category.soundcontrol.main": "Sound Control",
+  "category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Відкрити Налаштування Звуку",
   "key.soundcontrol.toggle_overlay": "Відображення звуків на екрані",
   "text.soundcontrol.title": "Контроль Звуку",
@@ -26,5 +27,12 @@
   "text.soundcontrol.filter.edited": "Лише змінені",
   "text.soundcontrol.global.hostile_ambient": "ВСІ ЗВУКИ ІСНУВАННЯ (ВОРОЖІ)",
   "text.soundcontrol.global.passive_ambient": "ВСІ ЗВУКИ ІСНУВАННЯ (МИРНІ)",
-  "text.soundcontrol.filter.favorites": "Тільки Обрані"
+  "text.soundcontrol.filter.favorites": "Тільки Обрані",
+  "text.soundcontrol.button.radar_position": "Позиція радара",
+  "text.soundcontrol.radar_position.title": "Змінити розташування радара",
+  "text.soundcontrol.radar_position.help": "Затисніть та перетягніть радар мишкою",
+  "gui.save": "Зберегти",
+  "gui.cancel": "Вийти",
+  "text.soundcontrol.tooltip.reset": "Скинути до стандартних",
+  "tooltip.soundcontrol.favorite": "Додати до обраних"
 }

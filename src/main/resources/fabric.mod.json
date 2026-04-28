@@ -3,15 +3,22 @@
   "id": "soundcontrol",
   "version": "${version}",
   "name": "Sound Control",
-  "description": "Advanced sound control for individual sounds and mobs.",
+  "description": "Total control over Minecraft's audio. Mute annoying sounds, adjust individual volumes, mark favorites, and track audio with a built-in radar.",
   "authors": ["lilaktt"],
-  "contact": {},
+  "contact": {
+    "homepage": "https://modrinth.com/mod/sound_control",
+    "sources": "https://github.com/lilaktt/soundcontrol",
+    "issues": "https://github.com/lilaktt/soundcontrol/issues"
+  },
   "license": "MIT",
   "icon": "assets/soundcontrol/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
       "soundcontrol.SoundControl"
+    ],
+    "modmenu": [
+      "soundcontrol.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -19,7 +26,7 @@
   ],
   "depends": {
     "fabricloader": ">=0.15.11",
-    "minecraft": "~1.21",
+    "minecraft": ">=1.21.6 <=1.21.8",
     "java": ">=21",
     "fabric-api": "*"
   }

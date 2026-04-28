@@ -14,6 +14,7 @@ public class SoundControlScreen extends Screen {
     private ModListWidget modList;
     private SoundCategory currentCategory = SoundCategory.ALL;
     private int viewMode = 0;
+    public int getViewMode() { return this.viewMode; }
     private String selectedMod = "";
     private int filterMode = 0;
 
@@ -38,6 +39,10 @@ public class SoundControlScreen extends Screen {
             button.setMessage(getFilterText());
             this.soundList.filter(this.searchBox.getText(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
         }).dimensions(this.width / 2 + 50, 22, 100, 20).build());
+
+                this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.button.radar_position"), button -> {
+            this.client.setScreen(new RadarPositionScreen(this));
+        }).dimensions(this.width - 110, 5, 100, 20).build());
 
         int buttonWidth = 60;
         int startX = this.width / 2 - (buttonWidth * 3 + 10) / 2;
@@ -110,6 +115,28 @@ public class SoundControlScreen extends Screen {
 
         this.searchBox.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFFFF);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (this.viewMode == 2 && this.modList != null && this.modList.isMouseOver(mouseX, mouseY)) {
+            if (this.modList.mouseClicked(mouseX, mouseY, button)) {
+                this.setFocused(this.modList);
+                if (button == 0) this.setDragging(true);
+                return true;
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (this.viewMode == 2 && this.modList != null && this.modList.isMouseOver(mouseX, mouseY)) {
+            if (this.modList.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)) {
+                return true;
+            }
+        }
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Override

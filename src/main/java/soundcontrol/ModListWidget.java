@@ -2,6 +2,7 @@ package soundcontrol;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -56,10 +57,17 @@ public class ModListWidget extends ElementListWidget<ModListWidget.ModEntry> {
     public class ModEntry extends ElementListWidget.Entry<ModEntry> {
         private final String modId;
         private final ModListWidget parentList;
+        private final ButtonWidget button;
 
         public ModEntry(String modId, ModListWidget parentList) {
             this.modId = modId;
             this.parentList = parentList;
+
+            String displayText = this.modId.equals("all") ? Text.translatable("text.soundcontrol.modlist.all").getString() : this.modId;
+
+            this.button = ButtonWidget.builder(Text.literal(displayText), b -> {
+                this.parentList.selectMod(this.modId);
+            }).dimensions(0, 0, 100, 15).build();
         }
 
         public String getModId() {
@@ -68,25 +76,38 @@ public class ModListWidget extends ElementListWidget<ModListWidget.ModEntry> {
 
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            int color = parentList.parent.getSelectedMod().equals(this.modId) ? 0xFF00FF00 : 0xFFFFFFFF;
+            this.button.setX(x);
+            this.button.setY(y);
+
+            boolean isSelected = parentList.parent.getSelectedMod().equals(this.modId);
+            String prefix = isSelected ? "▶ " : "";
             String displayText = this.modId.equals("all") ? Text.translatable("text.soundcontrol.modlist.all").getString() : this.modId;
-            context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, displayText, x + 5, y + 2, color);
+            this.button.setMessage(Text.literal(prefix + displayText));
+
+            this.button.render(context, mouseX, mouseY, tickDelta);
         }
 
         @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            this.parentList.selectMod(this.modId);
-            return true;
+        public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+            if (this.parentList.parent.getViewMode() != 2) return false;
+            if (mouseButton == 0) {
+                this.parentList.selectMod(this.modId);
+                MinecraftClient.getInstance().getSoundManager().play(net.minecraft.client.sound.PositionedSoundInstance.master(net.minecraft.sound.SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                return true;
+            }
+            return false;
         }
 
         @Override
         public List<? extends net.minecraft.client.gui.Element> children() {
-            return List.of();
+            if (this.parentList.parent.getViewMode() != 2) return List.of();
+            return List.of(this.button);
         }
 
         @Override
         public List<? extends net.minecraft.client.gui.Selectable> selectableChildren() {
-            return List.of();
+            if (this.parentList.parent.getViewMode() != 2) return List.of();
+            return List.of(this.button);
         }
     }
 }
