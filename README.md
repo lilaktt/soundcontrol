@@ -1,30 +1,39 @@
-# 🎧 Sound Control (v1.21.6 - 1.21.8)
+# 🔊 Sound Control
 
-![Fabric](https://img.shields.io/badge/Modloader-Fabric-lightgrey?style=flat-square)
-![Minecraft Versions](https://img.shields.io/badge/Minecraft-1.21.6%20--%201.21.8-brightgreen?style=flat-square)
+![Minecraft Versions](https://img.shields.io/badge/Minecraft-1.21%20to%2026.1.1-2b2d2f?style=for-the-badge&logo=minecraft)
+[![Modrinth](https://img.shields.io/badge/Modrinth-00AF5C?style=for-the-badge&logo=modrinth&logoColor=white)](https://modrinth.com/mod/sound_control)
+[![CurseForge](https://img.shields.io/badge/CurseForge-F16436?style=for-the-badge&logo=curseforge&logoColor=white)](https://www.curseforge.com/minecraft/mc-mods/advanced-sound-control)
+[![Fabric](https://img.shields.io/badge/Fabric-DBD8BD?style=for-the-badge&logo=fabric&logoColor=211E26)](#)
 
-**Sound Control** is a client-side Fabric utility mod that gives you complete, granular control over every single sound in Minecraft. 
+**Sound Control** is the ultimate utility mod for managing your Minecraft audio experience. It gives you precise control over every single sound in the game, allowing you to mute annoying noises, boost quiet sounds, or completely customize your audio environment.
 
 ## ✨ Features
 
-* ⭐ **Favorites System:** Pin your most frequently tweaked sounds to the top of the list for quick and easy access using the **(★)** button.
-* 🎚️ **Individual Volume Control:** Adjust the volume or completely mute *any* specific sound in the game independently.
-* 🔍 **Smart Search & Filters:** Quickly find sounds using the search bar, or filter by categories (Mobs, Blocks, All) and Status (Edited, Favorites).
-* 👀 **Live Sound Tracker:** Toggle an on-screen overlay to see exactly which sound IDs are currently playing around you in real-time.
-* 🌍 **Client-Side Only:** No server-side installation required. Works on any vanilla or modded server.
-* 🌐 **Fully Localized:** Supports 12+ languages including English, Ukrainian, German, French, and more.
+* **🎚️ Individual Sound Volume Control:** Change the volume of *any* specific sound in the game independently from the master volume.
+* **🔇 Instant Mute:** Mute annoying sounds (like nether portals, specific mobs, or rain) with a single click.
+* **⭐ Favorites System:** Pin your most frequently tweaked sounds to your "Favorites" list for instant access.
+* **🔎 Smart Search & Categories:** 
+  * Instantly find sounds with a built-in search bar (supports multiple languages!).
+  * Filter sounds by categories like `All`, `Mobs`, or `Blocks`.
+  * Filter views to show `All Sounds`, `Edited Only`, or `Favorites Only`.
+* **📡 Directional Sound Radar:** An on-screen visual radar that shows you the direction of sounds happening around you. Perfect for locating caves, hostile mobs, or players!
+  * Fully customizable radar position via drag-and-drop on the screen.
+* **▶️ In-Menu Previews:** Listen to the sound before you edit it right inside the mod menu using the play button.
+* **📂 Mod Support:** Easily filter and manage sounds from other mods you have installed.
 
-## 🎮 How to Use
+## 📥 Installation
 
-* **`V`** - Open the main Sound Control GUI.
-* **`Y`** - Toggle the Live Sound Tracker overlay on/off.
-* In the menu, simply click the **Play (▶)** button to preview, the **Mute** button to silence, or the **Star (★)** to add to Favorites.
+1. Install [Fabric Loader](https://fabricmc.net/).
+2. Download the appropriate version of **Sound Control** from [Modrinth](https://modrinth.com/mod/sound_control) or [CurseForge](https://www.curseforge.com/minecraft/mc-mods/advanced-sound-control).
+3. Drop the `.jar` file into your `.minecraft/mods` folder.
+4. *(Optional but recommended)* Install ModMenu to easily access the configuration screen.
 
-## 📦 Installation
+## ⚙️ Usage
 
-1. Install the [Fabric Loader](https://fabricmc.net/).
-2. Download the version for your Minecraft version (1.21.6+) and place it in your `mods` folder.
-3. Launch the game!
+To open the Sound Control menu, simply go to your Mod Menu list and click the configuration button next to Sound Control, or use the assigned hotkey (if configured).
+
+From there, you can scroll through the sounds, search for specific ones, preview them, and tweak their volume or mute them entirely. All changes are saved automatically and persist across your play sessions!
 
 ---
-*Created with ❤️ for the Minecraft community.*
+
+*Thank you for using Sound Control! If you enjoy the mod, consider leaving a star on GitHub!* ⭐
