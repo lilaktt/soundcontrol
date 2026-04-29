@@ -1,0 +1,25 @@
+# Gradle
+.gradle/
+build/
+bin/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Runtime
+run/
+crash-*.txt
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+test.java
+*.class
