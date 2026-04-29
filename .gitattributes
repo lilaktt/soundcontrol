@@ -1,0 +1,7 @@
+# Mark all HTML files as documentation so they don't count towards project languages
+*.html linguist-documentation=true
+*.bat linguist-documentation=true
+
+# Ignore the build folder for statistics even if it's accidentally tracked
+build/** linguist-vendored=true
+.gradle/** linguist-vendored=true
