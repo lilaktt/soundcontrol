@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All rights reserved"
+
+[[mods]]
+modId="soundcontrol"
+version="${version}"
+logoFile="assets/soundcontrol/icon.png"
+displayName="${mod_name}"
+authors="lilaktt"
+description='''
+Sound Control gives you granular control over every sound in Minecraft.
+Ported to NeoForge 26.1.
+'''
+
+[[mixins]]
+config="soundcontrol.mixins.json"
+
+[[dependencies.soundcontrol]]
+    modId="neoforge"
+    type="required"
+    versionRange="[26.1,26.2)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.soundcontrol]]
+    modId="minecraft"
+    type="required"
+    versionRange="[26.1,26.2)"
+    ordering="NONE"
+    side="BOTH"

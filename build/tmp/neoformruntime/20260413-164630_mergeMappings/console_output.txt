@@ -1,0 +1,24 @@
+--------------------------------------------------------------------------------
+
+Command-Line:
+ - C:\Program Files\Java\jdk-21\bin\java.exe
+ - -jar
+ - C:\Users\Admin\.gradle\caches\modules-2\files-2.1\net.neoforged.installertools\installertools\4.0.7\679b87aecf538183e16421207505b70b868547d\installertools-4.0.7-fatjar.jar
+ - --task
+ - MERGE_MAPPING
+ - --base
+ - C:\Users\Admin\.gradle\caches\neoformruntime\artifacts\minecraft_1.21.11_client_mappings.txt
+ - --merge
+ - config\joined.tsrg
+ - --reverse-base
+ - --output
+ - ./output.tsrg
+--------------------------------------------------------------------------------
+
+Task: MERGE_MAPPING
+Base Mappings: C:\Users\Admin\.gradle\caches\neoformruntime\artifacts\minecraft_1.21.11_client_mappings.txt
+Reverse Base Mappings: true
+Merge Mappings: config\joined.tsrg
+Reverse Merge Mappings: false
+Output: .\output.tsrg
+Reverse Output: false
