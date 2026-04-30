@@ -1,0 +1,18 @@
+--------------------------------------------------------------------------------
+
+Command-Line:
+ - C:\Program Files\Java\jdk-21\bin\java.exe
+ - -jar
+ - C:\Users\Admin\.gradle\caches\modules-2\files-2.1\net.neoforged\mergetool\2.0.7\8d217011e2eac8f185c9351240282c780be53e72\mergetool-2.0.7-fatjar.jar
+ - --client
+ - C:\Users\Admin\.gradle\caches\neoformruntime\intermediate_results\stripClient_c5065bfe236315b0771ff442d4d0e243ee95f905_output.jar
+ - --server
+ - C:\Users\Admin\.gradle\caches\neoformruntime\intermediate_results\stripServer_2e77e38f0c8739958d5c986c6668285bdbdf5cc8_output.jar
+ - --ann
+ - 1.21.9
+ - --output
+ - ./output.jar
+ - --inject
+ - false
+--------------------------------------------------------------------------------
+

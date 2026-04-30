@@ -1,5 +1,5 @@
-{
-  "key.category.soundcontrol.main": "Управление звуком",
+﻿{
+  "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Открыть настройки звука",
   "key.soundcontrol.toggle_overlay": "Отображение звуков на экране",
   "text.soundcontrol.title": "Управление звуком",
@@ -26,5 +26,13 @@
   "text.soundcontrol.filter.edited": "Только измененные",
   "text.soundcontrol.global.hostile_ambient": "ВСЕ ЗВУКИ ПРИСУТСТВИЯ (ВРАЖДЕБНЫЕ)",
   "text.soundcontrol.global.passive_ambient": "ВСЕ ЗВУКИ ПРИСУТСТВИЯ (МИРНЫЕ)",
-  "text.soundcontrol.filter.favorites": "Только избранные"
+  "text.soundcontrol.filter.favorites": "Только избранные",
+  "text.soundcontrol.button.radar_position": "Позиция радара",
+  "text.soundcontrol.radar_position.title": "Изменить расположение радара",
+  "text.soundcontrol.radar_position.help": "Зажмите и перетащите радар мышкой",
+  "gui.save": "Сохранить",
+  "gui.cancel": "Выход"
+,
+  "text.soundcontrol.tooltip.reset": "Сбросить до стандартных",
+  "tooltip.soundcontrol.favorite": "Добавить в избранное"
 }

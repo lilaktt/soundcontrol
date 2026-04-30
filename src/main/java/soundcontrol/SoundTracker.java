@@ -1,7 +1,7 @@
 package soundcontrol;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -21,12 +21,15 @@ public class SoundTracker {
         }
     }
 
-    public static void render(DrawContext context) {
+    public static void render(GuiGraphics context) {
         if (!showOverlay) return;
 
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft client = Minecraft.getInstance();
+        var font = client.font;
         long currentTime = System.currentTimeMillis();
-        int yOffset = 5;
+
+        int x = 5;
+        int y = 5;
 
         synchronized (activeSounds) {
             Iterator<Map.Entry<String, Long>> iterator = activeSounds.entrySet().iterator();
@@ -35,8 +38,8 @@ public class SoundTracker {
                 if (currentTime > entry.getValue()) {
                     iterator.remove();
                 } else {
-                    context.drawTextWithShadow(client.textRenderer, entry.getKey(), 5, yOffset, 0xFF00FF00);
-                    yOffset += 10;
+                    context.drawString(font, "» " + entry.getKey().substring(entry.getKey().indexOf(':') + 1), x, y, 0xFF00FF00, true);
+                    y += 10;
                 }
             }
         }
