@@ -1,0 +1,10 @@
+﻿.gradle/
+build/
+bin/
+.idea/
+.vscode/
+*.log
+crash-*.txt
+logs/
+run/
+neo 26.1/
