@@ -7,3 +7,11 @@ bin
 *.log
 run/
 .DS_Store
+.gradle/
+build/
+bin/
+.idea/
+.vscode/
+crash-*.txt
+logs/
+neo 26.1/
