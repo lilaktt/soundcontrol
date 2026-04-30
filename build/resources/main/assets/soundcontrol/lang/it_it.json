@@ -1,5 +1,5 @@
-{
-  "key.category.soundcontrol.main": "Controllo del Suono",
+﻿{
+  "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Apri impostazioni audio",
   "key.soundcontrol.toggle_overlay": "Attiva/disattiva overlay audio",
   "text.soundcontrol.title": "Controllo del Suono",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "TUTTI I SUONI DI POSIZIONAMENTO",
   "text.soundcontrol.global.step": "TUTTI I SUONI DI PASSI",
   "text.soundcontrol.global.hit": "TUTTI I SUONI DI COLPI",
-  "text.soundcontrol.global.hostile_hurt": "TUTTI I SUONI DI DANNO OSTILI",
-  "text.soundcontrol.global.passive_hurt": "TUTTI I SUONI DI DANNO PASSIVI",
+  "text.soundcontrol.global.hostile_hurt": "TUTTI I SUONI DI DANNO E MORTE DEI MOB OSTILI",
+  "text.soundcontrol.global.passive_hurt": "TUTTI I SUONI DI DANNO E MORTE DEI MOB PASSIVI",
   "text.soundcontrol.tooltip.advanced_only": "Disponibile solo in modalità avanzata",
   "text.soundcontrol.filter.all": "Tutti i suoni",
   "text.soundcontrol.filter.edited": "Solo modificati",
@@ -32,4 +32,7 @@
   "text.soundcontrol.radar_position.help": "Clicca e trascina l'anteprima per spostarla",
   "gui.save": "Salva",
   "gui.cancel": "Esci"
+,
+  "text.soundcontrol.tooltip.reset": "Ripristina predefiniti",
+  "tooltip.soundcontrol.favorite": "Aggiungi ai preferiti"
 }

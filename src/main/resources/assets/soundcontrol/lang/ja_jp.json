@@ -1,5 +1,5 @@
 ﻿{
-  "key.category.soundcontrol.main": "サウンドコントロール",
+  "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "サウンド設定を開く",
   "key.soundcontrol.toggle_overlay": "サウンドオーバーレイを切り替え",
   "text.soundcontrol.title": "サウンドコントロール",
@@ -32,4 +32,7 @@
   "text.soundcontrol.radar_position.help": "プレビューをドラッグして移動",
   "gui.save": "保存",
   "gui.cancel": "終了"
+,
+  "text.soundcontrol.tooltip.reset": "デフォルトにリセット",
+  "tooltip.soundcontrol.favorite": "お気に入りに追加"
 }

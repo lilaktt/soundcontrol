@@ -1,5 +1,5 @@
 ﻿{
-  "key.category.soundcontrol.main": "Control de Sonido",
+  "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Abrir ajustes de sonido",
   "key.soundcontrol.toggle_overlay": "Alternar superposición de sonido",
   "text.soundcontrol.title": "Control de Sonido",
@@ -32,4 +32,7 @@
   "text.soundcontrol.radar_position.help": "Haz clic y arrastra la vista previa para moverla",
   "gui.save": "Guardar",
   "gui.cancel": "Salir"
+,
+  "text.soundcontrol.tooltip.reset": "Restablecer por defecto",
+  "tooltip.soundcontrol.favorite": "Añadir a favoritos"
 }

@@ -1,5 +1,5 @@
 ﻿{
-  "key.category.soundcontrol.main": "Kontrola Dźwięku",
+  "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Otwórz ustawienia dźwięku",
   "key.soundcontrol.toggle_overlay": "Przełącz nakładkę dźwiękową",
   "text.soundcontrol.title": "Kontrola Dźwięku",
@@ -32,4 +32,7 @@
   "text.soundcontrol.radar_position.help": "Kliknij i przeciągnij podgląd, aby przesunąć",
   "gui.save": "Zapisz",
   "gui.cancel": "Wyjdź"
+,
+  "text.soundcontrol.tooltip.reset": "Przywróć domyślne",
+  "tooltip.soundcontrol.favorite": "Dodaj do ulubionych"
 }

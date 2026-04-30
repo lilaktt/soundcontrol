@@ -1,5 +1,5 @@
 ﻿{
-  "key.category.soundcontrol.main": "Contrôle du Son",
+  "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Ouvrir les paramètres audio",
   "key.soundcontrol.toggle_overlay": "Basculer l'affichage du son",
   "text.soundcontrol.title": "Contrôle du Son",
@@ -32,4 +32,7 @@
   "text.soundcontrol.radar_position.help": "Cliquez et faites glisser l'aperçu pour déplacer",
   "gui.save": "Enregistrer",
   "gui.cancel": "Quitter"
+,
+  "text.soundcontrol.tooltip.reset": "Réinitialiser",
+  "tooltip.soundcontrol.favorite": "Ajouter aux favoris"
 }

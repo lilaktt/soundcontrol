@@ -19,9 +19,15 @@ public class SoundControlScreen extends Screen {
 
 
     private int filterMode = 0;
+    private final Screen parent;
+
+    public SoundControlScreen(Screen parent) {
+        super(Component.translatable("text.soundcontrol.title"));
+        this.parent = parent;
+    }
 
     public SoundControlScreen() {
-        super(Component.translatable("text.soundcontrol.title"));
+        this(null);
     }
 
     private Component getFilterText() {
@@ -142,5 +148,14 @@ public class SoundControlScreen extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public void onClose() {
+        if (this.minecraft != null) {
+            this.minecraft.setScreen(this.parent);
+        } else {
+            super.onClose();
+        }
     }
 }

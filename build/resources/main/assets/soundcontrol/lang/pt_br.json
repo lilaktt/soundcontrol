@@ -1,5 +1,5 @@
-{
-  "key.category.soundcontrol.main": "Controle de Som",
+﻿{
+  "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Abrir configurações de som",
   "key.soundcontrol.toggle_overlay": "Alternar sobreposição de som",
   "text.soundcontrol.title": "Controle de Som",
@@ -19,8 +19,8 @@
   "text.soundcontrol.global.place": "TODOS OS SONS DE COLOCAÇÃO",
   "text.soundcontrol.global.step": "TODOS OS SONS DE PASSOS",
   "text.soundcontrol.global.hit": "TODOS OS SONS DE GOLPES",
-  "text.soundcontrol.global.hostile_hurt": "TODOS OS SONS DE DANO HOSTIL",
-  "text.soundcontrol.global.passive_hurt": "TODOS OS SONS DE DANO PASSIVO",
+  "text.soundcontrol.global.hostile_hurt": "TODOS OS SONS DE DANO E MORTE DE MOBS HOSTIS",
+  "text.soundcontrol.global.passive_hurt": "TODOS OS SONS DE DANO E MORTE DE MOBS PASSIVOS",
   "text.soundcontrol.tooltip.advanced_only": "Disponível apenas no modo avançado",
   "text.soundcontrol.filter.all": "Todos os sons",
   "text.soundcontrol.filter.edited": "Apenas editados",
@@ -32,4 +32,7 @@
   "text.soundcontrol.radar_position.help": "Clique e arraste a prévia para mover",
   "gui.save": "Salvar",
   "gui.cancel": "Sair"
+,
+  "text.soundcontrol.tooltip.reset": "Restaurar padrão",
+  "tooltip.soundcontrol.favorite": "Adicionar aos favoritos"
 }
