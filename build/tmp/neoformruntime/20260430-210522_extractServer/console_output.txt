@@ -1,0 +1,22 @@
+--------------------------------------------------------------------------------
+
+Command-Line:
+ - C:\Program Files\Java\jdk-21\bin\java.exe
+ - -jar
+ - C:\Users\Admin\.gradle\caches\modules-2\files-2.1\net.neoforged.installertools\installertools\3.0.13\f4e4010a2c6a0c64c831b8ccf66a592b03c92138\installertools-3.0.13-fatjar.jar
+ - --task
+ - bundler_extract
+ - --input
+ - C:\Users\Admin\.gradle\caches\neoformruntime\artifacts\minecraft_1.21.10_server.jar
+ - --output
+ - ./output.jar
+ - --jar-only
+--------------------------------------------------------------------------------
+
+Task: BUNDLER_EXTRACT
+Input:   C:\Users\Admin\.gradle\caches\neoformruntime\artifacts\minecraft_1.21.10_server.jar
+Output:  D:\CREATEMOD\development\sc neoforge 1.21.10\build\tmp\neoformruntime\20260430-210522_extractServer\.\output.jar
+All:     false
+JarOnly: true
+Libs:    false
+Extracted: versions/1.21.10/server-1.21.10.jar

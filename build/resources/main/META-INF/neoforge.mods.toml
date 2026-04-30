@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="MIT"
+
+[[mods]]
+modId="soundcontrol"
+version="1.3.1+neo-1.21.10"
+logoFile="assets/soundcontrol/icon.png"
+displayName="Sound Control"
+authors="lilaktt"
+description="Total control over Minecraft's audio. Mute annoying sounds, adjust individual volumes, mark favorites, and track audio with a built-in radar."
+displayURL="https://modrinth.com/mod/sound_control"
+issuesURL="https://github.com/lilaktt/soundcontrol/issues"
+sourcesURL="https://github.com/lilaktt/soundcontrol"
+
+[[mixins]]
+config="soundcontrol.mixins.json"
+
+[[dependencies.soundcontrol]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.10,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.soundcontrol]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.10,1.21.11)"
+    ordering="NONE"
+    side="BOTH"

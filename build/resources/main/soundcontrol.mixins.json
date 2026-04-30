@@ -2,9 +2,12 @@
   "required": true,
   "package": "soundcontrol.mixin",
   "compatibilityLevel": "JAVA_21",
-  "mixins": [
+  "client": [
     "AbstractSoundInstanceMixin",
-    "SoundTrackerMixin"
+    "SoundTrackerMixin",
+    "GuiMixin",
+    "ChannelMixin",
+    "SoundEngineMixin"
   ],
   "injectors": {
     "defaultRequire": 1
