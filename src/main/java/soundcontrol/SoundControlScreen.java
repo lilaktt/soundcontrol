@@ -108,13 +108,14 @@ public class SoundControlScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
+        this.renderBackground(context);
         this.soundList.render(context, mouseX, mouseY, delta);
 
         if (this.viewMode == 2) {
             this.modList.render(context, mouseX, mouseY, delta);
         }
 
+        super.render(context, mouseX, mouseY, delta);
         this.searchBox.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFF);
     }
