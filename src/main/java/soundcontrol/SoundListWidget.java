@@ -90,16 +90,17 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         this.lastFilterMode = filterMode;
         this.clearEntries();
         String lowerQuery = query.toLowerCase();
-        // Favorites are global - collect from config, not from allEntries
-        if (filterMode == 2) {
-            java.util.List<String> favoriteIds = new java.util.ArrayList<>();
+        // Favorites and Edited are global - collect from config
+        if (filterMode == 1 || filterMode == 2) {
+            java.util.List<String> list = new java.util.ArrayList<>();
             for (var e : SoundConfig.SOUNDS.entrySet()) {
-                if (e.getValue().favorite) {
-                    favoriteIds.add(e.getKey());
-                }
+                boolean valid = false;
+                if (filterMode == 2 && e.getValue().favorite) valid = true;
+                if (filterMode == 1 && (e.getValue().muted || Math.abs(e.getValue().volume - 1.0f) >= 0.01f)) valid = true;
+                if (valid) list.add(e.getKey());
             }
-            java.util.Collections.sort(favoriteIds);
-            for (String id : favoriteIds) {
+            java.util.Collections.sort(list);
+            for (String id : list) {
                 if (id.toLowerCase().contains(lowerQuery)) {
                     this.addEntry(new SoundEntry(id, 1, this));
                 }
@@ -108,12 +109,6 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         }
 
         for (SoundEntry entry : this.allEntries) {
-
-            if (filterMode == 1) {
-                if (!SoundConfig.SOUNDS.containsKey(entry.soundId)) continue;
-                SoundConfig.SoundSettings s = SoundConfig.SOUNDS.get(entry.soundId);
-                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f) continue;
-            }
 
             boolean matchCategory = false;
 
