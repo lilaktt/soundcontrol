@@ -179,7 +179,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
             Identifier parsedId = Identifier.tryParse(this.soundId);
             boolean isPlayable = !isBasicMode && parsedId != null;
 
-            ButtonWidget.Builder playBuilder = ButtonWidget.builder(Text.literal("в–¶"), button -> {
+            ButtonWidget.Builder playBuilder = ButtonWidget.builder(Text.literal("▶"), button -> {
                 MinecraftClient client = MinecraftClient.getInstance();
                 if (this.playingInstance != null && client.getSoundManager().isPlaying(this.playingInstance)) {
                     client.getSoundManager().stop(this.playingInstance);
@@ -210,10 +210,10 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
             }).dimensions(0, 0, 50, 20).build();
 
 
-            this.favoriteButton = ButtonWidget.builder(Text.literal(initialFavorite ? "в…" : "в†"), button -> {
+            this.favoriteButton = ButtonWidget.builder(Text.literal(initialFavorite ? "★" : "☆"), button -> {
                 SoundConfig.SoundSettings s = SoundConfig.SOUNDS.computeIfAbsent(this.soundId, k -> new SoundConfig.SoundSettings());
                 s.favorite = !s.favorite;
-                button.setMessage(Text.literal(s.favorite ? "в…" : "в†"));
+                button.setMessage(Text.literal(s.favorite ? "★" : "☆"));
                 if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.SOUNDS.remove(this.soundId);
                 SoundConfig.save();
                 parentList.refilter();
@@ -245,7 +245,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
 
             this.volumeSlider = new VolumeSlider(0, 0, 100, 20, Text.translatable("text.soundcontrol.slider.volume", (int)(initialVolume * 100)), initialVolume / 2.0f);
 
-            this.resetButton = ButtonWidget.builder(Text.literal("вџІ"), button -> {
+            this.resetButton = ButtonWidget.builder(Text.literal("⟲"), button -> {
                 SoundConfig.SoundSettings current = SoundConfig.SOUNDS.get(this.soundId);
                 boolean wasFavorite = current != null && current.favorite;
                 if (wasFavorite) {
@@ -267,7 +267,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             boolean isPlaying = this.playingInstance != null && MinecraftClient.getInstance().getSoundManager().isPlaying(this.playingInstance);
-            this.playButton.setMessage(Text.literal(isPlaying ? "в– " : "в–¶"));
+            this.playButton.setMessage(Text.literal(isPlaying ? "■" : "▶"));
 
             Text displayIdText = Text.literal(this.soundId);
 
