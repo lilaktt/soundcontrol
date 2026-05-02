@@ -70,6 +70,8 @@ public class SoundWorldRenderer {
         int screenWidth = context.guiWidth();
         int screenHeight = context.guiHeight();
 
+        java.util.List<int[]> renderedRects = new java.util.ArrayList<>();
+
         activeSounds.removeIf(s -> now - s.createdAt > DISPLAY_DURATION_MS);
 
         for (SoundEvent3D sound : activeSounds) {
@@ -107,6 +109,23 @@ public class SoundWorldRenderer {
                     int textWidth = font.width(displayName);
                     int renderX = screenX - textWidth / 2;
                     int renderY = screenY;
+
+                    boolean overlap;
+                    int attempts = 0;
+                    do {
+                        overlap = false;
+                        for (int[] rect : renderedRects) {
+                            int rx = rect[0], ry = rect[1], rw = rect[2], rh = rect[3];
+                            if (renderX < rx + rw && renderX + textWidth > rx && renderY < ry + rh && renderY + font.lineHeight > ry) {
+                                overlap = true;
+                                renderY += font.lineHeight + 2;
+                                break;
+                            }
+                        }
+                        attempts++;
+                    } while (overlap && attempts < 15);
+
+                    renderedRects.add(new int[]{renderX, renderY, textWidth, font.lineHeight});
 
                     int alphaInt = (int) (alpha * 255);
                     int color = (alphaInt << 24) | 0x55FFFF;
