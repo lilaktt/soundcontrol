@@ -7,8 +7,7 @@
     "SoundTrackerMixin",
     "GuiMixin",
     "SoundEngineMixin",
-    "ChannelMixin",
-    "LevelRendererMixin"
+    "ChannelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

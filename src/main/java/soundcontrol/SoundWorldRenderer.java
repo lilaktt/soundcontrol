@@ -1,11 +1,11 @@
 package soundcontrol;
 
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
-import org.joml.Matrix4fc;
 import org.joml.Vector4f;
 
 import java.util.Iterator;
@@ -17,9 +17,6 @@ public class SoundWorldRenderer {
     private static final CopyOnWriteArrayList<SoundEvent3D> activeSounds = new CopyOnWriteArrayList<>();
     private static final long DISPLAY_DURATION_MS = 3000;
     private static final long FADE_DURATION_MS = 800;
-
-    private static CameraRenderState lastCameraState;
-    private static Matrix4f lastProjectionMatrix;
 
     public static class SoundEvent3D {
         public final String soundId;
@@ -33,14 +30,6 @@ public class SoundWorldRenderer {
             this.z = z;
             this.createdAt = System.currentTimeMillis();
         }
-    }
-
-    public static void updateMatrices(CameraRenderState state, Matrix4fc projection) {
-        lastCameraState = state;
-        if (lastProjectionMatrix == null) {
-            lastProjectionMatrix = new Matrix4f();
-        }
-        lastProjectionMatrix.set(projection);
     }
 
     public static void recordSound(String soundId, double x, double y, double z) {
@@ -66,18 +55,17 @@ public class SoundWorldRenderer {
     }
 
     public static void render(GuiGraphicsExtractor context) {
-        if (!enabled || activeSounds.isEmpty() || lastCameraState == null || lastProjectionMatrix == null) return;
+        if (!enabled || activeSounds.isEmpty()) return;
+
+        Minecraft client = Minecraft.getInstance();
+        if (client.gameRenderer == null || client.gameRenderer.getMainCamera() == null) return;
 
         long now = System.currentTimeMillis();
-        Minecraft client = Minecraft.getInstance();
         Font font = client.font;
 
-        double camX = lastCameraState.pos.x;
-        double camY = lastCameraState.pos.y;
-        double camZ = lastCameraState.pos.z;
-
-        Matrix4f viewMatrix = lastCameraState.viewRotationMatrix;
-        Matrix4f projectionMatrix = lastProjectionMatrix;
+        Camera camera = client.gameRenderer.getMainCamera();
+        Vec3 camPos = camera.position();
+        Matrix4f projectionMatrix = camera.getViewRotationProjectionMatrix(new Matrix4f());
 
         int screenWidth = context.guiWidth();
         int screenHeight = context.guiHeight();
@@ -91,26 +79,23 @@ public class SoundWorldRenderer {
             float alpha = remaining < FADE_DURATION_MS ? (float) remaining / FADE_DURATION_MS : 1.0f;
             if (alpha <= 0.01f) continue;
 
-            double dx = sound.x - camX;
-            double dy = sound.y - camY + 0.5;
-            double dz = sound.z - camZ;
+            double dx = sound.x - camPos.x;
+            double dy = sound.y - camPos.y + 0.5; // Slightly above source
+            double dz = sound.z - camPos.z;
 
             double distSq = dx * dx + dy * dy + dz * dz;
-            if (distSq > 64 * 64) continue;
+            if (distSq > 64 * 64) continue; // Don't render too far away
 
             Vector4f pos = new Vector4f((float) dx, (float) dy, (float) dz, 1.0f);
-            viewMatrix.transform(pos);
-            
-            // Only draw if it is in front of the camera
-            if (pos.z() > 0) continue; 
-            
             projectionMatrix.transform(pos);
 
+            // w > 0 means the point is in front of the camera
             if (pos.w() > 0.0f) {
                 float ndcX = pos.x() / pos.w();
                 float ndcY = pos.y() / pos.w();
 
-                if (ndcX >= -1.0f && ndcX <= 1.0f && ndcY >= -1.0f && ndcY <= 1.0f) {
+                // Check if point is on screen
+                if (ndcX >= -1.2f && ndcX <= 1.2f && ndcY >= -1.2f && ndcY <= 1.2f) {
                     int screenX = (int) ((ndcX + 1.0f) * 0.5f * screenWidth);
                     int screenY = (int) ((1.0f - ndcY) * 0.5f * screenHeight);
 
