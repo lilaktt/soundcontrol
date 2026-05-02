@@ -33,5 +33,6 @@
   "gui.save": "Сохранить",
   "gui.cancel": "Выход",
   "text.soundcontrol.tooltip.reset": "Сбросить до стандартных",
-  "tooltip.soundcontrol.favorite": "Добавить в избранное"
+  "tooltip.soundcontrol.favorite": "Добавить в избранное",
+  "key.soundcontrol.toggle_world_labels": "3D надписи звуков в мире"
 }

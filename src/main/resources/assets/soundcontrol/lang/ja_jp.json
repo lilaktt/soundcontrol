@@ -33,5 +33,6 @@
   "gui.save": "保存",
   "gui.cancel": "終了",
   "text.soundcontrol.tooltip.reset": "デフォルトにリセット",
-  "tooltip.soundcontrol.favorite": "お気に入りに追加"
+  "tooltip.soundcontrol.favorite": "お気に入りに追加",
+  "key.soundcontrol.toggle_world_labels": "3Dサウンドラベルの切り替え"
 }

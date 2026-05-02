@@ -81,6 +81,24 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
         this.lastFilterMode = filterMode;
         this.clearEntries();
         String lowerQuery = query.toLowerCase();
+
+        // Favorites are global — collect from config, not from allEntries
+        if (filterMode == 2) {
+            List<String> favoriteIds = new ArrayList<>();
+            for (var e : SoundConfig.SOUNDS.entrySet()) {
+                if (e.getValue().favorite) {
+                    favoriteIds.add(e.getKey());
+                }
+            }
+            Collections.sort(favoriteIds);
+            for (String id : favoriteIds) {
+                if (id.toLowerCase().contains(lowerQuery)) {
+                    this.addEntry(new SoundEntry(id, 1, this.getRowWidth(), this));
+                }
+            }
+            return;
+        }
+
         for (SoundEntry entry : this.allEntries) {
 
             if (filterMode == 1) {
@@ -89,18 +107,9 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
                 if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f) continue;
             }
 
-            if (filterMode == 2) {
-                if (!SoundConfig.SOUNDS.containsKey(entry.soundId) || !SoundConfig.SOUNDS.get(entry.soundId).favorite) {
-                    continue;
-                }
-            }
-
             boolean matchCategory = false;
 
-            if (filterMode == 2) {
-                // Favorites are global — show in any category/view
-                matchCategory = true;
-            } else if (viewMode == 2) {
+            if (viewMode == 2) {
                 if (selectedMod != null && !selectedMod.isEmpty()) {
                     if (selectedMod.equals("all")) {
                         matchCategory = !entry.soundId.startsWith("minecraft:") && !entry.soundId.startsWith("#global:");

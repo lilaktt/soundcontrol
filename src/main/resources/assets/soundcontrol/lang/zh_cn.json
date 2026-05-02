@@ -33,5 +33,6 @@
   "gui.save": "保存",
   "gui.cancel": "退出",
   "text.soundcontrol.tooltip.reset": "重置为默认",
-  "tooltip.soundcontrol.favorite": "添加到收藏"
+  "tooltip.soundcontrol.favorite": "添加到收藏",
+  "key.soundcontrol.toggle_world_labels": "切换3D声音标签"
 }

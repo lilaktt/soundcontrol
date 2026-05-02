@@ -33,5 +33,6 @@
   "gui.save": "Zapisz",
   "gui.cancel": "Wyjdź",
   "text.soundcontrol.tooltip.reset": "Przywróć domyślne",
-  "tooltip.soundcontrol.favorite": "Dodaj do ulubionych"
+  "tooltip.soundcontrol.favorite": "Dodaj do ulubionych",
+  "key.soundcontrol.toggle_world_labels": "Przełącz etykiety 3D dźwięków"
 }

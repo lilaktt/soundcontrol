@@ -33,5 +33,6 @@
   "gui.save": "Speichern",
   "gui.cancel": "Beenden",
   "text.soundcontrol.tooltip.reset": "Auf Standard zurücksetzen",
-  "tooltip.soundcontrol.favorite": "Zu Favoriten hinzufügen"
+  "tooltip.soundcontrol.favorite": "Zu Favoriten hinzufügen",
+  "key.soundcontrol.toggle_world_labels": "3D-Soundbeschriftungen umschalten"
 }

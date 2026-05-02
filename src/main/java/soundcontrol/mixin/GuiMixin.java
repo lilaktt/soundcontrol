@@ -8,11 +8,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import soundcontrol.SoundTracker;
+import soundcontrol.SoundWorldRenderer;
 
 @Mixin(Gui.class)
 public class GuiMixin {
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void onRender(GuiGraphicsExtractor context, DeltaTracker deltaTracker, CallbackInfo ci) {
         SoundTracker.render(context);
+        SoundWorldRenderer.render(context);
     }
 }

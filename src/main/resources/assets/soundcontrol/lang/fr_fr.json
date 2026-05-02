@@ -33,5 +33,6 @@
   "gui.save": "Enregistrer",
   "gui.cancel": "Quitter",
   "text.soundcontrol.tooltip.reset": "Réinitialiser",
-  "tooltip.soundcontrol.favorite": "Ajouter aux favoris"
+  "tooltip.soundcontrol.favorite": "Ajouter aux favoris",
+  "key.soundcontrol.toggle_world_labels": "Basculer les labels 3D des sons"
 }

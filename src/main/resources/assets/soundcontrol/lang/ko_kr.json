@@ -33,5 +33,6 @@
   "gui.save": "저장",
   "gui.cancel": "나가기",
   "text.soundcontrol.tooltip.reset": "기본값으로 재설정",
-  "tooltip.soundcontrol.favorite": "즐겨찾기에 추가"
+  "tooltip.soundcontrol.favorite": "즐겨찾기에 추가",
+  "key.soundcontrol.toggle_world_labels": "3D 소리 레이블 토글"
 }
