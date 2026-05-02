@@ -91,22 +91,20 @@ public class SoundWorldRenderer {
             float alpha = remaining < FADE_DURATION_MS ? (float) remaining / FADE_DURATION_MS : 1.0f;
             if (alpha <= 0.01f) continue;
 
-            float yOffset = (age / 1000.0f) * 0.5f;
-
             double dx = sound.x - camX;
-            double dy = sound.y - camY + 0.5 + yOffset;
+            double dy = sound.y - camY + 0.5;
             double dz = sound.z - camZ;
 
             double distSq = dx * dx + dy * dy + dz * dz;
             if (distSq > 64 * 64) continue;
 
             Vector4f pos = new Vector4f((float) dx, (float) dy, (float) dz, 1.0f);
-            pos.mul(viewMatrix);
+            viewMatrix.transform(pos);
             
             // Only draw if it is in front of the camera
             if (pos.z() > 0) continue; 
             
-            pos.mul(projectionMatrix);
+            projectionMatrix.transform(pos);
 
             if (pos.w() > 0.0f) {
                 float ndcX = pos.x() / pos.w();
