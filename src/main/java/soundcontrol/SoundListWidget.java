@@ -106,7 +106,6 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
             boolean matchCategory = false;
 
             if (filterMode == 2) {
-                // Favorites are global — show in any category/view
                 matchCategory = true;
             } else if (viewMode == 2) {
                 if (selectedMod != null && !selectedMod.isEmpty()) {
@@ -264,7 +263,6 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         }
 
         public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            // ТУТ СПРАВЖНІ КООРДИНАТИ!
             int x = this.getX();
             int y = this.getY();
 

@@ -38,11 +38,12 @@ public class SoundControl implements ClientModInitializer {
             }
             while (toggleOverlayKey.wasPressed()) {
                 SoundTracker.showOverlay = !SoundTracker.showOverlay;
+                SoundWorldRenderer.enabled = SoundTracker.showOverlay;
             }
         });
 
         HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
-            SoundTracker.render(drawContext);
+            SoundWorldRenderer.render(drawContext);
         });
     }
 }
