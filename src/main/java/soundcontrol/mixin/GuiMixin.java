@@ -14,7 +14,6 @@ import soundcontrol.SoundWorldRenderer;
 public class GuiMixin {
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void onRender(GuiGraphicsExtractor context, DeltaTracker deltaTracker, CallbackInfo ci) {
-        SoundTracker.render(context);
         SoundWorldRenderer.render(context);
     }
 }

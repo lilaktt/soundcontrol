@@ -1,0 +1,56 @@
+name: "🐞 Bug Report"
+description: "Found a bug in Sound Control? Let us know!"
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thank you for helping us make Sound Control better! Please fill out the form below."
+
+  - type: input
+    id: mc_version
+    attributes:
+      label: "Minecraft Version"
+      description: "On which Minecraft version did this issue occur?"
+      placeholder: "Example: 1.21.9, 1.20.1..."
+    validations:
+      required: true
+
+  - type: input
+    id: mod_version
+    attributes:
+      label: "Sound Control Version"
+      description: "Which version of the mod are you using?"
+      placeholder: "Example: 1.2.2"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Bug Description"
+      description: "Describe what went wrong in detail."
+      placeholder: "I pressed Y, but the radar didn't show up..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: "Steps to Reproduce"
+      description: "Step-by-step instructions on how we can reproduce this bug."
+      placeholder: |
+        1. Join a world
+        2. Spawn a bee
+        3. Press the button...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Crash Log / Latest Log"
+      description: "If the game crashed, please paste your crash log or a link to mclo.gs."
+      placeholder: "Paste your log here..."
+    validations:
+      required: false

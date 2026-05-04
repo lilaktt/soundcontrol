@@ -44,3 +44,4 @@ jar {
         rename { "${it}_${project.base.archivesName.get()}"}
     }
 }
+

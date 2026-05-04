@@ -2,7 +2,6 @@
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Open Sound Settings",
   "key.soundcontrol.toggle_overlay": "Toggle Sound Overlay",
-  "key.soundcontrol.toggle_world_labels": "Toggle 3D Sound Labels",
   "text.soundcontrol.title": "Sound Control",
   "text.soundcontrol.category.all": "All",
   "text.soundcontrol.category.mobs": "Mobs",

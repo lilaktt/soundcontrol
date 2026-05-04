@@ -82,7 +82,6 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
         this.clearEntries();
         String lowerQuery = query.toLowerCase();
 
-        // Favorites are global — collect from config, not from allEntries
         if (filterMode == 2) {
             List<String> favoriteIds = new ArrayList<>();
             for (var e : SoundConfig.SOUNDS.entrySet()) {
@@ -246,7 +245,6 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
             this.resetButton.setTooltip(Tooltip.create(Component.translatable("text.soundcontrol.tooltip.reset")));
 
             this.textHoverButton = Button.builder(Component.literal(""), b -> {}).bounds(0, 0, 100, 20).build();
-            // We only show tooltip, we don't render the button itself, but we need it in the children list for tooltip handling
         }
 
         private static abstract class SoundSlider extends AbstractSliderButton {
