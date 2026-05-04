@@ -9,3 +9,7 @@ push_legacy_to_github.bat
 *.log
 run/
 .DS_Store
+build/
+
+crash-*.txt
+
