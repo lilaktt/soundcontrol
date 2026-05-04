@@ -24,4 +24,21 @@ public class SoundEngineMixin {
         }
         return result;
     }
+    @org.spongepowered.asm.mixin.injection.Inject(method = "play", at = @At("HEAD"))
+    private void onEnginePlay(SoundInstance sound, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+        if (sound != null && sound.getId() != null) {
+            String id = sound.getId().toString();
+            soundcontrol.SoundTracker.recordSound(id);
+            soundcontrol.SoundWorldRenderer.recordSound(sound, id);
+        }
+    }
+
+    @org.spongepowered.asm.mixin.injection.Inject(method = "playNextTick", at = @At("HEAD"))
+    private void onEnginePlayNextTick(net.minecraft.client.sound.TickableSoundInstance sound, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+        if (sound != null && sound.getId() != null) {
+            String id = sound.getId().toString();
+            soundcontrol.SoundTracker.recordSound(id);
+            soundcontrol.SoundWorldRenderer.recordSound(sound, id);
+        }
+    }
 }
