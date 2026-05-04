@@ -8,3 +8,8 @@ cleanup_repository.bat
 *.log
 run/
 .DS_Store
+
+build/
+
+crash-*.txt
+

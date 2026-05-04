@@ -132,7 +132,6 @@ public class SoundConfig {
             }
         }
 
-        // Fallback: Check if any key in SOUNDS is a prefix of the id (e.g. key "minecraft:block.stone" matches id "minecraft:block.stone.break")
         for (Map.Entry<String, SoundSettings> entry : SOUNDS.entrySet()) {
             String key = entry.getKey();
             if (!key.startsWith("#") && id.startsWith(key)) {
