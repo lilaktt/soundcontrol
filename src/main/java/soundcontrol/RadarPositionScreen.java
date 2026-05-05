@@ -69,10 +69,10 @@ public class RadarPositionScreen extends Screen {
         context.drawTextWithShadow(this.textRenderer, "» [Preview Sound 2]", previewX, previewY + 10, 0xFFFFFFFF);
         context.drawTextWithShadow(this.textRenderer, "» [Preview Sound 3]", previewX, previewY + 20, 0xFFFFFFFF);
 
-        context.fill(previewX - 2, previewY - 2, previewX + 118, previewY - 1, 0x88FFFFFF); // Top
-        context.fill(previewX - 2, previewY + 33, previewX + 118, previewY + 34, 0x88FFFFFF); // Bottom
-        context.fill(previewX - 2, previewY - 1, previewX - 1, previewY + 33, 0x88FFFFFF); // Left
-        context.fill(previewX + 117, previewY - 1, previewX + 118, previewY + 33, 0x88FFFFFF); // Right
+        context.fill(previewX - 2, previewY - 2, previewX + 118, previewY - 1, 0x88FFFFFF);
+        context.fill(previewX - 2, previewY + 33, previewX + 118, previewY + 34, 0x88FFFFFF);
+        context.fill(previewX - 2, previewY - 1, previewX - 1, previewY + 33, 0x88FFFFFF);
+        context.fill(previewX + 117, previewY - 1, previewX + 118, previewY + 33, 0x88FFFFFF);
     }
 
     @Override

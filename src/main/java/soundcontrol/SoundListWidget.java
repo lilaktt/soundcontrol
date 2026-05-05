@@ -90,7 +90,6 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         this.lastFilterMode = filterMode;
         this.clearEntries();
         String lowerQuery = query.toLowerCase();
-        // Favorites and Edited are global - collect from config
         if (filterMode == 1 || filterMode == 2) {
             java.util.List<String> list = new java.util.ArrayList<>();
             for (var e : SoundConfig.SOUNDS.entrySet()) {
