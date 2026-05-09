@@ -28,7 +28,6 @@
   "text.soundcontrol.global.hostile_ambient": "すべての敵対的モブの環境音",
   "text.soundcontrol.global.passive_ambient": "すべての友好的モブの環境音",
   "text.soundcontrol.filter.favorites": "お気に入りのみ",
-  "text.soundcontrol.button.radar_position": "レーダーの位置",
   "text.soundcontrol.radar_position.title": "レーダーの位置を変更",
   "text.soundcontrol.radar_position.help": "プレビューをドラッグして移動",
   "gui.save": "保存",

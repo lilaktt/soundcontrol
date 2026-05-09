@@ -28,7 +28,6 @@
   "text.soundcontrol.global.hostile_ambient": "WSZYSTKIE DŹWIĘKI OTOCZENIA WROGÓW",
   "text.soundcontrol.global.passive_ambient": "WSZYSTKIE DŹWIĘKI OTOCZENIA PASYWNYCH",
   "text.soundcontrol.filter.favorites": "Tylko ulubione",
-  "text.soundcontrol.button.radar_position": "Pozycja Radaru",
   "text.soundcontrol.radar_position.title": "Zmień pozycję radaru",
   "text.soundcontrol.radar_position.help": "Kliknij i przeciągnij podgląd, aby przesunąć",
   "gui.save": "Zapisz",

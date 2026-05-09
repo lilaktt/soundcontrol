@@ -28,7 +28,6 @@
   "text.soundcontrol.global.hostile_ambient": "TODOS LOS SONIDOS AMBIENTALES HOSTILES",
   "text.soundcontrol.global.passive_ambient": "TODOS LOS SONIDOS AMBIENTALES PASIVOS",
   "text.soundcontrol.filter.favorites": "Solo favoritos",
-  "text.soundcontrol.button.radar_position": "Posición del Radar",
   "text.soundcontrol.radar_position.title": "Cambiar Posición del Radar",
   "text.soundcontrol.radar_position.help": "Haz clic y arrastra la vista previa para moverla",
   "gui.save": "Guardar",

@@ -28,7 +28,6 @@
   "text.soundcontrol.global.hostile_ambient": "모든 적대적 몹 주변 소리",
   "text.soundcontrol.global.passive_ambient": "모든 평화적 몹 주변 소리",
   "text.soundcontrol.filter.favorites": "즐겨찾기만",
-  "text.soundcontrol.button.radar_position": "레이더 위치",
   "text.soundcontrol.radar_position.title": "레이더 위치 변경",
   "text.soundcontrol.radar_position.help": "미리보기를 드래그하여 이동",
   "gui.save": "저장",

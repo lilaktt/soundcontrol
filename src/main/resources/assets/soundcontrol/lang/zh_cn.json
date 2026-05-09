@@ -28,7 +28,6 @@
   "text.soundcontrol.global.hostile_ambient": "所有敌对生物环境音",
   "text.soundcontrol.global.passive_ambient": "所有被动生物环境音",
   "text.soundcontrol.filter.favorites": "仅收藏",
-  "text.soundcontrol.button.radar_position": "雷达位置",
   "text.soundcontrol.radar_position.title": "更改雷达位置",
   "text.soundcontrol.radar_position.help": "点击并拖动预览以移动位置",
   "gui.save": "保存",
