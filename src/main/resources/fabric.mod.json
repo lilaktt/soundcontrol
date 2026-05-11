@@ -10,7 +10,7 @@
     "sources": "https://github.com/lilaktt/soundcontrol",
     "issues": "https://github.com/lilaktt/soundcontrol/issues"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "icon": "assets/soundcontrol/icon.png",
   "environment": "client",
   "entrypoints": {

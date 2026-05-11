@@ -154,6 +154,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         private final ButtonWidget textHoverButton;
         private PositionedSoundInstance playingInstance;
         private final SoundListWidget parentList;
+        private boolean sliderDragging = false;
 
         public SoundEntry(String soundId, int viewMode, SoundListWidget parentList) {
             this.soundId = soundId;
