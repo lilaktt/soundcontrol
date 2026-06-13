@@ -32,9 +32,7 @@ processResources {
     filesMatching("fabric.mod.json") { expand "version": project.version }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    it.options.release = 25
-}
+
 
 java {
     withSourcesJar()
