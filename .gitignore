@@ -16,3 +16,9 @@ Thumbs.db
 # Other
 *.jar
 !src/**/*.jar
+*.hprof
+*.log
+
+
+!gradle/wrapper/gradle-wrapper.jar
+
