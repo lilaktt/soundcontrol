@@ -1,0 +1,41 @@
+// neoforge-1.21.10/build.gradle
+plugins {
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+version = "1.4.2-neo-1.21.10"
+
+base {
+    archivesName = "soundcontrol-neoforge-1.21.10"
+}
+
+neoForge {
+    version = "21.10.64"
+    runs { client { client() } }
+    mods { soundcontrol { sourceSet sourceSets.main } }
+}
+
+dependencies {
+    implementation project(':common')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+java {
+    withSourcesJar()
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
+}
+
+tasks.withType(ProcessResources).configureEach {
+    def props = ["version": project.version, "mod_name": "Sound Control", "mod_authors": "lilaktt", "mod_description": "Total control over Minecraft audio", "minecraft_version": "1.21.10", "neo_version": "21.10.64"]
+    inputs.properties props
+    filesMatching("META-INF/neoforge.mods.toml") { expand props }
+}
+
+jar {
+    from project(':common').sourceSets.main.output
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

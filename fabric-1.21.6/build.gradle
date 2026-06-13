@@ -1,0 +1,42 @@
+// fabric-1.21.6/build.gradle
+// Охоплює 1.21.6, 1.21.7, 1.21.8 і 1.21.9 (якщо Yarn-маппінги сумісні)
+plugins {
+    id 'fabric-loom' version '1.15.5'
+}
+
+version = "1.4.2-1.21.6"
+
+base {
+    archivesName = "soundcontrol-fabric-1.21.6"
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:1.21.6"
+    mappings  "net.fabricmc:yarn:1.21.6+build.1:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.18.4"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.128.2+1.21.6"
+    modCompileOnly   "com.terraformersmc:modmenu:14.0.0"
+
+    implementation project(':common')
+
+    // Вбудовуємо common класи прямо в JAR
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") { expand "version": project.version }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from project(':common').sourceSets.main.output
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

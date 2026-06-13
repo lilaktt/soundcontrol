@@ -1,0 +1,24 @@
+// Кореневий build.gradle
+// Визначає спільні параметри для ВСІХ підпроектів
+
+subprojects {
+    apply plugin: 'java'
+
+    group   = 'soundcontrol'
+    version = '1.4.2'
+
+    java {
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
+
+    repositories {
+        mavenCentral()
+        maven { name = 'Fabric';         url = 'https://maven.fabricmc.net/' }
+        maven { name = 'TerraformersMC'; url = 'https://maven.terraformersmc.com/' }
+        maven { name = 'NeoForged';      url = 'https://maven.neoforged.net/releases' }
+    }
+}
