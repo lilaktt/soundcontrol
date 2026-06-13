@@ -25,3 +25,5 @@ include 'neoforge-1.21.11'  // Neo 21.11.42
 include 'neoforge-26.1'     // Neo 26.1.1.15-beta (нова нумерація)
 
 rootProject.name = 'soundcontrol'
+
+
