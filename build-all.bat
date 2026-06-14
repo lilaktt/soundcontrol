@@ -19,6 +19,14 @@ call gradlew.bat ^
   :neoforge-1.21.10:build ^
   :neoforge-1.21.11:build ^
   :neoforge-26.1:build ^
+
+echo.
+echo ============================================
+echo  Building neoforge-1.20.1...
+echo ============================================
+cd neoforge-1.20.1
+call gradlew.bat build
+cd ..
   --continue
 
 echo.

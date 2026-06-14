@@ -51,8 +51,7 @@ public class RecentSoundsPickerScreen extends Screen {
 
     @Override
     protected void init() {
-        this.soundList = new RecentSoundList(this.client, this.width, this.height - 84, 28, 26);
-        this.soundList.setRenderBackground(false);
+        this.soundList = new RecentSoundList(this.client, this.width, this.height, 32, this.height - 36, 26);
         this.addSelectableChild(this.soundList);
 
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.recent.clear"), button -> {
@@ -95,8 +94,8 @@ public class RecentSoundsPickerScreen extends Screen {
     @Override public boolean shouldPause() { return false; }
 
     private static class RecentSoundList extends ElementListWidget<RecentSoundEntry> {
-        public RecentSoundList(MinecraftClient client, int width, int height, int y, int itemHeight) {
-            super(client, width, height, y, height, itemHeight);
+        public RecentSoundList(MinecraftClient client, int width, int height, int top, int bottom, int itemHeight) {
+            super(client, width, height, top, bottom, itemHeight);
         }
         @Override public int getRowWidth() { return 380; }
         @Override protected int getScrollbarPositionX() { return this.left + this.width / 2 + 195; }

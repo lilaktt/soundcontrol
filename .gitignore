@@ -22,3 +22,7 @@ Thumbs.db
 
 !gradle/wrapper/gradle-wrapper.jar
 
+
+# Run directories
+run/
+*/run/

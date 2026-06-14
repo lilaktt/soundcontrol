@@ -54,8 +54,7 @@ public class RecentSoundsPickerScreen extends Screen {
 
     @Override
     protected void init() {
-        this.soundList = new RecentSoundList(this.minecraft, this.width, this.height - 84, 28, 26);
-        this.soundList.setRenderBackground(false);
+        this.soundList = new RecentSoundList(this.minecraft, this.width, this.height, 32, this.height - 36, 26);
         this.addRenderableWidget(this.soundList);
 
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.recent.clear"), button -> {
@@ -98,8 +97,8 @@ public class RecentSoundsPickerScreen extends Screen {
     @Override public boolean isPauseScreen() { return false; }
 
     private static class RecentSoundList extends ObjectSelectionList<RecentSoundEntry> {
-        public RecentSoundList(Minecraft client, int width, int height, int y, int itemHeight) {
-            super(client, width, height, y, height, itemHeight);
+        public RecentSoundList(Minecraft client, int width, int height, int top, int bottom, int itemHeight) {
+            super(client, width, height, top, bottom, itemHeight);
         }
         @Override public int getRowWidth() { return 380; }
         public void clearAll() { this.clearEntries(); }
