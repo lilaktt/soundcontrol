@@ -1,6 +1,5 @@
 {
   "key.category.soundcontrol.main": "Sound Control",
-  "category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Ouvrir les paramètres audio",
   "key.soundcontrol.toggle_overlay": "Basculer l'affichage du son",
   "text.soundcontrol.title": "Contrôle du Son",
@@ -33,5 +32,21 @@
   "gui.save": "Enregistrer",
   "gui.cancel": "Quitter",
   "text.soundcontrol.tooltip.reset": "Réinitialiser",
-  "tooltip.soundcontrol.favorite": "Ajouter aux favoris"
+  "tooltip.soundcontrol.favorite": "Ajouter aux favoris",
+  "key.soundcontrol.toggle_world_labels": "Basculer les labels 3D des sons",
+  "text.soundcontrol.anchors.title": "Ancres Sonores",
+  "text.soundcontrol.anchors.create": "+ Créer une Ancre Ici",
+  "text.soundcontrol.anchors.edit": "Édit.",
+  "text.soundcontrol.anchors.browse": "Parcourir Tous les Sons",
+  "text.soundcontrol.anchors.recent": "Sons Récents",
+  "text.soundcontrol.anchors.clear": "Tout Effacer",
+  "text.soundcontrol.recent.title": "Sons Récents",
+  "text.soundcontrol.recent.pick": "Choisir un Son pour l'Ancre",
+  "text.soundcontrol.recent.clear": "Effacer l'Historique",
+  "text.soundcontrol.recent.empty": "Aucun son enregistré.",
+  "text.soundcontrol.recent.pick_hint": "Cliquez pour ajouter",
+  "text.soundcontrol.recent.subtitle": "Sons joués récemment",
+  "text.soundcontrol.recent.manage": "Gérer",
+  "text.soundcontrol.button.back": "Retour",
+  "text.soundcontrol.tooltip.copy": "Cliquez pour copier l'ID du son"
 }

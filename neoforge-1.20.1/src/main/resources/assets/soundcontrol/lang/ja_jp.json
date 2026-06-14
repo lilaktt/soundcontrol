@@ -33,5 +33,20 @@
   "gui.cancel": "終了",
   "text.soundcontrol.tooltip.reset": "デフォルトにリセット",
   "tooltip.soundcontrol.favorite": "お気に入りに追加",
-  "key.soundcontrol.toggle_world_labels": "3Dサウンドラベルの切り替え"
+  "key.soundcontrol.toggle_world_labels": "3Dサウンドラベルの切り替え",
+  "text.soundcontrol.anchors.title": "サウンドアンカー",
+  "text.soundcontrol.anchors.create": "+ ここにアンカーを作成",
+  "text.soundcontrol.anchors.edit": "編集",
+  "text.soundcontrol.anchors.browse": "すべてのサウンドを閲覧",
+  "text.soundcontrol.anchors.recent": "最近のサウンド",
+  "text.soundcontrol.anchors.clear": "すべて削除",
+  "text.soundcontrol.recent.title": "最近のサウンド",
+  "text.soundcontrol.recent.pick": "アンカーのサウンドを選択",
+  "text.soundcontrol.recent.clear": "履歴を消去",
+  "text.soundcontrol.recent.empty": "まだサウンドが記録されていません。",
+  "text.soundcontrol.recent.pick_hint": "クリックで追加",
+  "text.soundcontrol.recent.subtitle": "最近再生されたサウンド",
+  "text.soundcontrol.recent.manage": "管理",
+  "text.soundcontrol.button.back": "戻る",
+  "text.soundcontrol.tooltip.copy": "クリックでサウンドIDをコピー"
 }

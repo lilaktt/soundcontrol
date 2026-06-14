@@ -1,6 +1,5 @@
 {
   "key.category.soundcontrol.main": "Sound Control",
-  "category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "打开声音设置",
   "key.soundcontrol.toggle_overlay": "切换声音叠加",
   "text.soundcontrol.title": "声音控制",
@@ -33,5 +32,21 @@
   "gui.save": "保存",
   "gui.cancel": "退出",
   "text.soundcontrol.tooltip.reset": "重置为默认",
-  "tooltip.soundcontrol.favorite": "添加到收藏"
+  "tooltip.soundcontrol.favorite": "添加到收藏",
+  "key.soundcontrol.toggle_world_labels": "切换3D声音标签",
+  "text.soundcontrol.anchors.title": "声音锚点",
+  "text.soundcontrol.anchors.create": "+ 在此创建锚点",
+  "text.soundcontrol.anchors.edit": "编辑",
+  "text.soundcontrol.anchors.browse": "浏览所有声音",
+  "text.soundcontrol.anchors.recent": "最近的声音",
+  "text.soundcontrol.anchors.clear": "清除全部",
+  "text.soundcontrol.recent.title": "最近的声音",
+  "text.soundcontrol.recent.pick": "为锚点选择声音",
+  "text.soundcontrol.recent.clear": "清除历史",
+  "text.soundcontrol.recent.empty": "还没有录制声音。",
+  "text.soundcontrol.recent.pick_hint": "点击添加",
+  "text.soundcontrol.recent.subtitle": "最近播放的声音",
+  "text.soundcontrol.recent.manage": "管理",
+  "text.soundcontrol.button.back": "返回",
+  "text.soundcontrol.tooltip.copy": "点击复制音效ID"
 }

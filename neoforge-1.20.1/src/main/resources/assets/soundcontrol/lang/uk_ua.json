@@ -32,5 +32,20 @@
   "gui.save": "Зберегти",
   "gui.cancel": "Вийти",
   "text.soundcontrol.tooltip.reset": "Скинути до стандартних",
-  "tooltip.soundcontrol.favorite": "Додати до обраних"
+  "tooltip.soundcontrol.favorite": "Додати до обраних",
+  "text.soundcontrol.anchors.title": "Звукові Якорі",
+  "text.soundcontrol.anchors.create": "+ Створити Якір Тут",
+  "text.soundcontrol.anchors.edit": "Ред.",
+  "text.soundcontrol.anchors.browse": "Огляд Всіх",
+  "text.soundcontrol.anchors.recent": "Останні",
+  "text.soundcontrol.anchors.clear": "Очистити",
+  "text.soundcontrol.recent.title": "Останні Звуки",
+  "text.soundcontrol.recent.pick": "Виберіть Звук для Якоря",
+  "text.soundcontrol.recent.clear": "Очистити Історію",
+  "text.soundcontrol.recent.empty": "Звуків ще не записано.",
+  "text.soundcontrol.recent.pick_hint": "Натисніть щоб додати",
+  "text.soundcontrol.recent.subtitle": "Нещодавно відтворені звуки",
+  "text.soundcontrol.recent.manage": "Керувати",
+  "text.soundcontrol.button.back": "Назад",
+  "text.soundcontrol.tooltip.copy": "Натисніть, щоб скопіювати ID звуку"
 }

@@ -33,5 +33,20 @@
   "gui.cancel": "Salir",
   "text.soundcontrol.tooltip.reset": "Restablecer por defecto",
   "tooltip.soundcontrol.favorite": "Añadir a favoritos",
-  "key.soundcontrol.toggle_world_labels": "Alternar etiquetas 3D de sonidos"
+  "key.soundcontrol.toggle_world_labels": "Alternar etiquetas 3D de sonidos",
+  "text.soundcontrol.anchors.title": "Anclas de Sonido",
+  "text.soundcontrol.anchors.create": "+ Crear Ancla Aquí",
+  "text.soundcontrol.anchors.edit": "Edit.",
+  "text.soundcontrol.anchors.browse": "Explorar Todos los Sonidos",
+  "text.soundcontrol.anchors.recent": "Sonidos Recientes",
+  "text.soundcontrol.anchors.clear": "Borrar Todo",
+  "text.soundcontrol.recent.title": "Sonidos Recientes",
+  "text.soundcontrol.recent.pick": "Elegir Sonido para Ancla",
+  "text.soundcontrol.recent.clear": "Borrar Historial",
+  "text.soundcontrol.recent.empty": "Aún no hay sonidos grabados.",
+  "text.soundcontrol.recent.pick_hint": "Haz clic para agregar",
+  "text.soundcontrol.recent.subtitle": "Sonidos reproducidos recientemente",
+  "text.soundcontrol.recent.manage": "Gestionar",
+  "text.soundcontrol.button.back": "Atrás",
+  "text.soundcontrol.tooltip.copy": "Haz clic para copiar el ID del sonido"
 }

@@ -52,6 +52,7 @@ public class RecentSoundsPickerScreen extends Screen {
     @Override
     protected void init() {
         this.soundList = new RecentSoundList(this.client, this.width, this.height - 84, 28, 26);
+        this.soundList.setRenderBackground(false);
         this.addSelectableChild(this.soundList);
 
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.recent.clear"), button -> {
@@ -74,6 +75,7 @@ public class RecentSoundsPickerScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         this.soundList.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFFFF);
@@ -239,7 +241,7 @@ public class RecentSoundsPickerScreen extends Screen {
             return List.of(nameTooltipButton, playButton, muteButton, volumeSlider, favoriteButton, resetButton);
         }
         @Override public List<? extends net.minecraft.client.gui.Selectable> selectableChildren() {
-            return List.of(playButton, muteButton, volumeSlider, favoriteButton, resetButton);
+            return List.of(nameTooltipButton, playButton, muteButton, volumeSlider, favoriteButton, resetButton);
         }
     }
 }

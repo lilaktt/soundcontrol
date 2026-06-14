@@ -1,6 +1,5 @@
 {
   "key.category.soundcontrol.main": "Sound Control",
-  "category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Open Sound Settings",
   "key.soundcontrol.toggle_overlay": "Toggle Sound Overlay",
   "text.soundcontrol.title": "Sound Control",
@@ -33,5 +32,20 @@
   "gui.save": "Save",
   "gui.cancel": "Exit",
   "text.soundcontrol.tooltip.reset": "Reset to Default",
-  "tooltip.soundcontrol.favorite": "Add to favorites"
+  "tooltip.soundcontrol.favorite": "Add to favorites",
+  "text.soundcontrol.anchors.title": "Sound Anchors",
+  "text.soundcontrol.anchors.create": "+ Create Anchor Here",
+  "text.soundcontrol.anchors.edit": "Edit",
+  "text.soundcontrol.anchors.browse": "Browse All",
+  "text.soundcontrol.anchors.recent": "Recent",
+  "text.soundcontrol.anchors.clear": "Clear All",
+  "text.soundcontrol.recent.title": "Recent Sounds",
+  "text.soundcontrol.recent.pick": "Pick Sound for Anchor",
+  "text.soundcontrol.recent.clear": "Clear History",
+  "text.soundcontrol.recent.empty": "No sounds recorded yet.",
+  "text.soundcontrol.recent.pick_hint": "Click a sound to add it",
+  "text.soundcontrol.recent.subtitle": "Recently played sounds",
+  "text.soundcontrol.recent.manage": "Manage",
+  "text.soundcontrol.button.back": "Back",
+  "text.soundcontrol.tooltip.copy": "Click to copy sound ID"
 }

@@ -33,5 +33,20 @@
   "gui.cancel": "Wyjdź",
   "text.soundcontrol.tooltip.reset": "Przywróć domyślne",
   "tooltip.soundcontrol.favorite": "Dodaj do ulubionych",
-  "key.soundcontrol.toggle_world_labels": "Przełącz etykiety 3D dźwięków"
+  "key.soundcontrol.toggle_world_labels": "Przełącz etykiety 3D dźwięków",
+  "text.soundcontrol.anchors.title": "Kotwice Dźwięku",
+  "text.soundcontrol.anchors.create": "+ Utwórz Kotwicę Tutaj",
+  "text.soundcontrol.anchors.edit": "Edyt.",
+  "text.soundcontrol.anchors.browse": "Przeglądaj Wszystkie Dźwięki",
+  "text.soundcontrol.anchors.recent": "Ostatnie Dźwięki",
+  "text.soundcontrol.anchors.clear": "Wyczyść Wszystko",
+  "text.soundcontrol.recent.title": "Ostatnie Dźwięki",
+  "text.soundcontrol.recent.pick": "Wybierz Dźwięk dla Kotwicy",
+  "text.soundcontrol.recent.clear": "Wyczyść Historię",
+  "text.soundcontrol.recent.empty": "Brak nagranych dźwięków.",
+  "text.soundcontrol.recent.pick_hint": "Kliknij aby dodać",
+  "text.soundcontrol.recent.subtitle": "Ostatnio odtwarzane dźwięki",
+  "text.soundcontrol.recent.manage": "Zarządzaj",
+  "text.soundcontrol.button.back": "Wróć",
+  "text.soundcontrol.tooltip.copy": "Kliknij, aby skopiować ID dźwięku"
 }

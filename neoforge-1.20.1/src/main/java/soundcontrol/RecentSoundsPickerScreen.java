@@ -55,6 +55,7 @@ public class RecentSoundsPickerScreen extends Screen {
     @Override
     protected void init() {
         this.soundList = new RecentSoundList(this.minecraft, this.width, this.height - 84, 28, 26);
+        this.soundList.setRenderBackground(false);
         this.addRenderableWidget(this.soundList);
 
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.recent.clear"), button -> {
@@ -77,6 +78,7 @@ public class RecentSoundsPickerScreen extends Screen {
 
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
+        this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         context.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFFFF);
         if (getRecentSounds().isEmpty()) {

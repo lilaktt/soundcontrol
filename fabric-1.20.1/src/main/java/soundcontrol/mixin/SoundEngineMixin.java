@@ -30,6 +30,7 @@ public class SoundEngineMixin {
             String id = sound.getId().toString();
             soundcontrol.SoundTracker.recordSound(id);
             soundcontrol.SoundWorldRenderer.recordSound(sound, id);
+            soundcontrol.RecentSoundsPickerScreen.recordRecentSound(id, sound.getX(), sound.getY(), sound.getZ());
         }
     }
 
@@ -39,6 +40,7 @@ public class SoundEngineMixin {
             String id = sound.getId().toString();
             soundcontrol.SoundTracker.recordSound(id);
             soundcontrol.SoundWorldRenderer.recordSound(sound, id);
+            soundcontrol.RecentSoundsPickerScreen.recordRecentSound(id, sound.getX(), sound.getY(), sound.getZ());
         }
     }
 }

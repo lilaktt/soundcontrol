@@ -1,6 +1,5 @@
 {
   "key.category.soundcontrol.main": "Sound Control",
-  "category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Abrir configurações de som",
   "key.soundcontrol.toggle_overlay": "Alternar sobreposição de som",
   "text.soundcontrol.title": "Controle de Som",
@@ -33,5 +32,21 @@
   "gui.save": "Salvar",
   "gui.cancel": "Sair",
   "text.soundcontrol.tooltip.reset": "Restaurar padrão",
-  "tooltip.soundcontrol.favorite": "Adicionar aos favoritos"
+  "tooltip.soundcontrol.favorite": "Adicionar aos favoritos",
+  "key.soundcontrol.toggle_world_labels": "Alternar rótulos 3D de sons",
+  "text.soundcontrol.anchors.title": "Âncoras de Som",
+  "text.soundcontrol.anchors.create": "+ Criar Âncora Aqui",
+  "text.soundcontrol.anchors.edit": "Edit.",
+  "text.soundcontrol.anchors.browse": "Explorar Todos os Sons",
+  "text.soundcontrol.anchors.recent": "Sons Recentes",
+  "text.soundcontrol.anchors.clear": "Limpar Tudo",
+  "text.soundcontrol.recent.title": "Sons Recentes",
+  "text.soundcontrol.recent.pick": "Escolher Som para Âncora",
+  "text.soundcontrol.recent.clear": "Limpar Histórico",
+  "text.soundcontrol.recent.empty": "Nenhum som gravado ainda.",
+  "text.soundcontrol.recent.pick_hint": "Clique para adicionar",
+  "text.soundcontrol.recent.subtitle": "Sons reproduzidos recentemente",
+  "text.soundcontrol.recent.manage": "Gerenciar",
+  "text.soundcontrol.button.back": "Voltar",
+  "text.soundcontrol.tooltip.copy": "Clique para copiar o ID do som"
 }

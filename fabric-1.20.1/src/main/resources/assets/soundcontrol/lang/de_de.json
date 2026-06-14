@@ -1,6 +1,5 @@
 {
   "key.category.soundcontrol.main": "Sound Control",
-  "category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Sound-Einstellungen öffnen",
   "key.soundcontrol.toggle_overlay": "Sound-Overlay umschalten",
   "text.soundcontrol.title": "Sound-Steuerung",
@@ -33,5 +32,21 @@
   "gui.save": "Speichern",
   "gui.cancel": "Beenden",
   "text.soundcontrol.tooltip.reset": "Auf Standard zurücksetzen",
-  "tooltip.soundcontrol.favorite": "Zu Favoriten hinzufügen"
+  "tooltip.soundcontrol.favorite": "Zu Favoriten hinzufügen",
+  "key.soundcontrol.toggle_world_labels": "3D-Soundbeschriftungen umschalten",
+  "text.soundcontrol.anchors.title": "Klang-Anker",
+  "text.soundcontrol.anchors.create": "+ Anker hier erstellen",
+  "text.soundcontrol.anchors.edit": "Bearb.",
+  "text.soundcontrol.anchors.browse": "Alle Sounds durchsuchen",
+  "text.soundcontrol.anchors.recent": "Letzte Sounds",
+  "text.soundcontrol.anchors.clear": "Alle löschen",
+  "text.soundcontrol.recent.title": "Letzte Sounds",
+  "text.soundcontrol.recent.pick": "Sound für Anker auswählen",
+  "text.soundcontrol.recent.clear": "Verlauf löschen",
+  "text.soundcontrol.recent.empty": "Noch keine Sounds aufgenommen.",
+  "text.soundcontrol.recent.pick_hint": "Klicken zum Hinzufügen",
+  "text.soundcontrol.recent.subtitle": "Kürzlich gespielte Sounds",
+  "text.soundcontrol.recent.manage": "Verwalten",
+  "text.soundcontrol.button.back": "Zurück",
+  "text.soundcontrol.tooltip.copy": "Klicken, um Sound-ID zu kopieren"
 }

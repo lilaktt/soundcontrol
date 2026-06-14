@@ -33,5 +33,20 @@
   "gui.cancel": "나가기",
   "text.soundcontrol.tooltip.reset": "기본값으로 재설정",
   "tooltip.soundcontrol.favorite": "즐겨찾기에 추가",
-  "key.soundcontrol.toggle_world_labels": "3D 소리 레이블 토글"
+  "key.soundcontrol.toggle_world_labels": "3D 소리 레이블 토글",
+  "text.soundcontrol.anchors.title": "사운드 앵커",
+  "text.soundcontrol.anchors.create": "+ 여기에 앵커 생성",
+  "text.soundcontrol.anchors.edit": "편집",
+  "text.soundcontrol.anchors.browse": "모든 소리 탐색",
+  "text.soundcontrol.anchors.recent": "최근 소리",
+  "text.soundcontrol.anchors.clear": "모두 삭제",
+  "text.soundcontrol.recent.title": "최근 소리",
+  "text.soundcontrol.recent.pick": "앵커에 소리 선택",
+  "text.soundcontrol.recent.clear": "기록 삭제",
+  "text.soundcontrol.recent.empty": "아직 녹음된 소리가 없습니다.",
+  "text.soundcontrol.recent.pick_hint": "클릭하여 추가",
+  "text.soundcontrol.recent.subtitle": "최근 재생된 소리",
+  "text.soundcontrol.recent.manage": "관리",
+  "text.soundcontrol.button.back": "뒤로",
+  "text.soundcontrol.tooltip.copy": "클릭하여 사운드 ID 복사"
 }
