@@ -140,7 +140,7 @@ public class RecentSoundsPickerScreen extends Screen {
                     this.playingInstance = PositionedSoundInstance.master(SoundEvent.of(parsedId), 1.0F, 1.0F);
                     client.getSoundManager().play(this.playingInstance);
                 }
-            }).dimensions(0, 0, 20, 20).tooltip(Tooltip.of(Text.translatable("text.soundcontrol.tooltip.play"))).build();
+            }).dimensions(0, 0, 20, 20).build();
 
             final String sid = sound.soundId;
             this.muteButton = ButtonWidget.builder(
@@ -152,7 +152,7 @@ public class RecentSoundsPickerScreen extends Screen {
                     if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.SOUNDS.remove(sid);
                     SoundConfig.save();
                 }
-            ).dimensions(0, 0, 38, 20).tooltip(Tooltip.of(Text.translatable("text.soundcontrol.tooltip.mute"))).build();
+            ).dimensions(0, 0, 38, 20).build();
 
             class VSlider extends SliderWidget {
                 public VSlider(int x, int y, int w, int h, Text msg, double val) { super(x, y, w, h, msg, val); }
@@ -173,7 +173,7 @@ public class RecentSoundsPickerScreen extends Screen {
                 button.setMessage(Text.literal(s.favorite ? "\u2605" : "\u2606"));
                 if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.SOUNDS.remove(sid);
                 SoundConfig.save();
-            }).dimensions(0, 0, 20, 20).tooltip(Tooltip.of(Text.translatable("tooltip.soundcontrol.favorite"))).build();
+            }).dimensions(0, 0, 20, 20).build();
 
             this.resetButton = ButtonWidget.builder(Text.literal("\u27F2"), button -> {
                 SoundConfig.SoundSettings cur = SoundConfig.SOUNDS.get(sid);
@@ -182,7 +182,7 @@ public class RecentSoundsPickerScreen extends Screen {
                 SoundConfig.save();
                 this.muteButton.setMessage(Text.translatable("text.soundcontrol.button.mute"));
                 ((VSlider) this.volumeSlider).resetValue();
-            }).dimensions(0, 0, 20, 20).tooltip(Tooltip.of(Text.translatable("text.soundcontrol.tooltip.reset"))).build();
+            }).dimensions(0, 0, 20, 20).build();
 
             this.nameTooltipButton = ButtonWidget.builder(Text.empty(), b -> {
                 MinecraftClient.getInstance().keyboard.setClipboard(sound.soundId);

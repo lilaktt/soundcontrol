@@ -50,6 +50,7 @@ int buttonWidth = 60;
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.category.blocks"), b -> setCategory(SoundCategory.BLOCKS)).dimensions(startX + (buttonWidth + 5) * 2, 46, buttonWidth, 20).build());
 
         this.soundList = new SoundListWidget(this.client, this.width, this.height, 72, this.height - 44, 25);
+        this.soundList.setRenderBackground(false);
         this.addSelectableChild(this.soundList);
 
         this.modList = new ModListWidget(this.client, 120, this.height, 72, this.height - 44, 15, this);

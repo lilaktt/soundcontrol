@@ -188,9 +188,7 @@ public class RecentSoundsPickerScreen extends Screen {
                 SoundConfig.save();
                 this.muteButton.setMessage(Component.translatable("text.soundcontrol.button.mute"));
                 this.volumeSlider.resetValue(0.5);
-            }).bounds(0, 0, 20, 20)
-            .tooltip(Tooltip.create(Component.translatable("text.soundcontrol.tooltip.reset")))
-            .build();
+            }).bounds(0, 0, 20, 20).build();
         }
 
         private static abstract class SoundSlider extends AbstractSliderButton {
@@ -248,7 +246,8 @@ public class RecentSoundsPickerScreen extends Screen {
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int btn) {
             int left = parentScreen.soundList.getRowLeft();
-            if (mouseX >= left + 2 && mouseX <= left + 170 && mouseY >= 0) {
+            int top = this.playButton.getY() - 3;
+            if (mouseX >= left + 2 && mouseX <= left + 170 && mouseY >= top && mouseY <= top + 14) {
                 Minecraft.getInstance().keyboardHandler.setClipboard(sound.soundId);
                 this.copiedAt = System.currentTimeMillis();
                 return true;

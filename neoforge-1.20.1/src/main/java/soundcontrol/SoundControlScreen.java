@@ -49,6 +49,7 @@ public class SoundControlScreen extends Screen {
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.category.blocks"), b -> setCategory(SoundCategory.BLOCKS)).bounds(startX + (buttonWidth + 5) * 2, 46, buttonWidth, 20).build());
 
         this.soundList = new SoundListWidget(this.minecraft, this.width, this.height, 72, this.height - 44, 25);
+        this.soundList.setRenderBackground(false);
         this.addWidget(this.soundList);
 
         this.modList = new ModListWidget(this.minecraft, 120, this.height, 72, this.height - 44, 15, this);
@@ -74,7 +75,11 @@ public class SoundControlScreen extends Screen {
             SoundConfig.resetSettings();
             this.soundList.loadEntries(this.viewMode);
             this.soundList.filter(this.searchBox.getValue(), this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
-        }).bounds(this.width / 2 + 60, this.height - 28, 100, 20).build());
+        }).bounds(this.width / 2 + 60, this.height - 28, 80, 20).build());
+
+        this.addRenderableWidget(Button.builder(Component.literal("\uD83D\uDD52"), button -> {
+            this.minecraft.setScreen(new RecentSoundsPickerScreen(this));
+        }).bounds(this.width - 26, this.height - 28, 20, 20).build());
 
         this.setInitialFocus(this.searchBox);
         this.soundList.loadEntries(this.viewMode);

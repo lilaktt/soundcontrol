@@ -65,7 +65,7 @@ public class SoundWorldRenderer {
         Vec3 camPos = camera.getPosition();
 
         Quaternionf rotation = camera.rotation();
-        Matrix4f viewMatrix = new Matrix4f().rotation(rotation);
+        Matrix4f viewMatrix = new Matrix4f().rotation(rotation.conjugate(new Quaternionf()));
         double fov = client.options.fov().get().doubleValue();
         Matrix4f projMatrix = client.gameRenderer.getProjectionMatrix(fov);
         Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix);
@@ -95,9 +95,9 @@ public class SoundWorldRenderer {
             float alpha = remaining < FADE_DURATION_MS ? (float) remaining / FADE_DURATION_MS : 1.0f;
             if (alpha <= 0.01f) continue;
 
-            double dx = (event.sound.getX() + 0.5) - camPos.x;
+            double dx = event.sound.getX() - camPos.x;
             double dy = event.sound.getY() - camPos.y + 0.5;
-            double dz = (event.sound.getZ() + 0.5) - camPos.z;
+            double dz = event.sound.getZ() - camPos.z;
 
             float volume = 1.0f;
             try {

@@ -8,6 +8,7 @@ import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.client.sound.TickableSoundInstance;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector4f;
 
 import java.util.Iterator;
@@ -63,17 +64,9 @@ public class SoundWorldRenderer {
         Camera camera = client.gameRenderer.getCamera();
         Vec3d camPos = camera.getPos();
 
-        // Build view matrix from pitch/yaw (more reliable on 1.20.1 than quaternion approach)
-        float pitch = camera.getPitch();
-        float yaw = camera.getYaw();
-
-        double pitchRad = Math.toRadians(pitch);
-        double yawRad = Math.toRadians(yaw + 180.0);
-
-        Matrix4f viewMatrix = new Matrix4f();
-        viewMatrix.rotateX((float) pitchRad);
-        viewMatrix.rotateY((float) yawRad);
-
+        // Use camera quaternion conjugate for view matrix (same as 1.21.6)
+        Quaternionf rotation = camera.getRotation();
+        Matrix4f viewMatrix = new Matrix4f().rotation(rotation.conjugate(new Quaternionf()));
         Matrix4f projMatrix = client.gameRenderer.getBasicProjectionMatrix(client.options.getFov().getValue().doubleValue());
         Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix);
 
