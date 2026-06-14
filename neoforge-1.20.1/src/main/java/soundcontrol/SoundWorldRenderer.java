@@ -8,7 +8,6 @@ import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
 import org.joml.Vector4f;
 
 import java.util.Iterator;
@@ -64,10 +63,21 @@ public class SoundWorldRenderer {
         Camera camera = client.gameRenderer.getMainCamera();
         Vec3 camPos = camera.getPosition();
 
-        Quaternionf rotation = camera.rotation();
-        Matrix4f viewMatrix = new Matrix4f().rotation(rotation.conjugate(new Quaternionf()));
+        // Build view matrix from pitch/yaw (same approach as working Fabric version)
+        float pitch = camera.getXRot();
+        float yaw = camera.getYRot();
+
+        double pitchRad = Math.toRadians(pitch);
+        double yawRad = Math.toRadians(yaw + 180.0);
+
+        Matrix4f viewMatrix = new Matrix4f();
+        viewMatrix.rotateX((float) pitchRad);
+        viewMatrix.rotateY((float) yawRad);
+
+        // Use simple perspective projection based on FOV
         double fov = client.options.fov().get().doubleValue();
-        Matrix4f projMatrix = client.gameRenderer.getProjectionMatrix(fov);
+        float aspectRatio = (float) client.getWindow().getWidth() / (float) client.getWindow().getHeight();
+        Matrix4f projMatrix = new Matrix4f().perspective((float) Math.toRadians(fov), aspectRatio, 0.05f, 1024.0f);
         Matrix4f viewProjMatrix = new Matrix4f(projMatrix).mul(viewMatrix);
 
         int screenWidth = client.getWindow().getGuiScaledWidth();

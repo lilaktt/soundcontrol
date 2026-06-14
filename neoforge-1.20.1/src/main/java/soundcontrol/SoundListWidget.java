@@ -334,6 +334,16 @@ public class SoundListWidget extends ObjectSelectionList<SoundListWidget.SoundEn
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+            // Copy sound ID to clipboard when clicking on the name text
+            if (mouseButton == 0) {
+                int left = this.playButton.getX() - this.entryWidth + 235;
+                int top = this.playButton.getY();
+                int maxTextWidth = this.entryWidth - 245;
+                if (mouseX >= left + 5 && mouseX <= left + 5 + maxTextWidth && mouseY >= top && mouseY <= top + 20) {
+                    Minecraft.getInstance().keyboardHandler.setClipboard(this.soundId);
+                    return true;
+                }
+            }
             if (this.playButton.mouseClicked(mouseX, mouseY, mouseButton)) return true;
             if (this.muteButton.mouseClicked(mouseX, mouseY, mouseButton)) return true;
             if (this.volumeSlider.mouseClicked(mouseX, mouseY, mouseButton)) {

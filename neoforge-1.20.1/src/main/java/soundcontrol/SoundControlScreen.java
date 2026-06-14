@@ -49,7 +49,6 @@ public class SoundControlScreen extends Screen {
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.category.blocks"), b -> setCategory(SoundCategory.BLOCKS)).bounds(startX + (buttonWidth + 5) * 2, 46, buttonWidth, 20).build());
 
         this.soundList = new SoundListWidget(this.minecraft, this.width, this.height, 72, this.height - 44, 25);
-        this.soundList.setRenderBackground(false);
         this.addWidget(this.soundList);
 
         this.modList = new ModListWidget(this.minecraft, 120, this.height, 72, this.height - 44, 15, this);
