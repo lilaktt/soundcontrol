@@ -108,7 +108,7 @@ int buttonWidth = 60;
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderBackgroundTexture(context);
         this.soundList.render(context, mouseX, mouseY, delta);
 
         if (this.viewMode == 2) {

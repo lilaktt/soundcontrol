@@ -104,7 +104,7 @@ public class SoundControlScreen extends Screen {
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         // 1. Background
-        this.renderBackground(context);
+        this.renderDirtBackground(context);
         // 2. Sound list (behind buttons)
         this.soundList.render(context, mouseX, mouseY, delta);
         // 3. Mod list if in mods mode
