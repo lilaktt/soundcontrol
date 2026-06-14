@@ -77,7 +77,7 @@ public class RecentSoundsPickerScreen extends Screen {
 
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
+        this.renderDirtBackground(context);
         super.render(context, mouseX, mouseY, delta);
         context.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFFFF);
         if (getRecentSounds().isEmpty()) {

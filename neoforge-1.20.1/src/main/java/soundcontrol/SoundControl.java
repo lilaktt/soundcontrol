@@ -51,8 +51,7 @@ public class SoundControl {
             }
         }
         while (toggleOverlayKey.consumeClick()) {
-            SoundTracker.showOverlay = !SoundTracker.showOverlay;
-            SoundWorldRenderer.enabled = SoundTracker.showOverlay;
+            SoundTracker.cycleOverlayMode();
         }
     }
 
