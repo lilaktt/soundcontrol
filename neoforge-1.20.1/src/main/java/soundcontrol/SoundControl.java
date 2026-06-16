@@ -53,6 +53,9 @@ public class SoundControl {
         while (toggleOverlayKey.consumeClick()) {
             SoundTracker.cycleOverlayMode();
         }
+        if (SoundTracker.overlayMode == 2) {
+            SoundLookupRenderer.tick(client);
+        }
     }
 
     private void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {

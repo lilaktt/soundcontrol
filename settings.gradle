@@ -17,6 +17,7 @@ include 'fabric-1.21.4'     // MC 1.21.4
 include 'fabric-1.21.6'     // MC 1.21.6 – 1.21.8
 include 'fabric-1.21.9'     // MC 1.21.9
 include 'fabric-26.1'       // MC 26.1 (нова нумерація)
+include 'fabric-26.2'       // MC 26.2
 
 // ── NeoForge ───────────────────────────────────────────────
 include 'neoforge-1.21.1'   // Neo 21.1.228
