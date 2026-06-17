@@ -26,7 +26,6 @@ neoForge {
 }
 
 dependencies {
-    // спільний код підключається напряму
     implementation project(':common')
 }
 
