@@ -9,7 +9,6 @@ pluginManagement {
 include 'common'
 
 // ── Fabric ─────────────────────────────────────────────────
-include 'fabric-1.20.1'
 include 'fabric-1.21' 
 include 'fabric-1.21.3'
 include 'fabric-1.21.4'
