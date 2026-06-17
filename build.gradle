@@ -1,5 +1,3 @@
-// Кореневий build.gradle
-// Визначає спільні параметри для ВСІХ підпроектів
 
 subprojects {
     apply plugin: 'java'
