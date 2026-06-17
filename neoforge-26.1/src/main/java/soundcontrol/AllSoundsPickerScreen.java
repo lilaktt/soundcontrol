@@ -23,8 +23,8 @@ public class AllSoundsPickerScreen extends Screen {
     private PickerModList modList;
     private List<String> allSoundIds;
     private SoundCategory currentCategory = SoundCategory.ALL;
-    private int viewMode = 1; // 0=basic (groups), 1=advanced (individual), 2=mods
-    private int filterMode = 0; // 0=all, 1=edited, 2=favorites
+    private int viewMode = 1;
+    private int filterMode = 0;
     private String selectedMod = "";
 
     private static final String[] GLOBAL_ENTRIES = {
@@ -133,7 +133,6 @@ public class AllSoundsPickerScreen extends Screen {
         String lowerQuery = query.toLowerCase();
 
         if (viewMode == 0) {
-            // Basic mode: global entries + groups
             for (String global : GLOBAL_ENTRIES) {
                 String displayName = getGlobalDisplayName(global);
                 if (!displayName.toLowerCase().contains(lowerQuery)) continue;
@@ -157,7 +156,6 @@ public class AllSoundsPickerScreen extends Screen {
                 this.soundList.add(new SoundPickerEntry(group, this));
             }
         } else if (viewMode == 2) {
-            // Mods mode: filter by selected mod namespace
             if (selectedMod.isEmpty()) selectedMod = "all";
             for (String id : allSoundIds) {
                 if (selectedMod.equals("all")) {
@@ -193,11 +191,9 @@ public class AllSoundsPickerScreen extends Screen {
 
     private boolean matchesFilter(String id) {
         if (filterMode == 1) {
-            // Edited only: in anchor overrides
             return targetAnchor.getSoundOverrides().containsKey(id);
         }
         if (filterMode == 2) {
-            // Favorites
             SoundConfig.SoundSettings s = SoundConfig.getSound(id);
             return s != null && s.favorite;
         }
