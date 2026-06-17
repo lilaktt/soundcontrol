@@ -44,11 +44,11 @@ public class SoundLookupRenderer {
                 currentTarget = blockId;
                 currentSounds.clear();
 
-                // Always show the sound group sounds (break, step, place, hit, fall)
+                
                 SoundType group = state.getSoundType();
                 addSoundGroupSounds(group);
 
-                // Also add any block-specific sounds from registry
+                
                 String blockPath = blockId.contains(":") ? blockId.substring(blockId.indexOf(':') + 1) : blockId;
                 String soundPrefix = "block." + blockPath + ".";
 

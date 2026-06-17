@@ -173,7 +173,7 @@ public class SoundAnchorScreen extends Screen {
             int y = this.getY();
             var font = Minecraft.getInstance().font;
 
-            // Row 1
+            
             int cx = x + 58;
             this.toggleButton.setX(cx); this.toggleButton.setY(y + 2);
             this.toggleButton.extractRenderState(context, mouseX, mouseY, tickDelta);
@@ -204,7 +204,7 @@ public class SoundAnchorScreen extends Screen {
                 context.text(font, overrides + " snd", cx, y + 7, 0xFFFFAA00);
             }
 
-            // Row 2
+            
             if ("box".equals(anchor.getShapeMode())) {
                 int bx = x + 58;
                 context.text(font, "W:", bx + 4, y + 28, 0xFF999999);

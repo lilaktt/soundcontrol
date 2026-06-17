@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Shows recently played sounds. Also used as a picker for adding sounds to anchors.
- */
+
 public class RecentSoundsPickerScreen extends Screen {
     private final Screen parent;
     public final SoundAnchor targetAnchor;
@@ -101,7 +99,7 @@ public class RecentSoundsPickerScreen extends Screen {
     @Override public void onClose() { this.minecraft.setScreen(this.parent); }
     @Override public boolean isPauseScreen() { return false; }
 
-    // ========== List ==========
+    
 
     private static class RecentSoundList extends ContainerObjectSelectionList<RecentSoundEntry> {
         public RecentSoundList(Minecraft client, int width, int height, int y, int itemHeight) {
@@ -112,7 +110,7 @@ public class RecentSoundsPickerScreen extends Screen {
         public void add(RecentSoundEntry entry) { this.addEntry(entry); }
     }
 
-    // ========== Entry ==========
+    
 
     private static class RecentSoundEntry extends ContainerObjectSelectionList.Entry<RecentSoundEntry> {
         private final RecentSound sound;
@@ -247,7 +245,7 @@ public class RecentSoundsPickerScreen extends Screen {
             int x = this.getX(); int y = this.getY();
             var font = Minecraft.getInstance().font;
 
-            // Sound name (without minecraft: prefix)
+            
             String rawDisplay = sound.soundId.contains(":") ? sound.soundId.substring(sound.soundId.indexOf(':') + 1) : sound.soundId;
             int maxW = 165;
             String display = font.plainSubstrByWidth(rawDisplay, maxW);
@@ -262,7 +260,7 @@ public class RecentSoundsPickerScreen extends Screen {
                 context.text(font, "\u2714", checkX, y + 3, 0xFF55FF55);
             }
 
-            // Time and coordinates on second line, close to text
+            
             long secsAgo = (System.currentTimeMillis() - sound.timestamp) / 1000;
             String timeStr = secsAgo < 60 ? secsAgo + "s" : secsAgo < 3600 ? (secsAgo / 60) + "m" : (secsAgo / 3600) + "h";
             context.text(font, timeStr, x + 2, y + 14, 0xFF888888);
@@ -272,13 +270,13 @@ public class RecentSoundsPickerScreen extends Screen {
             boolean isPlaying = this.playingInstance != null && Minecraft.getInstance().getSoundManager().isActive(this.playingInstance);
             this.playButton.setMessage(Component.literal(isPlaying ? "\u25A0" : "\u25B6"));
 
-            // Invisible click area for copying
+            
             this.nameTooltipButton.setX(x + 2);
             this.nameTooltipButton.setY(y);
             this.nameTooltipButton.setAlpha(0.0f);
             this.nameTooltipButton.extractRenderState(context, mouseX, mouseY, tickDelta);
 
-            // Buttons on the right, matching screenshot layout
+            
             int btnX = x + 178;
 
             if (this.anchorAddButton != null) {

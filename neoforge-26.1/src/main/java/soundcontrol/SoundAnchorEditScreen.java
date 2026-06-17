@@ -15,11 +15,7 @@ import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 
-/**
- * Screen for editing which sounds a specific anchor overrides.
- * Removed: extra nameBox (name is edited in the main anchor screen).
- * Added: "Browse All Sounds" button alongside "Add from Recent".
- */
+
 public class SoundAnchorEditScreen extends Screen {
     private final Screen parent;
     private final SoundAnchor anchor;
@@ -34,7 +30,7 @@ public class SoundAnchorEditScreen extends Screen {
 
     @Override
     protected void init() {
-        // Single search box
+        
         this.searchBox = new EditBox(this.font, this.width / 2 - 90, 18, 180, 16, Component.literal("Search"));
         this.searchBox.setResponder(this::onSearch);
         this.addWidget(this.searchBox);
@@ -58,7 +54,7 @@ public class SoundAnchorEditScreen extends Screen {
             loadSounds("");
         }).bounds(this.width / 2 + 0, this.height - 42, 70, 20).build());
 
-        // Done
+        
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, button -> this.onClose())
                 .bounds(this.width / 2 + 80, this.height - 42, 80, 20).build());
 
@@ -111,7 +107,7 @@ public class SoundAnchorEditScreen extends Screen {
     @Override public void onClose() { this.minecraft.setScreen(this.parent); }
     @Override public boolean isPauseScreen() { return false; }
 
-    // ========== List ==========
+    
 
     private static class AnchorSoundList extends ContainerObjectSelectionList<AnchorSoundEntry> {
         public AnchorSoundList(Minecraft client, int width, int height, int y, int itemHeight) {
@@ -122,7 +118,7 @@ public class SoundAnchorEditScreen extends Screen {
         public void add(AnchorSoundEntry entry) { this.addEntry(entry); }
     }
 
-    // ========== Entry ==========
+    
 
     private static class AnchorSoundEntry extends ContainerObjectSelectionList.Entry<AnchorSoundEntry> {
         private final String soundId;

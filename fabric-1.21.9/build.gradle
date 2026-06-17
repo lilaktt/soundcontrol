@@ -1,4 +1,4 @@
-// fabric-1.21.9/build.gradle
+
 plugins {
     id 'fabric-loom' version '1.15.5'
 }
@@ -18,7 +18,7 @@ dependencies {
 
     implementation project(':common')
 
-    // Вбудовуємо common класи прямо в JAR
+    
 }
 
 processResources {

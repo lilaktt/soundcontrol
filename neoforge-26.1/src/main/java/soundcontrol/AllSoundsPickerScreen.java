@@ -62,14 +62,14 @@ public class AllSoundsPickerScreen extends Screen {
         this.addWidget(this.searchBox);
         this.addRenderableWidget(this.searchBox);
 
-        // Filter button
+        
         this.addRenderableWidget(Button.builder(getFilterText(), button -> {
             this.filterMode = (this.filterMode + 1) % 3;
             button.setMessage(getFilterText());
             loadSounds(this.searchBox.getValue());
         }).bounds(this.width / 2 + 50, 22, 100, 20).build());
 
-        // Category buttons
+        
         int buttonWidth = 60;
         int startX = this.width / 2 - (buttonWidth * 3 + 10) / 2;
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.category.all"), b -> { this.currentCategory = SoundCategory.ALL; loadSounds(this.searchBox.getValue()); }).bounds(startX, 46, buttonWidth, 20).build());
@@ -92,7 +92,7 @@ public class AllSoundsPickerScreen extends Screen {
             this.modList.visible = false;
         }
 
-        // Mode toggle
+        
         String initialModeKey = this.viewMode == 0 ? "basic" : (this.viewMode == 1 ? "advanced" : "mods");
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.mode." + initialModeKey), button -> {
             this.viewMode = (this.viewMode + 1) % 3;
@@ -169,7 +169,7 @@ public class AllSoundsPickerScreen extends Screen {
                 this.soundList.add(new SoundPickerEntry(id, this));
             }
         } else {
-            // Advanced mode: individual sounds
+            
             for (String id : allSoundIds) {
                 if (!id.toLowerCase().contains(lowerQuery)) continue;
                 if (!matchesCategory(id)) continue;
@@ -180,7 +180,7 @@ public class AllSoundsPickerScreen extends Screen {
     }
 
     private boolean matchesCategory(String id) {
-        if (viewMode == 2) return true; // Ignore category in Mods mode
+        if (viewMode == 2) return true; 
         if (currentCategory == SoundCategory.MOBS) {
             return id.contains("entity.") || id.contains("_hurt") || id.contains("_ambient") || id.startsWith("#global:hostile") || id.startsWith("#global:passive");
         } else if (currentCategory == SoundCategory.BLOCKS) {

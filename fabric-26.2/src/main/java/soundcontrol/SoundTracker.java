@@ -19,6 +19,6 @@ public class SoundTracker {
     }
     
     public static void recordSound(String soundId) {
-        // Obsolete, left for mixin compatibility if any remain
+        
     }
 }

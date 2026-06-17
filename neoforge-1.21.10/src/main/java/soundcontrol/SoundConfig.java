@@ -32,7 +32,7 @@ public class SoundConfig {
     private static ConfigData DATA = new ConfigData();
     private static Map<String, SoundSettings> SOUNDS = DATA.sounds;
 
-    // --- Public accessor methods for SOUNDS ---
+    
     public static SoundSettings getSound(String id) { return SOUNDS.get(id); }
     public static void putSound(String id, SoundSettings s) { SOUNDS.put(id, s); }
     public static void removeSound(String id) { SOUNDS.remove(id); }

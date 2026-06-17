@@ -28,7 +28,7 @@ public class SoundEngineMixin {
         float result = original.call(instance, volume, category);
         String id = sound.getIdentifier().toString();
 
-        // Check anchor-based override first
+        
         Minecraft client = Minecraft.getInstance();
         if (client.player != null) {
             String dimension = client.player.level().dimension().toString();
@@ -38,7 +38,7 @@ public class SoundEngineMixin {
             }
         }
 
-        // Fall back to global modifier
+        
         float modifier = SoundConfig.getVolumeModifier(id);
         if (modifier > 1.0f) {
             return result * modifier;

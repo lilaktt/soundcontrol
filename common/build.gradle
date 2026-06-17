@@ -1,6 +1,6 @@
-// common/build.gradle
-// Спільний Java-код між усіма платформами.
-// Залежить тільки від стандартних бібліотек (Gson, SLF4J), які є в кожній версії MC.
+
+
+
 
 plugins {
     id 'java-library'
@@ -17,17 +17,17 @@ tasks.withType(JavaCompile).configureEach {
 
 repositories {
     mavenCentral()
-    maven { url = 'https://maven.fabricmc.net/' }  // для Fabric Loader API (тільки для компіляції)
+    maven { url = 'https://maven.fabricmc.net/' }  
 }
 
 dependencies {
-    // Gson — є в MC за замовчуванням як бібліотека Mojang
+    
     compileOnly 'com.google.code.gson:gson:2.10.1'
 
-    // SLF4J — є у всіх версіях MC
+    
     compileOnly 'org.slf4j:slf4j-api:2.0.9'
 
-    // Fabric Loader — тільки для компіляції (отримати configDir).
-    // На NeoForge конфігурація буде передаватися через ConfigPathProvider.
+    
+    
     compileOnly "net.fabricmc:fabric-loader:0.15.11"
 }

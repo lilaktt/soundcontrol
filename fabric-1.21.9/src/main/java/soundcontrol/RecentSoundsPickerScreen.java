@@ -94,7 +94,7 @@ public class RecentSoundsPickerScreen extends Screen {
     @Override public void close() { this.client.setScreen(this.parent); }
     @Override public boolean shouldPause() { return false; }
 
-    // ========== List ==========
+    
 
     private static class RecentSoundList extends ElementListWidget<RecentSoundEntry> {
         public RecentSoundList(MinecraftClient client, int width, int height, int y, int itemHeight) {
@@ -106,7 +106,7 @@ public class RecentSoundsPickerScreen extends Screen {
         public int addEntry(RecentSoundEntry entry) { return super.addEntry(entry); }
     }
 
-    // ========== Entry ==========
+    
 
     private static class RecentSoundEntry extends ElementListWidget.Entry<RecentSoundEntry> {
         private final RecentSound sound;

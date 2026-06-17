@@ -16,7 +16,7 @@ import soundcontrol.SoundLookupRenderer;
 public class GuiMixin {
     @Inject(method = "extractRenderState", at = @At("TAIL"))
     private void onRender(GuiGraphicsExtractor context, DeltaTracker deltaTracker, CallbackInfo ci) {
-        // 26.2: Hud.extractRenderState(GuiGraphicsExtractor, DeltaTracker) has the graphics context
+        
         SoundWorldRenderer.render(context);
         if (SoundTracker.getOverlayMode() == 2) {
             SoundLookupRenderer.render(context);

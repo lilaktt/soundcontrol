@@ -35,7 +35,7 @@ public class SoundConfig {
     private static ConfigData DATA = new ConfigData();
     private static Map<String, SoundSettings> SOUNDS = DATA.sounds;
 
-    // --- Public accessor methods for SOUNDS ---
+    
     public static SoundSettings getSound(String id) { return SOUNDS.get(id); }
     public static void putSound(String id, SoundSettings s) { SOUNDS.put(id, s); }
     public static void removeSound(String id) { SOUNDS.remove(id); }
@@ -198,10 +198,7 @@ public class SoundConfig {
         return 1.0f;
     }
 
-    /**
-     * Check if a sound at a specific position is affected by any anchor.
-     * Returns the anchor's volume modifier, or -1 if no anchor applies.
-     */
+    
     public static float getAnchorVolumeModifier(String id, String dimension, double x, double y, double z) {
         for (SoundAnchor anchor : getAnchors()) {
             if (anchor.contains(dimension, x, y, z)) {

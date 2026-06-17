@@ -30,7 +30,7 @@ public class SoundAnchor {
         this.radius = radius;
     }
 
-    // --- Getters ---
+    
     public String getName() { return name; }
     public String getDimension() { return dimension; }
     public double getX() { return x; }
@@ -45,7 +45,7 @@ public class SoundAnchor {
     public int getBoxD() { return boxD; }
     public Map<String, SoundConfig.SoundSettings> getSoundOverrides() { return soundOverrides; }
 
-    // --- Setters ---
+    
     public void setName(String name) { this.name = name; }
     public void setDimension(String dimension) { this.dimension = dimension; }
     public void setX(double x) { this.x = x; }

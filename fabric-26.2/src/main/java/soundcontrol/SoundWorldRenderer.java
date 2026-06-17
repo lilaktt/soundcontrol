@@ -34,7 +34,7 @@ public class SoundWorldRenderer {
   public static void recordSound(SoundInstance sound, String soundId) {
     if (SoundConfig.getVolumeModifier(soundId) <= 0.0f) return;
 
-    // Skip sounds muted by anchors
+    
     Minecraft client = Minecraft.getInstance();
     if (client.player != null) {
       String dim = client.player.level().dimension().toString();

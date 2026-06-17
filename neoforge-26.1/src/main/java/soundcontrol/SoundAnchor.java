@@ -3,12 +3,7 @@ package soundcontrol;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * A Sound Anchor is a spatial point in the world where custom sound overrides apply.
- * Supports two shape modes:
- * - "radius" mode: sphere with a given radius
- * - "box" mode: box with width/height/depth centered on the anchor position
- */
+
 public class SoundAnchor {
     private String name;
     private String dimension;
@@ -17,11 +12,11 @@ public class SoundAnchor {
     private boolean enabled = true;
     private boolean showRadius = true;
 
-    // Shape mode: "radius" for sphere, "box" for W×H×D
+    
     private String shapeMode = "radius";
-    private int boxW = 32; // width  (X axis)
-    private int boxH = 32; // height (Y axis)
-    private int boxD = 32; // depth  (Z axis)
+    private int boxW = 32; 
+    private int boxH = 32; 
+    private int boxD = 32; 
 
     private Map<String, SoundConfig.SoundSettings> soundOverrides = new HashMap<>();
 
@@ -36,7 +31,7 @@ public class SoundAnchor {
         this.radius = radius;
     }
 
-    // --- Getters ---
+    
     public String getName() { return name; }
     public String getDimension() { return dimension; }
     public double getX() { return x; }
@@ -51,7 +46,7 @@ public class SoundAnchor {
     public int getBoxD() { return boxD; }
     public Map<String, SoundConfig.SoundSettings> getSoundOverrides() { return soundOverrides; }
 
-    // --- Setters ---
+    
     public void setName(String name) { this.name = name; }
     public void setDimension(String dimension) { this.dimension = dimension; }
     public void setX(double x) { this.x = x; }
@@ -65,9 +60,7 @@ public class SoundAnchor {
     public void setBoxH(int boxH) { this.boxH = boxH; }
     public void setBoxD(int boxD) { this.boxD = boxD; }
 
-    /**
-     * Check if a given world position is within this anchor's zone.
-     */
+    
     public boolean contains(String dimension, double px, double py, double pz) {
         if (!this.enabled) return false;
         if (!this.dimension.equals(dimension)) return false;
@@ -98,10 +91,7 @@ public class SoundAnchor {
         }
     }
 
-    /**
-     * Get the volume modifier for a sound ID at this anchor.
-     * Returns -1 if this anchor has no override for this sound.
-     */
+    
     public float getVolumeModifier(String soundId) {
         if (soundOverrides.containsKey(soundId)) {
             SoundConfig.SoundSettings s = soundOverrides.get(soundId);
@@ -110,9 +100,7 @@ public class SoundAnchor {
         return -1.0f;
     }
 
-    /**
-     * Get the max extent of this anchor for render distance calculation.
-     */
+    
     public double getMaxExtent() {
         if ("box".equals(shapeMode)) {
             return Math.max(boxW, Math.max(boxH, boxD)) / 2.0;
