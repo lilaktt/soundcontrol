@@ -1,5 +1,8 @@
 package soundcontrol.mixin;
 
+import soundcontrol.anchor.SoundAnchorRenderer;
+import soundcontrol.render.SoundLookupRenderer;
+import soundcontrol.render.SoundWorldRenderer;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.Hud;
@@ -8,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import soundcontrol.SoundTracker;
-import soundcontrol.SoundWorldRenderer;
-import soundcontrol.SoundAnchorRenderer;
-import soundcontrol.SoundLookupRenderer;
+import soundcontrol.render.SoundWorldRenderer;
+import soundcontrol.anchor.SoundAnchorRenderer;
+import soundcontrol.render.SoundLookupRenderer;
 
 @Mixin(Hud.class)
 public class GuiMixin {
@@ -24,3 +27,4 @@ public class GuiMixin {
         SoundAnchorRenderer.render(context);
     }
 }
+

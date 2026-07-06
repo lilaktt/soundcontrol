@@ -76,39 +76,36 @@ public class SoundWorldRenderer {
     int screenWidth = context.guiWidth();
     int screenHeight = context.guiHeight();
 
-    java.util.List<int[]> renderedRects = new java.util.ArrayList<>();
-
+    // First pass: refresh timestamps for active sounds, collect expired ones
+    java.util.List<SoundEvent3D> toRemove = new java.util.ArrayList<>();
     for (SoundEvent3D sound : activeSounds) {
       boolean active = client.getSoundManager().isActive(sound.sound);
       if (!active && sound.sound instanceof net.minecraft.client.resources.sounds.TickableSoundInstance tickable) {
         active = !tickable.isStopped();
       }
-
       boolean isShortSound = sound.soundId.contains("step") || sound.soundId.contains("fall");
-      if (isShortSound) {
-          active = false;
-      }
+      if (isShortSound) active = false;
+      if (active) sound.createdAt = now;
+      long age = now - sound.createdAt;
+      long duration = isShortSound ? 800 : DISPLAY_DURATION_MS;
+      if (age > duration) toRemove.add(sound);
+    }
+    if (!toRemove.isEmpty()) activeSounds.removeAll(toRemove);
 
-      if (active) {
-        sound.createdAt = now;
-      }
-
+    // Second pass: render surviving sounds
+    java.util.List<int[]> renderedRects = new java.util.ArrayList<>();
+    for (SoundEvent3D sound : activeSounds) {
+      boolean isShortSound = sound.soundId.contains("step") || sound.soundId.contains("fall");
       long age = now - sound.createdAt;
       long duration = isShortSound ? 800 : DISPLAY_DURATION_MS;
       long fade = isShortSound ? 300 : FADE_DURATION_MS;
-
-      if (age > duration) {
-        activeSounds.remove(sound);
-        continue;
-      }
-      
       long remaining = duration - age;
 
       float alpha = remaining < fade ? (float) remaining / fade : 1.0f;
       if (alpha <= 0.01f) continue;
 
       double dx = sound.sound.getX() - camPos.x;
-      double dy = sound.sound.getY() - camPos.y + 0.5; 
+      double dy = sound.sound.getY() - camPos.y + 0.5;
       double dz = sound.sound.getZ() - camPos.z;
 
       double distSq = dx * dx + dy * dy + dz * dz;

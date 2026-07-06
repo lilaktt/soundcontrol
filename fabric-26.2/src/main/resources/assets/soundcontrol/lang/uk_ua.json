@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Відкрити Налаштування Звуку",
   "key.soundcontrol.toggle_overlay": "Відображення звуків на екрані",
@@ -47,5 +47,18 @@
   "text.soundcontrol.recent.subtitle": "Нещодавно відтворені звуки",
   "text.soundcontrol.recent.manage": "Керувати",
   "text.soundcontrol.button.back": "Назад",
-  "text.soundcontrol.tooltip.copy": "Натисніть, щоб скопіювати ID звуку"
+  "text.soundcontrol.tooltip.copy": "Натисніть, щоб скопіювати ID звуку",
+  "text.soundcontrol.profile.open_folder": "Відкрити папку",
+  "text.soundcontrol.profile.add": "Створити новий профіль",
+  "text.soundcontrol.profile.clear_default": "Очистити звуки стандартного профілю",
+  "text.soundcontrol.profile.active": "Активний: %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.delete": "Видалити профіль",
+  "text.soundcontrol.profile.rename_title": "Перейменувати профіль",
+  "text.soundcontrol.profile.new_title": "Новий Профіль",
+  "text.soundcontrol.profile.editing": "Редагування профілю: %s",
+  "text.soundcontrol.profile.rename": "Перейменувати профіль",
+  "text.soundcontrol.profiles.title": "Профілі",
+  "text.soundcontrol.profile.name_hint": "Введіть назву профілю...",
+  "text.soundcontrol.profile.name_label": "Назва профілю:"
 }

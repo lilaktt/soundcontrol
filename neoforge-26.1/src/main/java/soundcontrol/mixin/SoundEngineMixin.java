@@ -46,7 +46,7 @@ public class SoundEngineMixin {
         return result;
     }
 
-    @Inject(method = "play", at = @At("HEAD"))
+    @Inject(method = "play(Lnet/minecraft/client/resources/sounds/SoundInstance;)Lnet/minecraft/client/sounds/SoundEngine$PlayResult;", at = @At("HEAD"))
     private void onEnginePlay(SoundInstance sound, CallbackInfoReturnable<?> cir) {
         if (sound != null && sound.getIdentifier() != null) {
             String id = sound.getIdentifier().toString();

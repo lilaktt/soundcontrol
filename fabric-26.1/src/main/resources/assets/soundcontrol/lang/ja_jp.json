@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "サウンド設定を開く",
   "key.soundcontrol.toggle_overlay": "サウンドオーバーレイを切り替え",
@@ -48,5 +48,18 @@
   "text.soundcontrol.recent.subtitle": "最近再生されたサウンド",
   "text.soundcontrol.recent.manage": "管理",
   "text.soundcontrol.button.back": "戻る",
-  "text.soundcontrol.tooltip.copy": "クリックでサウンドIDをコピー"
+  "text.soundcontrol.tooltip.copy": "クリックでサウンドIDをコピー",
+  "text.soundcontrol.profile.open_folder": "フォルダを開く",
+  "text.soundcontrol.profile.add": "新しいプロファイルを作成",
+  "text.soundcontrol.profile.clear_default": "デフォルトプロファイルのサウンドをクリア",
+  "text.soundcontrol.profile.active": "アクティブ: %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.delete": "プロファイルを削除",
+  "text.soundcontrol.profile.rename_title": "プロファイル名を変更",
+  "text.soundcontrol.profile.new_title": "新しいプロファイル",
+  "text.soundcontrol.profile.editing": "プロファイル編集: %s",
+  "text.soundcontrol.profile.rename": "プロファイル名を変更",
+  "text.soundcontrol.profiles.title": "プロファイル",
+  "text.soundcontrol.profile.name_hint": "プロファイル名を入力...",
+  "text.soundcontrol.profile.name_label": "プロファイル名:"
 }

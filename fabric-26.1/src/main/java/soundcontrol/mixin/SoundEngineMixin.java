@@ -1,5 +1,7 @@
 package soundcontrol.mixin;
 
+import soundcontrol.gui.RecentSoundsPickerScreen;
+import soundcontrol.render.SoundWorldRenderer;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
@@ -14,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import soundcontrol.SoundConfig;
 import soundcontrol.SoundTracker;
-import soundcontrol.SoundWorldRenderer;
-import soundcontrol.RecentSoundsPickerScreen;
+import soundcontrol.render.SoundWorldRenderer;
+import soundcontrol.gui.RecentSoundsPickerScreen;
 
 @Mixin(SoundEngine.class)
 public class SoundEngineMixin {
@@ -66,3 +68,4 @@ public class SoundEngineMixin {
         }
     }
 }
+

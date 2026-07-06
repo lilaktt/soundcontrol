@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-version = "1.4.2-26.2"
+version = "1.5.0-26.2"
 
 base {
     archivesName = "soundcontrol-fabric-26.2"

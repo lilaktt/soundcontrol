@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "打开声音设置",
   "key.soundcontrol.toggle_overlay": "切换声音叠加",
@@ -48,5 +48,18 @@
   "text.soundcontrol.recent.subtitle": "最近播放的声音",
   "text.soundcontrol.recent.manage": "管理",
   "text.soundcontrol.button.back": "返回",
-  "text.soundcontrol.tooltip.copy": "点击复制音效ID"
+  "text.soundcontrol.tooltip.copy": "点击复制音效ID",
+  "text.soundcontrol.profile.open_folder": "打开文件夹",
+  "text.soundcontrol.profile.add": "创建新配置文件",
+  "text.soundcontrol.profile.clear_default": "清除默认配置文件的声音",
+  "text.soundcontrol.profile.active": "当前: %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.delete": "删除配置文件",
+  "text.soundcontrol.profile.rename_title": "重命名配置文件",
+  "text.soundcontrol.profile.new_title": "新建配置文件",
+  "text.soundcontrol.profile.editing": "编辑配置文件: %s",
+  "text.soundcontrol.profile.rename": "重命名配置文件",
+  "text.soundcontrol.profiles.title": "配置文件",
+  "text.soundcontrol.profile.name_hint": "请输入配置文件名称...",
+  "text.soundcontrol.profile.name_label": "配置文件名称:"
 }

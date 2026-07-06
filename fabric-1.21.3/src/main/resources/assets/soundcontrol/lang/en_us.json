@@ -46,5 +46,19 @@
   "text.soundcontrol.recent.pick_hint": "Click a sound to add it",
   "text.soundcontrol.recent.subtitle": "Recently played sounds",
   "text.soundcontrol.recent.manage": "Manage",
-  "text.soundcontrol.button.back": "Back"
+  "text.soundcontrol.button.back": "Back",
+  "text.soundcontrol.tooltip.copy": "Click to copy sound ID",
+  "text.soundcontrol.profiles.title": "Profiles",
+  "text.soundcontrol.profile.add": "Create New Profile",
+  "text.soundcontrol.profile.active": "Active: %s",
+  "text.soundcontrol.profile.new_title": "New Profile",
+  "text.soundcontrol.profile.name_label": "Profile name:",
+  "text.soundcontrol.profile.name_hint": "Enter profile name...",
+  "text.soundcontrol.profile.clear_default": "Clear default profile sounds",
+  "text.soundcontrol.profile.editing": "Editing Profile: %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.rename": "Rename Profile",
+  "text.soundcontrol.profile.rename_title": "Rename Profile",
+  "text.soundcontrol.profile.delete": "Delete Profile",
+  "text.soundcontrol.profile.open_folder": "Open Folder"
 }

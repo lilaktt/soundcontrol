@@ -72,6 +72,7 @@ public class SoundConfig {
                 if (DATA.sounds == null) DATA.sounds = new HashMap<>();
                 SOUNDS = DATA.sounds;
             } catch (Exception e) {
+                LOGGER.warn("Failed to load config as ConfigData, trying legacy format", e);
                 try (FileReader reader = new FileReader(CONFIG_FILE)) {
                     Type type = new TypeToken<Map<String, SoundSettings>>(){}.getType();
                     Map<String, SoundSettings> oldSounds = GSON.fromJson(reader, type);

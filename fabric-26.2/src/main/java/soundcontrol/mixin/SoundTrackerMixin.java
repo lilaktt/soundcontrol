@@ -1,5 +1,6 @@
 package soundcontrol.mixin;
 
+import soundcontrol.render.SoundWorldRenderer;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.resources.sounds.TickableSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
@@ -9,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import soundcontrol.SoundTracker;
-import soundcontrol.SoundWorldRenderer;
+import soundcontrol.render.SoundWorldRenderer;
 
 @Mixin(SoundManager.class)
 public class SoundTrackerMixin {
@@ -31,3 +32,4 @@ public class SoundTrackerMixin {
         }
     }
 }
+

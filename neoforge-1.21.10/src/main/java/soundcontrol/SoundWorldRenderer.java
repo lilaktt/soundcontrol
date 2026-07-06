@@ -72,23 +72,25 @@ public class SoundWorldRenderer {
         int screenWidth = context.guiWidth();
         int screenHeight = context.guiHeight();
 
-        java.util.List<int[]> renderedRects = new java.util.ArrayList<>();
-
+        // First pass: refresh timestamps for active sounds, collect expired ones
+        java.util.List<SoundEvent3D> toRemove = new java.util.ArrayList<>();
         for (SoundEvent3D event : activeSounds) {
             boolean active = client.getSoundManager().isActive(event.sound);
             if (!active && event.sound instanceof TickableSoundInstance tickable) {
                 active = !tickable.isStopped();
             }
-
             if (active) {
                 event.createdAt = now;
             }
-
             if (now - event.createdAt > DISPLAY_DURATION_MS) {
-                activeSounds.remove(event);
-                continue;
+                toRemove.add(event);
             }
+        }
+        if (!toRemove.isEmpty()) activeSounds.removeAll(toRemove);
 
+        // Second pass: render surviving sounds
+        java.util.List<int[]> renderedRects = new java.util.ArrayList<>();
+        for (SoundEvent3D event : activeSounds) {
             long age = now - event.createdAt;
             long remaining = DISPLAY_DURATION_MS - age;
             float alpha = remaining < FADE_DURATION_MS ? (float) remaining / FADE_DURATION_MS : 1.0f;

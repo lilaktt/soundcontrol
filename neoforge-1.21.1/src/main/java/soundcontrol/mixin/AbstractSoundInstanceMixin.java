@@ -13,6 +13,11 @@ public class AbstractSoundInstanceMixin {
     private void soundcontrol_getVolume(CallbackInfoReturnable<Float> cir) {
         AbstractSoundInstance sound = (AbstractSoundInstance) (Object) this;
         float modifier = SoundConfig.getVolumeModifier(sound.getLocation().toString());
-        cir.setReturnValue(cir.getReturnValue() * modifier);
+        // Only apply reduction/muting here.
+        // Amplification (modifier > 1.0f) is handled exclusively by WrapOperation
+        // in SoundEngineMixin to avoid double-multiplication.
+        if (modifier < 1.0f) {
+            cir.setReturnValue(cir.getReturnValue() * modifier);
+        }
     }
 }

@@ -1,5 +1,8 @@
 package soundcontrol;
 
+import soundcontrol.render.SoundLookupRenderer;
+import soundcontrol.gui.SoundControlScreen;
+import soundcontrol.render.SoundWorldRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -52,3 +55,4 @@ public class SoundControl implements ClientModInitializer {
         });
     }
 }
+

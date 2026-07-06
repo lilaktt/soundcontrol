@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "사운드 설정 열기",
   "key.soundcontrol.toggle_overlay": "사운드 오버레이 토글",
@@ -47,5 +47,19 @@
   "text.soundcontrol.recent.pick_hint": "클릭하여 추가",
   "text.soundcontrol.recent.subtitle": "최근 재생된 소리",
   "text.soundcontrol.recent.manage": "관리",
-  "text.soundcontrol.button.back": "뒤로"
+  "text.soundcontrol.button.back": "뒤로",
+  "text.soundcontrol.tooltip.copy": "클릭하여 사운드 ID 복사",
+  "text.soundcontrol.profile.open_folder": "폴더 열기",
+  "text.soundcontrol.profile.add": "새 프로필 만들기",
+  "text.soundcontrol.profile.clear_default": "기본 프로필 사운드 초기화",
+  "text.soundcontrol.profile.active": "활성: %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.delete": "프로필 삭제",
+  "text.soundcontrol.profile.rename_title": "프로필 이름 변경",
+  "text.soundcontrol.profile.new_title": "새 프로필",
+  "text.soundcontrol.profile.editing": "프로필 편집: %s",
+  "text.soundcontrol.profile.rename": "프로필 이름 변경",
+  "text.soundcontrol.profiles.title": "프로필",
+  "text.soundcontrol.profile.name_hint": "프로필 이름 입력...",
+  "text.soundcontrol.profile.name_label": "프로필 이름:"
 }

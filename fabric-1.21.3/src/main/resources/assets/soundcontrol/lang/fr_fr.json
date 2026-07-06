@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Ouvrir les paramètres audio",
   "key.soundcontrol.toggle_overlay": "Basculer l'affichage du son",
@@ -47,5 +47,19 @@
   "text.soundcontrol.recent.pick_hint": "Cliquez pour ajouter",
   "text.soundcontrol.recent.subtitle": "Sons joués récemment",
   "text.soundcontrol.recent.manage": "Gérer",
-  "text.soundcontrol.button.back": "Retour"
+  "text.soundcontrol.button.back": "Retour",
+  "text.soundcontrol.tooltip.copy": "Cliquez pour copier l'ID du son",
+  "text.soundcontrol.profile.open_folder": "Ouvrir le dossier",
+  "text.soundcontrol.profile.add": "Créer un nouveau profil",
+  "text.soundcontrol.profile.clear_default": "Effacer les sons du profil par défaut",
+  "text.soundcontrol.profile.active": "Actif : %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.delete": "Supprimer le profil",
+  "text.soundcontrol.profile.rename_title": "Renommer le profil",
+  "text.soundcontrol.profile.new_title": "Nouveau Profil",
+  "text.soundcontrol.profile.editing": "Modification du profil : %s",
+  "text.soundcontrol.profile.rename": "Renommer le profil",
+  "text.soundcontrol.profiles.title": "Profils",
+  "text.soundcontrol.profile.name_hint": "Entrez le nom du profil...",
+  "text.soundcontrol.profile.name_label": "Nom du profil :"
 }

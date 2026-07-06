@@ -2,7 +2,7 @@ plugins {
     id 'fabric-loom' version '1.15.5'
 }
 
-version = "1.4.2-1.21.3"
+version = "1.5.0-1.21.3"
 
 base {
     archivesName = "soundcontrol-fabric-1.21.3"

@@ -1,5 +1,7 @@
 package soundcontrol.mixin;
 
+import soundcontrol.gui.RecentSoundsPickerScreen;
+import soundcontrol.render.SoundWorldRenderer;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.sound.SoundInstance;
@@ -29,8 +31,8 @@ public class SoundEngineMixin {
         if (sound != null && sound.getId() != null) {
             String id = sound.getId().toString();
             soundcontrol.SoundTracker.recordSound(id);
-            soundcontrol.SoundWorldRenderer.recordSound(sound, id);
-            soundcontrol.RecentSoundsPickerScreen.recordRecentSound(id, sound.getX(), sound.getY(), sound.getZ());
+            soundcontrol.render.SoundWorldRenderer.recordSound(sound, id);
+            soundcontrol.gui.RecentSoundsPickerScreen.recordRecentSound(id, sound.getX(), sound.getY(), sound.getZ());
         }
     }
 
@@ -39,8 +41,8 @@ public class SoundEngineMixin {
         if (sound != null && sound.getId() != null) {
             String id = sound.getId().toString();
             soundcontrol.SoundTracker.recordSound(id);
-            soundcontrol.SoundWorldRenderer.recordSound(sound, id);
-            soundcontrol.RecentSoundsPickerScreen.recordRecentSound(id, sound.getX(), sound.getY(), sound.getZ());
+            soundcontrol.render.SoundWorldRenderer.recordSound(sound, id);
+            soundcontrol.gui.RecentSoundsPickerScreen.recordRecentSound(id, sound.getX(), sound.getY(), sound.getZ());
         }
     }
 }

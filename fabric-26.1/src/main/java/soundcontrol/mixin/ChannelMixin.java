@@ -19,3 +19,4 @@ public class ChannelMixin {
         AL10.alSourcef(this.source, AL10.AL_MAX_GAIN, 10.0f);
     }
 }
+

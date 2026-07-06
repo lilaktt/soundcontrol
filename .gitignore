@@ -26,3 +26,6 @@ Thumbs.db
 # Run directories
 run/
 */run/
+
+# Upload scripts
+*.py

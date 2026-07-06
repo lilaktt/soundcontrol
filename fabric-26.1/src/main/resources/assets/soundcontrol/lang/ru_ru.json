@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Открыть настройки звука",
   "key.soundcontrol.toggle_overlay": "Отображение звуков на экране",
@@ -39,8 +39,7 @@
   "text.soundcontrol.anchors.edit": "Ред.",
   "text.soundcontrol.anchors.browse": "Просмотр Всех Звуков",
   "text.soundcontrol.anchors.recent": "Недавние Звуки",
-  "text.soundcontrol.anchors.clear": "Очистить всё"
-,
+  "text.soundcontrol.anchors.clear": "Очистить всё",
   "text.soundcontrol.recent.title": "Недавние Звуки",
   "text.soundcontrol.recent.pick": "Выбрать Звук для Якоря",
   "text.soundcontrol.recent.clear": "Очистить Историю",
@@ -48,5 +47,18 @@
   "text.soundcontrol.recent.pick_hint": "Нажмите чтобы добавить",
   "text.soundcontrol.recent.subtitle": "Недавно воспроизведённые звуки",
   "text.soundcontrol.recent.manage": "Управлять",
-  "text.soundcontrol.tooltip.copy": "Нажмите, чтобы скопировать ID звука"
+  "text.soundcontrol.tooltip.copy": "Нажмите, чтобы скопировать ID звука",
+  "text.soundcontrol.profile.open_folder": "Открыть папку",
+  "text.soundcontrol.profile.add": "Создать новый профиль",
+  "text.soundcontrol.profile.clear_default": "Очистить звуки стандартного профиля",
+  "text.soundcontrol.profile.active": "Активный: %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.delete": "Удалить профиль",
+  "text.soundcontrol.profile.rename_title": "Переименовать профиль",
+  "text.soundcontrol.profile.new_title": "Новый Профиль",
+  "text.soundcontrol.profile.editing": "Редактирование профиля: %s",
+  "text.soundcontrol.profile.rename": "Переименовать профиль",
+  "text.soundcontrol.profiles.title": "Профили",
+  "text.soundcontrol.profile.name_hint": "Введите имя профиля...",
+  "text.soundcontrol.profile.name_label": "Имя профиля:"
 }

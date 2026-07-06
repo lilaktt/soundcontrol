@@ -1,5 +1,7 @@
 package soundcontrol;
 
+import soundcontrol.render.SoundLookupRenderer;
+import soundcontrol.render.SoundWorldRenderer;
 public class SoundTracker {
     private static int overlayMode = 0;
     public static int getOverlayMode() { return overlayMode; }

@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Abrir configurações de som",
   "key.soundcontrol.toggle_overlay": "Alternar sobreposição de som",
@@ -48,5 +48,18 @@
   "text.soundcontrol.recent.subtitle": "Sons reproduzidos recentemente",
   "text.soundcontrol.recent.manage": "Gerenciar",
   "text.soundcontrol.button.back": "Voltar",
-  "text.soundcontrol.tooltip.copy": "Clique para copiar o ID do som"
+  "text.soundcontrol.tooltip.copy": "Clique para copiar o ID do som",
+  "text.soundcontrol.profile.open_folder": "Abrir pasta",
+  "text.soundcontrol.profile.add": "Criar novo perfil",
+  "text.soundcontrol.profile.clear_default": "Limpar sons do perfil padrão",
+  "text.soundcontrol.profile.active": "Ativo: %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.delete": "Excluir perfil",
+  "text.soundcontrol.profile.rename_title": "Renomear perfil",
+  "text.soundcontrol.profile.new_title": "Novo Perfil",
+  "text.soundcontrol.profile.editing": "Editando perfil: %s",
+  "text.soundcontrol.profile.rename": "Renomear perfil",
+  "text.soundcontrol.profiles.title": "Perfis",
+  "text.soundcontrol.profile.name_hint": "Digite o nome do perfil...",
+  "text.soundcontrol.profile.name_label": "Nome do perfil:"
 }

@@ -1,4 +1,4 @@
-{
+﻿{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Abrir ajustes de sonido",
   "key.soundcontrol.toggle_overlay": "Alternar superposición de sonido",
@@ -47,5 +47,19 @@
   "text.soundcontrol.recent.pick_hint": "Haz clic para agregar",
   "text.soundcontrol.recent.subtitle": "Sonidos reproducidos recientemente",
   "text.soundcontrol.recent.manage": "Gestionar",
-  "text.soundcontrol.button.back": "Atrás"
+  "text.soundcontrol.button.back": "Atrás",
+  "text.soundcontrol.tooltip.copy": "Haz clic para copiar el ID del sonido",
+  "text.soundcontrol.profile.open_folder": "Abrir carpeta",
+  "text.soundcontrol.profile.add": "Crear nuevo perfil",
+  "text.soundcontrol.profile.clear_default": "Limpiar sonidos del perfil predeterminado",
+  "text.soundcontrol.profile.active": "Activo: %s",
+  "text.soundcontrol.profile.editing_label": "✎ %s",
+  "text.soundcontrol.profile.delete": "Eliminar perfil",
+  "text.soundcontrol.profile.rename_title": "Renombrar perfil",
+  "text.soundcontrol.profile.new_title": "Nuevo Perfil",
+  "text.soundcontrol.profile.editing": "Editando perfil: %s",
+  "text.soundcontrol.profile.rename": "Renombrar perfil",
+  "text.soundcontrol.profiles.title": "Perfiles",
+  "text.soundcontrol.profile.name_hint": "Introduce el nombre del perfil...",
+  "text.soundcontrol.profile.name_label": "Nombre del perfil:"
 }
