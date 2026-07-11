@@ -4,7 +4,7 @@
 
 _Sounds from hostile mobs: zombies, creepers, skeletons, wardens, etc._
 
-**Total:** 241 sounds · **Groups:** 36
+**Total:** 277 sounds · **Groups:** 38
 
 ---
 
@@ -427,6 +427,21 @@ _Sounds from hostile mobs: zombies, creepers, skeletons, wardens, etc._
 
 </details>
 
+### Small Sulfur Cube
+
+<details>
+<summary><b>Small Sulfur Cube</b> — 5 sounds · Basic mode ID: <code>minecraft:entity.small_sulfur_cube</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `entity.small_sulfur_cube.death` | death | `minecraft:entity.small_sulfur_cube.death` |
+| `entity.small_sulfur_cube.eat` | eat | `minecraft:entity.small_sulfur_cube.eat` |
+| `entity.small_sulfur_cube.hurt` | hurt | `minecraft:entity.small_sulfur_cube.hurt` |
+| `entity.small_sulfur_cube.jump` | jump | `minecraft:entity.small_sulfur_cube.jump` |
+| `entity.small_sulfur_cube.squish` | squish | `minecraft:entity.small_sulfur_cube.squish` |
+
+</details>
+
 ### Spider
 
 <details>
@@ -452,6 +467,47 @@ _Sounds from hostile mobs: zombies, creepers, skeletons, wardens, etc._
 | `entity.stray.death` | death | `minecraft:entity.stray.death` |
 | `entity.stray.hurt` | hurt | `minecraft:entity.stray.hurt` |
 | `entity.stray.step` | step | `minecraft:entity.stray.step` |
+
+</details>
+
+### Sulfur Cube
+
+<details>
+<summary><b>Sulfur Cube</b> — 31 sounds · Basic mode ID: <code>minecraft:entity.sulfur_cube</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `entity.sulfur_cube.absorb` | absorb | `minecraft:entity.sulfur_cube.absorb` |
+| `entity.sulfur_cube.bounce` | bounce | `minecraft:entity.sulfur_cube.bounce` |
+| `entity.sulfur_cube.bouncy.hit` | bouncy.hit | `minecraft:entity.sulfur_cube.bouncy.hit` |
+| `entity.sulfur_cube.bouncy.push` | bouncy.push | `minecraft:entity.sulfur_cube.bouncy.push` |
+| `entity.sulfur_cube.death` | death | `minecraft:entity.sulfur_cube.death` |
+| `entity.sulfur_cube.eject` | eject | `minecraft:entity.sulfur_cube.eject` |
+| `entity.sulfur_cube.explosive.hit` | explosive.hit | `minecraft:entity.sulfur_cube.explosive.hit` |
+| `entity.sulfur_cube.explosive.push` | explosive.push | `minecraft:entity.sulfur_cube.explosive.push` |
+| `entity.sulfur_cube.fast_flat.hit` | fast_flat.hit | `minecraft:entity.sulfur_cube.fast_flat.hit` |
+| `entity.sulfur_cube.fast_flat.push` | fast_flat.push | `minecraft:entity.sulfur_cube.fast_flat.push` |
+| `entity.sulfur_cube.fast_sliding.hit` | fast_sliding.hit | `minecraft:entity.sulfur_cube.fast_sliding.hit` |
+| `entity.sulfur_cube.fast_sliding.push` | fast_sliding.push | `minecraft:entity.sulfur_cube.fast_sliding.push` |
+| `entity.sulfur_cube.high_resistance.hit` | high_resistance.hit | `minecraft:entity.sulfur_cube.high_resistance.hit` |
+| `entity.sulfur_cube.high_resistance.push` | high_resistance.push | `minecraft:entity.sulfur_cube.high_resistance.push` |
+| `entity.sulfur_cube.hot.hit` | hot.hit | `minecraft:entity.sulfur_cube.hot.hit` |
+| `entity.sulfur_cube.hot.push` | hot.push | `minecraft:entity.sulfur_cube.hot.push` |
+| `entity.sulfur_cube.hurt` | hurt | `minecraft:entity.sulfur_cube.hurt` |
+| `entity.sulfur_cube.jump` | jump | `minecraft:entity.sulfur_cube.jump` |
+| `entity.sulfur_cube.light.hit` | light.hit | `minecraft:entity.sulfur_cube.light.hit` |
+| `entity.sulfur_cube.light.push` | light.push | `minecraft:entity.sulfur_cube.light.push` |
+| `entity.sulfur_cube.regular.hit` | regular.hit | `minecraft:entity.sulfur_cube.regular.hit` |
+| `entity.sulfur_cube.regular.push` | regular.push | `minecraft:entity.sulfur_cube.regular.push` |
+| `entity.sulfur_cube.slow_bouncy.hit` | slow_bouncy.hit | `minecraft:entity.sulfur_cube.slow_bouncy.hit` |
+| `entity.sulfur_cube.slow_bouncy.push` | slow_bouncy.push | `minecraft:entity.sulfur_cube.slow_bouncy.push` |
+| `entity.sulfur_cube.slow_flat.hit` | slow_flat.hit | `minecraft:entity.sulfur_cube.slow_flat.hit` |
+| `entity.sulfur_cube.slow_flat.push` | slow_flat.push | `minecraft:entity.sulfur_cube.slow_flat.push` |
+| `entity.sulfur_cube.slow_sliding.hit` | slow_sliding.hit | `minecraft:entity.sulfur_cube.slow_sliding.hit` |
+| `entity.sulfur_cube.slow_sliding.push` | slow_sliding.push | `minecraft:entity.sulfur_cube.slow_sliding.push` |
+| `entity.sulfur_cube.squish` | squish | `minecraft:entity.sulfur_cube.squish` |
+| `entity.sulfur_cube.sticky.hit` | sticky.hit | `minecraft:entity.sulfur_cube.sticky.hit` |
+| `entity.sulfur_cube.sticky.push` | sticky.push | `minecraft:entity.sulfur_cube.sticky.push` |
 
 </details>
 
@@ -608,4 +664,3 @@ _Sounds from hostile mobs: zombies, creepers, skeletons, wardens, etc._
 | `entity.zombified_piglin.hurt` | hurt | `minecraft:entity.zombified_piglin.hurt` |
 
 </details>
-

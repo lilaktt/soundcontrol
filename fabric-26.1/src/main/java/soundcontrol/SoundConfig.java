@@ -1,7 +1,7 @@
 package soundcontrol;
 
 import soundcontrol.anchor.SoundAnchor;
-import soundcontrol.gui.ProfileEditScreen;
+import soundcontrol.api.SoundControlAPI;
 import com.google.gson.*;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class SoundConfig {
 
     private static Map<String, SoundSettings> EDIT_TARGET = null;
 
-    public static final Map<String, Float> API_OVERRIDES = new LinkedHashMap<>();
+
 
     private static Map<String, SoundSettings> sounds() {
         if (EDIT_TARGET != null) return EDIT_TARGET;
@@ -315,7 +315,8 @@ public class SoundConfig {
             }
         }
 
-        if (API_OVERRIDES.containsKey(id)) return API_OVERRIDES.get(id);
+        float apiVol = SoundControlAPI.resolveApiVolume(id);
+        if (apiVol >= 0) return apiVol;
         return 1.0f;
     }
 

@@ -4,20 +4,9 @@
 
 _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 
-**Total:** 541 sounds · **Groups:** 87
+**Total:** 565 sounds · **Groups:** 88
 
 ---
-
-### 
-
-<details>
-<summary><b></b> — 1 sounds · Basic mode ID: <code>minecraft:entity.</code></summary>
-
-| Sound ID | Action | Full ID |
-|----------|--------|---------|
-| `entity.` | — | `minecraft:entity.` |
-
-</details>
 
 ### Allay
 
@@ -342,7 +331,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `entity.copper_golem_become_statue` | — | `minecraft:entity.copper_golem_become_statue` |
+| `entity.copper_golem_become_statue` | entity.copper_golem_become_statue | `minecraft:entity.copper_golem_become_statue` |
 
 </details>
 
@@ -403,6 +392,20 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 | `entity.creaking.sway` | sway | `minecraft:entity.creaking.sway` |
 | `entity.creaking.twitch` | twitch | `minecraft:entity.creaking.twitch` |
 | `entity.creaking.unfreeze` | unfreeze | `minecraft:entity.creaking.unfreeze` |
+
+</details>
+
+### Cushion
+
+<details>
+<summary><b>Cushion</b> — 4 sounds · Basic mode ID: <code>minecraft:entity.cushion</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `entity.cushion.break` | break | `minecraft:entity.cushion.break` |
+| `entity.cushion.get_up` | get_up | `minecraft:entity.cushion.get_up` |
+| `entity.cushion.place` | place | `minecraft:entity.cushion.place` |
+| `entity.cushion.sit` | sit | `minecraft:entity.cushion.sit` |
 
 </details>
 
@@ -1032,6 +1035,37 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 
 </details>
 
+### Player
+
+<details>
+<summary><b>Player</b> — 21 sounds · Basic mode ID: <code>minecraft:entity.player</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `entity.player.attack.crit` | attack.crit | `minecraft:entity.player.attack.crit` |
+| `entity.player.attack.knockback` | attack.knockback | `minecraft:entity.player.attack.knockback` |
+| `entity.player.attack.nodamage` | attack.nodamage | `minecraft:entity.player.attack.nodamage` |
+| `entity.player.attack.strong` | attack.strong | `minecraft:entity.player.attack.strong` |
+| `entity.player.attack.sweep` | attack.sweep | `minecraft:entity.player.attack.sweep` |
+| `entity.player.attack.weak` | attack.weak | `minecraft:entity.player.attack.weak` |
+| `entity.player.big_fall` | big_fall | `minecraft:entity.player.big_fall` |
+| `entity.player.breath` | breath | `minecraft:entity.player.breath` |
+| `entity.player.burp` | burp | `minecraft:entity.player.burp` |
+| `entity.player.death` | death | `minecraft:entity.player.death` |
+| `entity.player.hurt` | hurt | `minecraft:entity.player.hurt` |
+| `entity.player.hurt_drown` | hurt_drown | `minecraft:entity.player.hurt_drown` |
+| `entity.player.hurt_freeze` | hurt_freeze | `minecraft:entity.player.hurt_freeze` |
+| `entity.player.hurt_on_fire` | hurt_on_fire | `minecraft:entity.player.hurt_on_fire` |
+| `entity.player.hurt_sweet_berry_bush` | hurt_sweet_berry_bush | `minecraft:entity.player.hurt_sweet_berry_bush` |
+| `entity.player.levelup` | levelup | `minecraft:entity.player.levelup` |
+| `entity.player.small_fall` | small_fall | `minecraft:entity.player.small_fall` |
+| `entity.player.splash` | splash | `minecraft:entity.player.splash` |
+| `entity.player.splash.high_speed` | splash.high_speed | `minecraft:entity.player.splash.high_speed` |
+| `entity.player.swim` | swim | `minecraft:entity.player.swim` |
+| `entity.player.teleport` | teleport | `minecraft:entity.player.teleport` |
+
+</details>
+
 ### Polar Bear
 
 <details>
@@ -1418,4 +1452,3 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 | `entity.zombie_villager.step` | step | `minecraft:entity.zombie_villager.step` |
 
 </details>
-

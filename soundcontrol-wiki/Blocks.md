@@ -4,7 +4,7 @@
 
 _All block-related sounds: breaking, placing, stepping, falling, etc._
 
-**Total:** 804 sounds · **Groups:** 193
+**Total:** 850 sounds · **Groups:** 201
 
 ---
 
@@ -616,6 +616,21 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 |----------|--------|---------|
 | `block.chorus_flower.death` | death | `minecraft:block.chorus_flower.death` |
 | `block.chorus_flower.grow` | grow | `minecraft:block.chorus_flower.grow` |
+
+</details>
+
+### Cinnabar
+
+<details>
+<summary><b>Cinnabar</b> — 5 sounds · Basic mode ID: <code>minecraft:block.cinnabar</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `block.cinnabar.break` | break | `minecraft:block.cinnabar.break` |
+| `block.cinnabar.fall` | fall | `minecraft:block.cinnabar.fall` |
+| `block.cinnabar.hit` | hit | `minecraft:block.cinnabar.hit` |
+| `block.cinnabar.place` | place | `minecraft:block.cinnabar.place` |
+| `block.cinnabar.step` | step | `minecraft:block.cinnabar.step` |
 
 </details>
 
@@ -1878,7 +1893,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Pointed Dripstone
 
 <details>
-<summary><b>Pointed Dripstone</b> — 9 sounds · Basic mode ID: <code>minecraft:block.pointed_dripstone</code></summary>
+<summary><b>Pointed Dripstone</b> — 10 sounds · Basic mode ID: <code>minecraft:block.pointed_dripstone</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1886,6 +1901,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 | `block.pointed_dripstone.drip_lava` | drip_lava | `minecraft:block.pointed_dripstone.drip_lava` |
 | `block.pointed_dripstone.drip_lava_into_cauldron` | drip_lava_into_cauldron | `minecraft:block.pointed_dripstone.drip_lava_into_cauldron` |
 | `block.pointed_dripstone.drip_water` | drip_water | `minecraft:block.pointed_dripstone.drip_water` |
+| `block.pointed_dripstone.drip_water_into_cauldron` | drip_water_into_cauldron | `minecraft:block.pointed_dripstone.drip_water_into_cauldron` |
 | `block.pointed_dripstone.fall` | fall | `minecraft:block.pointed_dripstone.fall` |
 | `block.pointed_dripstone.hit` | hit | `minecraft:block.pointed_dripstone.hit` |
 | `block.pointed_dripstone.land` | land | `minecraft:block.pointed_dripstone.land` |
@@ -1924,6 +1940,22 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 
 </details>
 
+### Poplar Leaves
+
+<details>
+<summary><b>Poplar Leaves</b> — 6 sounds · Basic mode ID: <code>minecraft:block.poplar_leaves</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `block.poplar_leaves.ambient` | ambient | `minecraft:block.poplar_leaves.ambient` |
+| `block.poplar_leaves.break` | break | `minecraft:block.poplar_leaves.break` |
+| `block.poplar_leaves.fall` | fall | `minecraft:block.poplar_leaves.fall` |
+| `block.poplar_leaves.hit` | hit | `minecraft:block.poplar_leaves.hit` |
+| `block.poplar_leaves.place` | place | `minecraft:block.poplar_leaves.place` |
+| `block.poplar_leaves.step` | step | `minecraft:block.poplar_leaves.step` |
+
+</details>
+
 ### Portal
 
 <details>
@@ -1934,6 +1966,26 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 | `block.portal.ambient` | ambient | `minecraft:block.portal.ambient` |
 | `block.portal.travel` | travel | `minecraft:block.portal.travel` |
 | `block.portal.trigger` | trigger | `minecraft:block.portal.trigger` |
+
+</details>
+
+### Potent Sulfur
+
+<details>
+<summary><b>Potent Sulfur</b> — 10 sounds · Basic mode ID: <code>minecraft:block.potent_sulfur</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `block.potent_sulfur.break` | break | `minecraft:block.potent_sulfur.break` |
+| `block.potent_sulfur.fall` | fall | `minecraft:block.potent_sulfur.fall` |
+| `block.potent_sulfur.geyser_continuous_eruption` | geyser_continuous_eruption | `minecraft:block.potent_sulfur.geyser_continuous_eruption` |
+| `block.potent_sulfur.geyser_continuous_eruption_active` | geyser_continuous_eruption_active | `minecraft:block.potent_sulfur.geyser_continuous_eruption_active` |
+| `block.potent_sulfur.geyser_eruption` | geyser_eruption | `minecraft:block.potent_sulfur.geyser_eruption` |
+| `block.potent_sulfur.geyser_eruption_active` | geyser_eruption_active | `minecraft:block.potent_sulfur.geyser_eruption_active` |
+| `block.potent_sulfur.hit` | hit | `minecraft:block.potent_sulfur.hit` |
+| `block.potent_sulfur.noxious_gas` | noxious_gas | `minecraft:block.potent_sulfur.noxious_gas` |
+| `block.potent_sulfur.place` | place | `minecraft:block.potent_sulfur.place` |
+| `block.potent_sulfur.step` | step | `minecraft:block.potent_sulfur.step` |
 
 </details>
 
@@ -1960,6 +2012,18 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
 | `block.pumpkin.carve` | carve | `minecraft:block.pumpkin.carve` |
+
+</details>
+
+### Red Shrub
+
+<details>
+<summary><b>Red Shrub</b> — 2 sounds · Basic mode ID: <code>minecraft:block.red_shrub</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `block.red_shrub.break` | break | `minecraft:block.red_shrub.break` |
+| `block.red_shrub.place` | place | `minecraft:block.red_shrub.place` |
 
 </details>
 
@@ -2177,6 +2241,21 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 | `block.shelf.single_swap` | single_swap | `minecraft:block.shelf.single_swap` |
 | `block.shelf.step` | step | `minecraft:block.shelf.step` |
 | `block.shelf.take_item` | take_item | `minecraft:block.shelf.take_item` |
+
+</details>
+
+### Shelf Mushroom
+
+<details>
+<summary><b>Shelf Mushroom</b> — 5 sounds · Basic mode ID: <code>minecraft:block.shelf_mushroom</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `block.shelf_mushroom.bounce` | bounce | `minecraft:block.shelf_mushroom.bounce` |
+| `block.shelf_mushroom.break` | break | `minecraft:block.shelf_mushroom.break` |
+| `block.shelf_mushroom.fall` | fall | `minecraft:block.shelf_mushroom.fall` |
+| `block.shelf_mushroom.place` | place | `minecraft:block.shelf_mushroom.place` |
+| `block.shelf_mushroom.step` | step | `minecraft:block.shelf_mushroom.step` |
 
 </details>
 
@@ -2437,6 +2516,53 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 |----------|--------|---------|
 | `block.stone_pressure_plate.click_off` | click_off | `minecraft:block.stone_pressure_plate.click_off` |
 | `block.stone_pressure_plate.click_on` | click_on | `minecraft:block.stone_pressure_plate.click_on` |
+
+</details>
+
+### Straw Bed
+
+<details>
+<summary><b>Straw Bed</b> — 6 sounds · Basic mode ID: <code>minecraft:block.straw_bed</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `block.straw_bed.break` | break | `minecraft:block.straw_bed.break` |
+| `block.straw_bed.break_leave` | break_leave | `minecraft:block.straw_bed.break_leave` |
+| `block.straw_bed.fall` | fall | `minecraft:block.straw_bed.fall` |
+| `block.straw_bed.hit` | hit | `minecraft:block.straw_bed.hit` |
+| `block.straw_bed.place` | place | `minecraft:block.straw_bed.place` |
+| `block.straw_bed.step` | step | `minecraft:block.straw_bed.step` |
+
+</details>
+
+### Sulfur
+
+<details>
+<summary><b>Sulfur</b> — 5 sounds · Basic mode ID: <code>minecraft:block.sulfur</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `block.sulfur.break` | break | `minecraft:block.sulfur.break` |
+| `block.sulfur.fall` | fall | `minecraft:block.sulfur.fall` |
+| `block.sulfur.hit` | hit | `minecraft:block.sulfur.hit` |
+| `block.sulfur.place` | place | `minecraft:block.sulfur.place` |
+| `block.sulfur.step` | step | `minecraft:block.sulfur.step` |
+
+</details>
+
+### Sulfur Spike
+
+<details>
+<summary><b>Sulfur Spike</b> — 6 sounds · Basic mode ID: <code>minecraft:block.sulfur_spike</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `block.sulfur_spike.break` | break | `minecraft:block.sulfur_spike.break` |
+| `block.sulfur_spike.fall` | fall | `minecraft:block.sulfur_spike.fall` |
+| `block.sulfur_spike.hit` | hit | `minecraft:block.sulfur_spike.hit` |
+| `block.sulfur_spike.land` | land | `minecraft:block.sulfur_spike.land` |
+| `block.sulfur_spike.place` | place | `minecraft:block.sulfur_spike.place` |
+| `block.sulfur_spike.step` | step | `minecraft:block.sulfur_spike.step` |
 
 </details>
 
@@ -2741,4 +2867,3 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 | `block.wool.step` | step | `minecraft:block.wool.step` |
 
 </details>
-

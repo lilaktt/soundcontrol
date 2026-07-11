@@ -4,51 +4,9 @@
 
 _Item usage sounds, enchanting, player actions, equipment._
 
-**Total:** 130 sounds · **Groups:** 43
+**Total:** 114 sounds · **Groups:** 43
 
 ---
-
-### Thorns
-
-<details>
-<summary><b>Thorns</b> — 1 sounds · Basic mode ID: <code>minecraft:enchant.thorns</code></summary>
-
-| Sound ID | Action | Full ID |
-|----------|--------|---------|
-| `enchant.thorns.hit` | hit | `minecraft:enchant.thorns.hit` |
-
-</details>
-
-### Player
-
-<details>
-<summary><b>Player</b> — 21 sounds · Basic mode ID: <code>minecraft:entity.player</code></summary>
-
-| Sound ID | Action | Full ID |
-|----------|--------|---------|
-| `entity.player.attack.crit` | attack.crit | `minecraft:entity.player.attack.crit` |
-| `entity.player.attack.knockback` | attack.knockback | `minecraft:entity.player.attack.knockback` |
-| `entity.player.attack.nodamage` | attack.nodamage | `minecraft:entity.player.attack.nodamage` |
-| `entity.player.attack.strong` | attack.strong | `minecraft:entity.player.attack.strong` |
-| `entity.player.attack.sweep` | attack.sweep | `minecraft:entity.player.attack.sweep` |
-| `entity.player.attack.weak` | attack.weak | `minecraft:entity.player.attack.weak` |
-| `entity.player.big_fall` | big_fall | `minecraft:entity.player.big_fall` |
-| `entity.player.breath` | breath | `minecraft:entity.player.breath` |
-| `entity.player.burp` | burp | `minecraft:entity.player.burp` |
-| `entity.player.death` | death | `minecraft:entity.player.death` |
-| `entity.player.hurt` | hurt | `minecraft:entity.player.hurt` |
-| `entity.player.hurt_drown` | hurt_drown | `minecraft:entity.player.hurt_drown` |
-| `entity.player.hurt_freeze` | hurt_freeze | `minecraft:entity.player.hurt_freeze` |
-| `entity.player.hurt_on_fire` | hurt_on_fire | `minecraft:entity.player.hurt_on_fire` |
-| `entity.player.hurt_sweet_berry_bush` | hurt_sweet_berry_bush | `minecraft:entity.player.hurt_sweet_berry_bush` |
-| `entity.player.levelup` | levelup | `minecraft:entity.player.levelup` |
-| `entity.player.small_fall` | small_fall | `minecraft:entity.player.small_fall` |
-| `entity.player.splash` | splash | `minecraft:entity.player.splash` |
-| `entity.player.splash.high_speed` | splash.high_speed | `minecraft:entity.player.splash.high_speed` |
-| `entity.player.swim` | swim | `minecraft:entity.player.swim` |
-| `entity.player.teleport` | teleport | `minecraft:entity.player.teleport` |
-
-</details>
 
 ### Armor
 
@@ -141,7 +99,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Bucket
 
 <details>
-<summary><b>Bucket</b> — 12 sounds · Basic mode ID: <code>minecraft:item.bucket</code></summary>
+<summary><b>Bucket</b> — 14 sounds · Basic mode ID: <code>minecraft:item.bucket</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -150,12 +108,14 @@ _Item usage sounds, enchanting, player actions, equipment._
 | `item.bucket.empty_fish` | empty_fish | `minecraft:item.bucket.empty_fish` |
 | `item.bucket.empty_lava` | empty_lava | `minecraft:item.bucket.empty_lava` |
 | `item.bucket.empty_powder_snow` | empty_powder_snow | `minecraft:item.bucket.empty_powder_snow` |
+| `item.bucket.empty_sulfur_cube` | empty_sulfur_cube | `minecraft:item.bucket.empty_sulfur_cube` |
 | `item.bucket.empty_tadpole` | empty_tadpole | `minecraft:item.bucket.empty_tadpole` |
 | `item.bucket.fill` | fill | `minecraft:item.bucket.fill` |
 | `item.bucket.fill_axolotl` | fill_axolotl | `minecraft:item.bucket.fill_axolotl` |
 | `item.bucket.fill_fish` | fill_fish | `minecraft:item.bucket.fill_fish` |
 | `item.bucket.fill_lava` | fill_lava | `minecraft:item.bucket.fill_lava` |
 | `item.bucket.fill_powder_snow` | fill_powder_snow | `minecraft:item.bucket.fill_powder_snow` |
+| `item.bucket.fill_sulfur_cube` | fill_sulfur_cube | `minecraft:item.bucket.fill_sulfur_cube` |
 | `item.bucket.fill_tadpole` | fill_tadpole | `minecraft:item.bucket.fill_tadpole` |
 
 </details>
@@ -266,17 +226,6 @@ _Item usage sounds, enchanting, player actions, equipment._
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
 | `item.glow_ink_sac.use` | use | `minecraft:item.glow_ink_sac.use` |
-
-</details>
-
-### Goat Horn
-
-<details>
-<summary><b>Goat Horn</b> — 1 sounds · Basic mode ID: <code>minecraft:item.goat_horn</code></summary>
-
-| Sound ID | Action | Full ID |
-|----------|--------|---------|
-| `item.goat_horn.sound.` | sound. | `minecraft:item.goat_horn.sound.` |
 
 </details>
 
@@ -395,6 +344,19 @@ _Item usage sounds, enchanting, player actions, equipment._
 
 </details>
 
+### Mob Effect
+
+<details>
+<summary><b>Mob Effect</b> — 3 sounds · Basic mode ID: <code>minecraft:event.mob_effect</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `event.mob_effect.bad_omen` | bad_omen | `minecraft:event.mob_effect.bad_omen` |
+| `event.mob_effect.raid_omen` | raid_omen | `minecraft:event.mob_effect.raid_omen` |
+| `event.mob_effect.trial_omen` | trial_omen | `minecraft:event.mob_effect.trial_omen` |
+
+</details>
+
 ### Nautilus Saddle Equip
 
 <details>
@@ -402,7 +364,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `item.nautilus_saddle_equip` | — | `minecraft:item.nautilus_saddle_equip` |
+| `item.nautilus_saddle_equip` | item.nautilus_saddle_equip | `minecraft:item.nautilus_saddle_equip` |
 
 </details>
 
@@ -413,7 +375,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `item.nautilus_saddle_underwater_equip` | — | `minecraft:item.nautilus_saddle_underwater_equip` |
+| `item.nautilus_saddle_underwater_equip` | item.nautilus_saddle_underwater_equip | `minecraft:item.nautilus_saddle_underwater_equip` |
 
 </details>
 
@@ -436,6 +398,17 @@ _Item usage sounds, enchanting, player actions, equipment._
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
 | `item.ominous_bottle.dispose` | dispose | `minecraft:item.ominous_bottle.dispose` |
+
+</details>
+
+### Raid
+
+<details>
+<summary><b>Raid</b> — 1 sounds · Basic mode ID: <code>minecraft:event.raid</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `event.raid.horn` | horn | `minecraft:event.raid.horn` |
 
 </details>
 
@@ -525,6 +498,17 @@ _Item usage sounds, enchanting, player actions, equipment._
 
 </details>
 
+### Thorns
+
+<details>
+<summary><b>Thorns</b> — 1 sounds · Basic mode ID: <code>minecraft:enchant.thorns</code></summary>
+
+| Sound ID | Action | Full ID |
+|----------|--------|---------|
+| `enchant.thorns.hit` | hit | `minecraft:enchant.thorns.hit` |
+
+</details>
+
 ### Totem
 
 <details>
@@ -567,4 +551,3 @@ _Item usage sounds, enchanting, player actions, equipment._
 | `item.wolf_armor.repair` | repair | `minecraft:item.wolf_armor.repair` |
 
 </details>
-
