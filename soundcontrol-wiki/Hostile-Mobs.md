@@ -1,8 +1,8 @@
 # 💀 Hostile Mobs
 
-[🔙 Back to Home](Home.md)
+[🔙 Back to Home](Home)
 
-_Sounds from hostile mobs: zombies, creepers, skeletons, wardens, etc._
+_Sounds from hostile mobs: zombies, creepers, skeletons, wardens, sulfur cubes, etc._
 
 **Total:** 277 sounds · **Groups:** 38
 

@@ -1,6 +1,6 @@
 # 🐄 Passive Mobs
 
-[🔙 Back to Home](Home.md)
+[🔙 Back to Home](Home)
 
 _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 
@@ -327,11 +327,11 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Copper Golem Become Statue
 
 <details>
-<summary><b>Copper Golem Become Statue</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.copper_golem_become_statue</code></summary>
+<summary><b>Copper Golem Become Statue</b> — 1 sound · Basic mode ID: <code>minecraft:entity.copper_golem_become_statue</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `entity.copper_golem_become_statue` | entity.copper_golem_become_statue | `minecraft:entity.copper_golem_become_statue` |
+| `entity.copper_golem_become_statue` | copper_golem_become_statue | `minecraft:entity.copper_golem_become_statue` |
 
 </details>
 
@@ -366,7 +366,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Cow
 
 <details>
-<summary><b>Cow</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.cow</code></summary>
+<summary><b>Cow</b> — 1 sound · Basic mode ID: <code>minecraft:entity.cow</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -449,7 +449,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Dragon Fireball
 
 <details>
-<summary><b>Dragon Fireball</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.dragon_fireball</code></summary>
+<summary><b>Dragon Fireball</b> — 1 sound · Basic mode ID: <code>minecraft:entity.dragon_fireball</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -460,7 +460,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Egg
 
 <details>
-<summary><b>Egg</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.egg</code></summary>
+<summary><b>Egg</b> — 1 sound · Basic mode ID: <code>minecraft:entity.egg</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -483,7 +483,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Ender Pearl
 
 <details>
-<summary><b>Ender Pearl</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.ender_pearl</code></summary>
+<summary><b>Ender Pearl</b> — 1 sound · Basic mode ID: <code>minecraft:entity.ender_pearl</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -494,7 +494,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Evoker Fangs
 
 <details>
-<summary><b>Evoker Fangs</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.evoker_fangs</code></summary>
+<summary><b>Evoker Fangs</b> — 1 sound · Basic mode ID: <code>minecraft:entity.evoker_fangs</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -505,7 +505,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Experience Bottle
 
 <details>
-<summary><b>Experience Bottle</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.experience_bottle</code></summary>
+<summary><b>Experience Bottle</b> — 1 sound · Basic mode ID: <code>minecraft:entity.experience_bottle</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -516,7 +516,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Experience Orb
 
 <details>
-<summary><b>Experience Orb</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.experience_orb</code></summary>
+<summary><b>Experience Orb</b> — 1 sound · Basic mode ID: <code>minecraft:entity.experience_orb</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -545,7 +545,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Fish
 
 <details>
-<summary><b>Fish</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.fish</code></summary>
+<summary><b>Fish</b> — 1 sound · Basic mode ID: <code>minecraft:entity.fish</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -812,7 +812,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Lingering Potion
 
 <details>
-<summary><b>Lingering Potion</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.lingering_potion</code></summary>
+<summary><b>Lingering Potion</b> — 1 sound · Basic mode ID: <code>minecraft:entity.lingering_potion</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1212,7 +1212,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Snowball
 
 <details>
-<summary><b>Snowball</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.snowball</code></summary>
+<summary><b>Snowball</b> — 1 sound · Basic mode ID: <code>minecraft:entity.snowball</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1282,7 +1282,7 @@ _Sounds from passive and neutral mobs: cows, villagers, wolves, etc._
 ### Tnt
 
 <details>
-<summary><b>Tnt</b> — 1 sounds · Basic mode ID: <code>minecraft:entity.tnt</code></summary>
+<summary><b>Tnt</b> — 1 sound · Basic mode ID: <code>minecraft:entity.tnt</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|

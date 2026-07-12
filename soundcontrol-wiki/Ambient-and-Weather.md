@@ -1,6 +1,6 @@
 # 🌧️ Ambient & Weather
 
-[🔙 Back to Home](Home.md)
+[🔙 Back to Home](Home)
 
 _Environmental sounds: caves, biome ambience, rain, thunder._
 
@@ -24,11 +24,11 @@ _Environmental sounds: caves, biome ambience, rain, thunder._
 ### Cave
 
 <details>
-<summary><b>Cave</b> — 1 sounds · Basic mode ID: <code>minecraft:ambient.cave</code></summary>
+<summary><b>Cave</b> — 1 sound · Basic mode ID: <code>minecraft:ambient.cave</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `ambient.cave` | ambient.cave | `minecraft:ambient.cave` |
+| `ambient.cave` | cave | `minecraft:ambient.cave` |
 
 </details>
 
@@ -48,11 +48,11 @@ _Environmental sounds: caves, biome ambience, rain, thunder._
 ### End Flash
 
 <details>
-<summary><b>End Flash</b> — 1 sounds · Basic mode ID: <code>minecraft:weather.end_flash</code></summary>
+<summary><b>End Flash</b> — 1 sound · Basic mode ID: <code>minecraft:weather.end_flash</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `weather.end_flash` | weather.end_flash | `minecraft:weather.end_flash` |
+| `weather.end_flash` | end_flash | `minecraft:weather.end_flash` |
 
 </details>
 
@@ -76,7 +76,7 @@ _Environmental sounds: caves, biome ambience, rain, thunder._
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `weather.rain` | weather.rain | `minecraft:weather.rain` |
+| `weather.rain` | rain | `minecraft:weather.rain` |
 | `weather.rain.above` | above | `minecraft:weather.rain.above` |
 
 </details>

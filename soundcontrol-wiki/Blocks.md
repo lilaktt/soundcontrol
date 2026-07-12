@@ -1,6 +1,6 @@
 # 🧱 Blocks
 
-[🔙 Back to Home](Home.md)
+[🔙 Back to Home](Home)
 
 _All block-related sounds: breaking, placing, stepping, falling, etc._
 
@@ -309,7 +309,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Blastfurnace
 
 <details>
-<summary><b>Blastfurnace</b> — 1 sounds · Basic mode ID: <code>minecraft:block.blastfurnace</code></summary>
+<summary><b>Blastfurnace</b> — 1 sound · Basic mode ID: <code>minecraft:block.blastfurnace</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -335,7 +335,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Brewing Stand
 
 <details>
-<summary><b>Brewing Stand</b> — 1 sounds · Basic mode ID: <code>minecraft:block.brewing_stand</code></summary>
+<summary><b>Brewing Stand</b> — 1 sound · Basic mode ID: <code>minecraft:block.brewing_stand</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -373,7 +373,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Cake
 
 <details>
-<summary><b>Cake</b> — 1 sounds · Basic mode ID: <code>minecraft:block.cake</code></summary>
+<summary><b>Cake</b> — 1 sound · Basic mode ID: <code>minecraft:block.cake</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -399,7 +399,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Campfire
 
 <details>
-<summary><b>Campfire</b> — 1 sounds · Basic mode ID: <code>minecraft:block.campfire</code></summary>
+<summary><b>Campfire</b> — 1 sound · Basic mode ID: <code>minecraft:block.campfire</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -652,7 +652,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Comparator
 
 <details>
-<summary><b>Comparator</b> — 1 sounds · Basic mode ID: <code>minecraft:block.comparator</code></summary>
+<summary><b>Comparator</b> — 1 sound · Basic mode ID: <code>minecraft:block.comparator</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -859,7 +859,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Crop
 
 <details>
-<summary><b>Crop</b> — 1 sounds · Basic mode ID: <code>minecraft:block.crop</code></summary>
+<summary><b>Crop</b> — 1 sound · Basic mode ID: <code>minecraft:block.crop</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -870,7 +870,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Deadbush
 
 <details>
-<summary><b>Deadbush</b> — 1 sounds · Basic mode ID: <code>minecraft:block.deadbush</code></summary>
+<summary><b>Deadbush</b> — 1 sound · Basic mode ID: <code>minecraft:block.deadbush</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -990,7 +990,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Dry Grass
 
 <details>
-<summary><b>Dry Grass</b> — 1 sounds · Basic mode ID: <code>minecraft:block.dry_grass</code></summary>
+<summary><b>Dry Grass</b> — 1 sound · Basic mode ID: <code>minecraft:block.dry_grass</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1001,7 +1001,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Enchantment Table
 
 <details>
-<summary><b>Enchantment Table</b> — 1 sounds · Basic mode ID: <code>minecraft:block.enchantment_table</code></summary>
+<summary><b>Enchantment Table</b> — 1 sound · Basic mode ID: <code>minecraft:block.enchantment_table</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1012,7 +1012,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### End Gateway
 
 <details>
-<summary><b>End Gateway</b> — 1 sounds · Basic mode ID: <code>minecraft:block.end_gateway</code></summary>
+<summary><b>End Gateway</b> — 1 sound · Basic mode ID: <code>minecraft:block.end_gateway</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1023,7 +1023,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### End Portal
 
 <details>
-<summary><b>End Portal</b> — 1 sounds · Basic mode ID: <code>minecraft:block.end_portal</code></summary>
+<summary><b>End Portal</b> — 1 sound · Basic mode ID: <code>minecraft:block.end_portal</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1034,7 +1034,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### End Portal Frame
 
 <details>
-<summary><b>End Portal Frame</b> — 1 sounds · Basic mode ID: <code>minecraft:block.end_portal_frame</code></summary>
+<summary><b>End Portal Frame</b> — 1 sound · Basic mode ID: <code>minecraft:block.end_portal_frame</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1096,7 +1096,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Firefly Bush
 
 <details>
-<summary><b>Firefly Bush</b> — 1 sounds · Basic mode ID: <code>minecraft:block.firefly_bush</code></summary>
+<summary><b>Firefly Bush</b> — 1 sound · Basic mode ID: <code>minecraft:block.firefly_bush</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1168,7 +1168,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Furnace
 
 <details>
-<summary><b>Furnace</b> — 1 sounds · Basic mode ID: <code>minecraft:block.furnace</code></summary>
+<summary><b>Furnace</b> — 1 sound · Basic mode ID: <code>minecraft:block.furnace</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1239,7 +1239,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Grindstone
 
 <details>
-<summary><b>Grindstone</b> — 1 sounds · Basic mode ID: <code>minecraft:block.grindstone</code></summary>
+<summary><b>Grindstone</b> — 1 sound · Basic mode ID: <code>minecraft:block.grindstone</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1250,7 +1250,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Growing Plant
 
 <details>
-<summary><b>Growing Plant</b> — 1 sounds · Basic mode ID: <code>minecraft:block.growing_plant</code></summary>
+<summary><b>Growing Plant</b> — 1 sound · Basic mode ID: <code>minecraft:block.growing_plant</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1432,7 +1432,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Lever
 
 <details>
-<summary><b>Lever</b> — 1 sounds · Basic mode ID: <code>minecraft:block.lever</code></summary>
+<summary><b>Lever</b> — 1 sound · Basic mode ID: <code>minecraft:block.lever</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1443,7 +1443,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Lily Pad
 
 <details>
-<summary><b>Lily Pad</b> — 1 sounds · Basic mode ID: <code>minecraft:block.lily_pad</code></summary>
+<summary><b>Lily Pad</b> — 1 sound · Basic mode ID: <code>minecraft:block.lily_pad</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1658,7 +1658,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Nether Wart
 
 <details>
-<summary><b>Nether Wart</b> — 1 sounds · Basic mode ID: <code>minecraft:block.nether_wart</code></summary>
+<summary><b>Nether Wart</b> — 1 sound · Basic mode ID: <code>minecraft:block.nether_wart</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -1855,7 +1855,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Pale Hanging Moss
 
 <details>
-<summary><b>Pale Hanging Moss</b> — 1 sounds · Basic mode ID: <code>minecraft:block.pale_hanging_moss</code></summary>
+<summary><b>Pale Hanging Moss</b> — 1 sound · Basic mode ID: <code>minecraft:block.pale_hanging_moss</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -2007,7 +2007,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Pumpkin
 
 <details>
-<summary><b>Pumpkin</b> — 1 sounds · Basic mode ID: <code>minecraft:block.pumpkin</code></summary>
+<summary><b>Pumpkin</b> — 1 sound · Basic mode ID: <code>minecraft:block.pumpkin</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -2030,7 +2030,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Redstone Torch
 
 <details>
-<summary><b>Redstone Torch</b> — 1 sounds · Basic mode ID: <code>minecraft:block.redstone_torch</code></summary>
+<summary><b>Redstone Torch</b> — 1 sound · Basic mode ID: <code>minecraft:block.redstone_torch</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -2289,7 +2289,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Sign
 
 <details>
-<summary><b>Sign</b> — 1 sounds · Basic mode ID: <code>minecraft:block.sign</code></summary>
+<summary><b>Sign</b> — 1 sound · Basic mode ID: <code>minecraft:block.sign</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -2342,7 +2342,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Smithing Table
 
 <details>
-<summary><b>Smithing Table</b> — 1 sounds · Basic mode ID: <code>minecraft:block.smithing_table</code></summary>
+<summary><b>Smithing Table</b> — 1 sound · Basic mode ID: <code>minecraft:block.smithing_table</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -2353,7 +2353,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Smoker
 
 <details>
-<summary><b>Smoker</b> — 1 sounds · Basic mode ID: <code>minecraft:block.smoker</code></summary>
+<summary><b>Smoker</b> — 1 sound · Basic mode ID: <code>minecraft:block.smoker</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -2736,7 +2736,7 @@ _All block-related sounds: breaking, placing, stepping, falling, etc._
 ### Water
 
 <details>
-<summary><b>Water</b> — 1 sounds · Basic mode ID: <code>minecraft:block.water</code></summary>
+<summary><b>Water</b> — 1 sound · Basic mode ID: <code>minecraft:block.water</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|

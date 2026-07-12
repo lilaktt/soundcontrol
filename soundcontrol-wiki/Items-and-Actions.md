@@ -1,6 +1,6 @@
 # ⚔️ Items & Actions
 
-[🔙 Back to Home](Home.md)
+[🔙 Back to Home](Home)
 
 _Item usage sounds, enchanting, player actions, equipment._
 
@@ -48,7 +48,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Bone Meal
 
 <details>
-<summary><b>Bone Meal</b> — 1 sounds · Basic mode ID: <code>minecraft:item.bone_meal</code></summary>
+<summary><b>Bone Meal</b> — 1 sound · Basic mode ID: <code>minecraft:item.bone_meal</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -137,7 +137,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Chorus Fruit
 
 <details>
-<summary><b>Chorus Fruit</b> — 1 sounds · Basic mode ID: <code>minecraft:item.chorus_fruit</code></summary>
+<summary><b>Chorus Fruit</b> — 1 sound · Basic mode ID: <code>minecraft:item.chorus_fruit</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -148,7 +148,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Crop
 
 <details>
-<summary><b>Crop</b> — 1 sounds · Basic mode ID: <code>minecraft:item.crop</code></summary>
+<summary><b>Crop</b> — 1 sound · Basic mode ID: <code>minecraft:item.crop</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -177,7 +177,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Dye
 
 <details>
-<summary><b>Dye</b> — 1 sounds · Basic mode ID: <code>minecraft:item.dye</code></summary>
+<summary><b>Dye</b> — 1 sound · Basic mode ID: <code>minecraft:item.dye</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -188,7 +188,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Elytra
 
 <details>
-<summary><b>Elytra</b> — 1 sounds · Basic mode ID: <code>minecraft:item.elytra</code></summary>
+<summary><b>Elytra</b> — 1 sound · Basic mode ID: <code>minecraft:item.elytra</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -199,7 +199,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Firecharge
 
 <details>
-<summary><b>Firecharge</b> — 1 sounds · Basic mode ID: <code>minecraft:item.firecharge</code></summary>
+<summary><b>Firecharge</b> — 1 sound · Basic mode ID: <code>minecraft:item.firecharge</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -210,7 +210,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Flintandsteel
 
 <details>
-<summary><b>Flintandsteel</b> — 1 sounds · Basic mode ID: <code>minecraft:item.flintandsteel</code></summary>
+<summary><b>Flintandsteel</b> — 1 sound · Basic mode ID: <code>minecraft:item.flintandsteel</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -221,7 +221,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Glow Ink Sac
 
 <details>
-<summary><b>Glow Ink Sac</b> — 1 sounds · Basic mode ID: <code>minecraft:item.glow_ink_sac</code></summary>
+<summary><b>Glow Ink Sac</b> — 1 sound · Basic mode ID: <code>minecraft:item.glow_ink_sac</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -244,7 +244,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Hoe
 
 <details>
-<summary><b>Hoe</b> — 1 sounds · Basic mode ID: <code>minecraft:item.hoe</code></summary>
+<summary><b>Hoe</b> — 1 sound · Basic mode ID: <code>minecraft:item.hoe</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -255,7 +255,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Honey Bottle
 
 <details>
-<summary><b>Honey Bottle</b> — 1 sounds · Basic mode ID: <code>minecraft:item.honey_bottle</code></summary>
+<summary><b>Honey Bottle</b> — 1 sound · Basic mode ID: <code>minecraft:item.honey_bottle</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -266,7 +266,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Honeycomb
 
 <details>
-<summary><b>Honeycomb</b> — 1 sounds · Basic mode ID: <code>minecraft:item.honeycomb</code></summary>
+<summary><b>Honeycomb</b> — 1 sound · Basic mode ID: <code>minecraft:item.honeycomb</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -277,7 +277,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Horse Armor
 
 <details>
-<summary><b>Horse Armor</b> — 1 sounds · Basic mode ID: <code>minecraft:item.horse_armor</code></summary>
+<summary><b>Horse Armor</b> — 1 sound · Basic mode ID: <code>minecraft:item.horse_armor</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -288,7 +288,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Ink Sac
 
 <details>
-<summary><b>Ink Sac</b> — 1 sounds · Basic mode ID: <code>minecraft:item.ink_sac</code></summary>
+<summary><b>Ink Sac</b> — 1 sound · Basic mode ID: <code>minecraft:item.ink_sac</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -312,7 +312,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Llama Carpet
 
 <details>
-<summary><b>Llama Carpet</b> — 1 sounds · Basic mode ID: <code>minecraft:item.llama_carpet</code></summary>
+<summary><b>Llama Carpet</b> — 1 sound · Basic mode ID: <code>minecraft:item.llama_carpet</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -323,7 +323,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Lodestone Compass
 
 <details>
-<summary><b>Lodestone Compass</b> — 1 sounds · Basic mode ID: <code>minecraft:item.lodestone_compass</code></summary>
+<summary><b>Lodestone Compass</b> — 1 sound · Basic mode ID: <code>minecraft:item.lodestone_compass</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -360,29 +360,29 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Nautilus Saddle Equip
 
 <details>
-<summary><b>Nautilus Saddle Equip</b> — 1 sounds · Basic mode ID: <code>minecraft:item.nautilus_saddle_equip</code></summary>
+<summary><b>Nautilus Saddle Equip</b> — 1 sound · Basic mode ID: <code>minecraft:item.nautilus_saddle_equip</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `item.nautilus_saddle_equip` | item.nautilus_saddle_equip | `minecraft:item.nautilus_saddle_equip` |
+| `item.nautilus_saddle_equip` | nautilus_saddle_equip | `minecraft:item.nautilus_saddle_equip` |
 
 </details>
 
 ### Nautilus Saddle Underwater Equip
 
 <details>
-<summary><b>Nautilus Saddle Underwater Equip</b> — 1 sounds · Basic mode ID: <code>minecraft:item.nautilus_saddle_underwater_equip</code></summary>
+<summary><b>Nautilus Saddle Underwater Equip</b> — 1 sound · Basic mode ID: <code>minecraft:item.nautilus_saddle_underwater_equip</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
-| `item.nautilus_saddle_underwater_equip` | item.nautilus_saddle_underwater_equip | `minecraft:item.nautilus_saddle_underwater_equip` |
+| `item.nautilus_saddle_underwater_equip` | nautilus_saddle_underwater_equip | `minecraft:item.nautilus_saddle_underwater_equip` |
 
 </details>
 
 ### Nether Wart
 
 <details>
-<summary><b>Nether Wart</b> — 1 sounds · Basic mode ID: <code>minecraft:item.nether_wart</code></summary>
+<summary><b>Nether Wart</b> — 1 sound · Basic mode ID: <code>minecraft:item.nether_wart</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -393,7 +393,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Ominous Bottle
 
 <details>
-<summary><b>Ominous Bottle</b> — 1 sounds · Basic mode ID: <code>minecraft:item.ominous_bottle</code></summary>
+<summary><b>Ominous Bottle</b> — 1 sound · Basic mode ID: <code>minecraft:item.ominous_bottle</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -404,7 +404,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Raid
 
 <details>
-<summary><b>Raid</b> — 1 sounds · Basic mode ID: <code>minecraft:event.raid</code></summary>
+<summary><b>Raid</b> — 1 sound · Basic mode ID: <code>minecraft:event.raid</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -415,7 +415,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Saddle
 
 <details>
-<summary><b>Saddle</b> — 1 sounds · Basic mode ID: <code>minecraft:item.saddle</code></summary>
+<summary><b>Saddle</b> — 1 sound · Basic mode ID: <code>minecraft:item.saddle</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -426,7 +426,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Shears
 
 <details>
-<summary><b>Shears</b> — 1 sounds · Basic mode ID: <code>minecraft:item.shears</code></summary>
+<summary><b>Shears</b> — 1 sound · Basic mode ID: <code>minecraft:item.shears</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -449,7 +449,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Shovel
 
 <details>
-<summary><b>Shovel</b> — 1 sounds · Basic mode ID: <code>minecraft:item.shovel</code></summary>
+<summary><b>Shovel</b> — 1 sound · Basic mode ID: <code>minecraft:item.shovel</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -501,7 +501,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Thorns
 
 <details>
-<summary><b>Thorns</b> — 1 sounds · Basic mode ID: <code>minecraft:enchant.thorns</code></summary>
+<summary><b>Thorns</b> — 1 sound · Basic mode ID: <code>minecraft:enchant.thorns</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
@@ -512,7 +512,7 @@ _Item usage sounds, enchanting, player actions, equipment._
 ### Totem
 
 <details>
-<summary><b>Totem</b> — 1 sounds · Basic mode ID: <code>minecraft:item.totem</code></summary>
+<summary><b>Totem</b> — 1 sound · Basic mode ID: <code>minecraft:item.totem</code></summary>
 
 | Sound ID | Action | Full ID |
 |----------|--------|---------|
