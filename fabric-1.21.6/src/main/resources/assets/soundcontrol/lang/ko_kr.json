@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "사운드 설정 열기",
   "key.soundcontrol.toggle_overlay": "사운드 오버레이 토글",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "프로필 이름 변경",
   "text.soundcontrol.profiles.title": "프로필",
   "text.soundcontrol.profile.name_hint": "프로필 이름 입력...",
-  "text.soundcontrol.profile.name_label": "프로필 이름:"
+  "text.soundcontrol.profile.name_label": "프로필 이름:",
+  "key.soundcontrol.mute_looked_at": "조준점 아래 소리 음소거/해제",
+  "text.soundcontrol.modlist.mute": "이 모드의 모든 소리 음소거/해제",
+  "message.soundcontrol.look_mute.muted": "음소거됨: %s",
+  "message.soundcontrol.look_mute.unmuted": "음소거 해제됨: %s",
+  "message.soundcontrol.look_mute.none": "조준점 아래에 음소거할 블록이나 몹이 없습니다.",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "이전 앵커를 이 월드로 이동 (%s)"
 }

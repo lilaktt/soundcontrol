@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Відкрити Налаштування Звуку",
   "key.soundcontrol.toggle_overlay": "Відображення звуків на екрані",
@@ -60,5 +60,15 @@
   "text.soundcontrol.profile.rename": "Перейменувати профіль",
   "text.soundcontrol.profiles.title": "Профілі",
   "text.soundcontrol.profile.name_hint": "Введіть назву профілю...",
-  "text.soundcontrol.profile.name_label": "Назва профілю:"
+  "text.soundcontrol.profile.name_label": "Назва профілю:",
+  "key.soundcontrol.mute_looked_at": "Вимкнути/увімкнути звук під прицілом",
+  "text.soundcontrol.modlist.mute": "Вимкнути/увімкнути всі звуки цього мода",
+  "message.soundcontrol.look_mute.muted": "Приглушено: %s",
+  "message.soundcontrol.look_mute.unmuted": "Відновлено: %s",
+  "message.soundcontrol.look_mute.none": "Немає блока або моба під прицілом для приглушення.",
+  "text.soundcontrol.anchors.edit_title": "Редагування якоря: %s",
+  "text.soundcontrol.anchors.search": "Пошук звуків",
+  "text.soundcontrol.anchors.remove": "Прибрати перевизначення",
+  "text.soundcontrol.anchors.all_mods": "Усі простори імен",
+  "text.soundcontrol.anchors.import_legacy": "Перенести старі якорі в цей світ (%s)"
 }

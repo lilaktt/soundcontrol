@@ -154,6 +154,7 @@ public class SoundControlScreen extends Screen {
 
         ctx.fill(0, 72, PROFILE_W, this.height - 44, 0x80202030);
 
+        ctx.fill(0, 0, this.width, this.height, 0xC0101010);
         super.extractRenderState(ctx, mouseX, mouseY, delta);
 
         ctx.text(this.font,

@@ -60,5 +60,15 @@
   "text.soundcontrol.profile.rename": "Rename Profile",
   "text.soundcontrol.profile.rename_title": "Rename Profile",
   "text.soundcontrol.profile.delete": "Delete Profile",
-  "text.soundcontrol.profile.open_folder": "Open Folder"
+  "text.soundcontrol.profile.open_folder": "Open Folder",
+  "key.soundcontrol.mute_looked_at": "Mute/Unmute Sound Under Crosshair",
+  "text.soundcontrol.modlist.mute": "Mute/unmute every sound from this mod",
+  "message.soundcontrol.look_mute.muted": "Muted: %s",
+  "message.soundcontrol.look_mute.unmuted": "Unmuted: %s",
+  "message.soundcontrol.look_mute.none": "No block or mob under crosshair to mute.",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "Move old anchors into this world (%s)"
 }

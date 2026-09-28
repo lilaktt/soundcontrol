@@ -99,7 +99,6 @@ public class ProfileListWidget extends ElementListWidget<ProfileListWidget.Profi
                     }
                 }
             }).dimensions(0, 0, activateW, 22).build();
-            this.activateButton.setAlpha(0f);
 
             if (profile.name.equals("default")) {
                 this.renameButton = null;
@@ -139,7 +138,7 @@ public class ProfileListWidget extends ElementListWidget<ProfileListWidget.Profi
                 active ? 0xFF55FF55 : 0xFFFFFFFF);
 
             activateButton.setX(0); activateButton.setY(y);
-            activateButton.render(ctx, mouseX, mouseY, delta);
+            // Match 26.1: activation is an input-only child and is never rendered.
 
             if (renameButton != null) {
                 renameButton.setX(PANEL_WIDTH - 42); renameButton.setY(y + 3);

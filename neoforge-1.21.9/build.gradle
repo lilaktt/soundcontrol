@@ -3,7 +3,7 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.141'
 }
 
-version = "1.4.2-neo-1.21.9"
+version = "1.6.0-neo-1.21.9"
 
 base {
     archivesName = "soundcontrol-neoforge-1.21.9"

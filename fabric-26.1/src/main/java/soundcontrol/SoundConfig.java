@@ -22,7 +22,8 @@ public class SoundConfig {
         public String activeProfile = "default";
         public int radarX = 10;
         public int radarY = -1;
-        public List<SoundAnchor> anchors = new ArrayList<>();
+        public List<SoundAnchor> anchors = new ArrayList<>(); // Unassigned legacy anchors; explicit import only.
+        public Map<String, List<SoundAnchor>> anchorsByWorld = new LinkedHashMap<>();
     }
     private static AppSettings SETTINGS = new AppSettings();
 
@@ -30,6 +31,7 @@ public class SoundConfig {
         public float volume = 1.0f;
         public boolean muted = false;
         public boolean favorite = false;
+        public boolean overrideParent = false;
     }
 
     public static class SoundProfile {
@@ -59,6 +61,41 @@ public class SoundConfig {
     public static Map<String, SoundSettings> getSounds() { return Collections.unmodifiableMap(sounds()); }
     public static SoundSettings computeSound(String id, Function<String, SoundSettings> fn) {
         return sounds().computeIfAbsent(id, fn);
+    }
+
+    public static boolean toggleSoundMuted(String id) {
+        return toggleSoundsMuted(List.of(id));
+    }
+
+    public static boolean toggleSoundsMuted(Collection<String> ids) {
+        Set<String> uniqueIds = new LinkedHashSet<>(ids);
+        if (uniqueIds.isEmpty()) return false;
+        boolean allMuted = uniqueIds.stream().allMatch(id -> getVolumeModifier(id) <= 0.0f);
+        boolean mute = !allMuted;
+        for (String id : uniqueIds) {
+            SoundSettings setting = sounds().computeIfAbsent(id, key -> new SoundSettings());
+            setting.muted = mute;
+            setting.overrideParent = true;
+            if (!mute && setting.volume <= 0.0f) setting.volume = 1.0f;
+        }
+        save();
+        return mute;
+    }
+
+    public static boolean isModMuted(String namespace) {
+        SoundSettings setting = sounds().get("#mod:" + namespace);
+        return setting != null && setting.muted;
+    }
+
+    public static boolean toggleModMuted(String namespace) {
+        String key = "#mod:" + namespace;
+        SoundSettings setting = sounds().computeIfAbsent(key, ignored -> new SoundSettings());
+        setting.muted = !setting.muted;
+        if (!setting.muted && !setting.favorite && Math.abs(setting.volume - 1.0f) < 0.01f) {
+            sounds().remove(key);
+        }
+        save();
+        return setting.muted;
     }
 
     public static void setEditTarget(Map<String, SoundSettings> target) { EDIT_TARGET = target; }
@@ -156,7 +193,7 @@ public class SoundConfig {
         CONFIGS_DIR.mkdirs();
 
         if (SETTINGS_FILE.exists()) {
-            try (FileReader r = new FileReader(SETTINGS_FILE)) {
+            try (java.io.Reader r = java.nio.file.Files.newBufferedReader(SETTINGS_FILE.toPath(), java.nio.charset.StandardCharsets.UTF_8)) {
                 AppSettings s = GSON.fromJson(r, AppSettings.class);
                 if (s != null) SETTINGS = s;
             } catch (Exception e) {
@@ -254,10 +291,26 @@ public class SoundConfig {
     }
 
     public static void saveSettings() {
-        try (FileWriter w = new FileWriter(SETTINGS_FILE)) {
-            GSON.toJson(SETTINGS, w);
-        } catch (IOException e) {
-            LOGGER.error("Failed to save settings", e);
+        SC_DIR.mkdirs();
+        java.nio.file.Path destination = SETTINGS_FILE.toPath();
+        java.nio.file.Path temporary = null;
+        try {
+            temporary = java.nio.file.Files.createTempFile(SC_DIR.toPath(), "settings-", ".tmp");
+            try (java.io.Writer writer = java.nio.file.Files.newBufferedWriter(temporary, java.nio.charset.StandardCharsets.UTF_8)) {
+                GSON.toJson(SETTINGS, writer);
+            }
+            try {
+                java.nio.file.Files.move(temporary, destination, java.nio.file.StandardCopyOption.REPLACE_EXISTING,
+                        java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+            } catch (java.nio.file.AtomicMoveNotSupportedException unsupported) {
+                java.nio.file.Files.move(temporary, destination, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException exception) {
+            LOGGER.error("Failed to save soundcontrol settings", exception);
+        } finally {
+            if (temporary != null) {
+                try { java.nio.file.Files.deleteIfExists(temporary); } catch (IOException ignored) {}
+            }
         }
     }
 
@@ -267,6 +320,7 @@ public class SoundConfig {
                 SoundSettings s = e.getValue();
                 s.volume = 1.0f;
                 s.muted = false;
+                s.overrideParent = false;
                 return !s.favorite;
             });
             saveProfileToFile(ACTIVE_PROFILE);
@@ -320,23 +374,91 @@ public class SoundConfig {
         return 1.0f;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /** Only the current world's list is visible to any anchor consumer. */
     public static List<SoundAnchor> getAnchors() {
-        if (SETTINGS.anchors == null) SETTINGS.anchors = new ArrayList<>();
-        return SETTINGS.anchors;
+        String worldKey = AnchorWorldContext.currentKey();
+        if (worldKey == null) return Collections.emptyList();
+        if (SETTINGS.anchorsByWorld == null) SETTINGS.anchorsByWorld = new LinkedHashMap<>();
+        List<SoundAnchor> anchors = SETTINGS.anchorsByWorld.computeIfAbsent(worldKey, key -> new ArrayList<>());
+        anchors.removeIf(Objects::isNull);
+        return anchors;
     }
 
-    public static float getAnchorVolumeModifier(String id, String dimension, double x, double y, double z) {
-        for (SoundAnchor anchor : getAnchors()) {
-            if (anchor.contains(dimension, x, y, z)) {
-                float mod = anchor.getVolumeModifier(id);
-                if (mod >= 0) return mod;
+    public static int getLegacyAnchorCount() {
+        if (SETTINGS.anchors == null) return 0;
+        SETTINGS.anchors.removeIf(Objects::isNull);
+        return SETTINGS.anchors.size();
+    }
+
+    /** Old settings did not record a world; migrate only by an explicit user action. */
+    public static void importLegacyAnchors() {
+        if (AnchorWorldContext.currentKey() == null || getLegacyAnchorCount() == 0) return;
+        getAnchors().addAll(SETTINGS.anchors);
+        SETTINGS.anchors.clear();
+        saveSettings();
+    }
+
+    public static float getAnchorSettingVolume(Map<String, SoundSettings> overrides, String id) {
+        if (id == null || overrides == null) return -1f;
+        SoundSettings setting = overrides.get(id);
+        if (setting == null) setting = overrides.get(getSoundGroup(id));
+        if (setting == null && id.contains(".break")) setting = overrides.get("#global:break");
+        if (setting == null && id.contains(".place")) setting = overrides.get("#global:place");
+        if (setting == null && id.contains(".step")) setting = overrides.get("#global:step");
+        if (setting == null && id.contains(".hit")) setting = overrides.get("#global:hit");
+        if (setting == null && id.startsWith("minecraft:entity.")) {
+            String[] parts = id.split("\\.");
+            if (parts.length >= 3) {
+                String kind = HOSTILE_MOBS.contains(parts[1]) ? "hostile" : "passive";
+                if (id.contains(".hurt")) setting = overrides.get("#global:" + kind + "_hurt");
+                if (id.contains(".ambient")) setting = overrides.get("#global:" + kind + "_ambient");
             }
         }
-        return -1.0f;
+        if (setting == null) return -1f;
+        if (setting.muted) return 0f;
+        return Float.isFinite(setting.volume) ? Math.max(0f, Math.min(2f, setting.volume)) : 1f;
+    }
+
+    /** Overlaps use the quietest matching override; order never changes which zone mutes. */
+    public static float getAnchorVolumeModifier(String id, String dimension, double x, double y, double z) {
+        float result = -1f;
+        for (SoundAnchor anchor : getAnchors()) {
+            if (anchor.contains(dimension, x, y, z)) {
+                float volume = anchor.getVolumeModifier(id);
+                if (volume >= 0) result = result < 0 ? volume : Math.min(result, volume);
+            }
+        }
+        return result;
     }
 
     private static float lookupIn(Map<String, SoundSettings> m, String id) {
         SoundSettings s = m.get(id);
+        if (s != null && s.overrideParent) return vol(s);
+        int namespaceEnd = id.indexOf(':');
+        if (namespaceEnd > 0) {
+            SoundSettings modSetting = m.get("#mod:" + id.substring(0, namespaceEnd));
+            if (!isDefault(modSetting)) return vol(modSetting);
+            for (String owner : ModSoundCatalog.getOwners(id)) {
+                modSetting = m.get("#mod:" + owner);
+                if (!isDefault(modSetting)) return vol(modSetting);
+            }
+        }
         if (!isDefault(s)) return vol(s);
         s = m.get(getSoundGroup(id));
         if (!isDefault(s)) return vol(s);

@@ -71,6 +71,7 @@ public class ProfileRenameScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor ctx, int mouseX, int mouseY, float delta) {
+        ctx.fill(0, 0, this.width, this.height, 0xC0101010);
         super.extractRenderState(ctx, mouseX, mouseY, delta);
         ctx.centeredText(this.font, this.title, this.width / 2, this.height / 2 - 48, 0xFFFFFFFF);
         ctx.text(this.font, Component.translatable("text.soundcontrol.profile.name_label"),

@@ -1,0 +1,56 @@
+package soundcontrol;
+
+import soundcontrol.render.SoundLookupRenderer;
+import soundcontrol.gui.SoundControlScreen;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.resources.Identifier;
+import com.mojang.blaze3d.platform.InputConstants;
+
+public class SoundControl implements ClientModInitializer {
+    public static final KeyMapping.Category SOUND_CONTROL = KeyMapping.Category.register(Identifier.parse("soundcontrol:main"));
+    public static KeyMapping openMenuKey;
+    public static KeyMapping toggleOverlayKey;
+    public static KeyMapping muteLookedAtSoundKey;
+
+    @Override
+    public void onInitializeClient() {
+        SoundConfig.load();
+
+        openMenuKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.soundcontrol.open",
+                InputConstants.KEY_V,
+                SOUND_CONTROL
+        ));
+
+        toggleOverlayKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.soundcontrol.toggle_overlay",
+                InputConstants.KEY_Y,
+                SOUND_CONTROL
+        ));
+
+        muteLookedAtSoundKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.soundcontrol.mute_looked_at", InputConstants.UNKNOWN.getValue(), SOUND_CONTROL));
+
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            while (openMenuKey.consumeClick()) {
+                if (client.canInterruptScreen()) {
+                    client.setScreenAndShow(new SoundControlScreen());
+                }
+            }
+            while (toggleOverlayKey.consumeClick()) {
+                SoundTracker.cycleOverlayMode();
+            }
+                        while (muteLookedAtSoundKey.consumeClick()) {
+                if (client.gui.screen() == null) soundcontrol.render.SoundWorldRenderer.toggleSoundUnderCrosshair(client);
+            }
+            if (SoundTracker.getOverlayMode() == 2) {
+                SoundLookupRenderer.tick(client);
+            }
+        });
+
+    }
+}
+

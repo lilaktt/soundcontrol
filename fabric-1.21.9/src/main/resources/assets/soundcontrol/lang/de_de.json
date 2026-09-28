@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Sound-Einstellungen öffnen",
   "key.soundcontrol.toggle_overlay": "Sound-Overlay umschalten",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "Profil umbenennen",
   "text.soundcontrol.profiles.title": "Profile",
   "text.soundcontrol.profile.name_hint": "Profilnamen eingeben...",
-  "text.soundcontrol.profile.name_label": "Profilname:"
+  "text.soundcontrol.profile.name_label": "Profilname:",
+  "key.soundcontrol.mute_looked_at": "Ton unter Fadenkreuz stummschalten",
+  "text.soundcontrol.modlist.mute": "Alle Töne dieses Mods stummschalten",
+  "message.soundcontrol.look_mute.muted": "Stummgeschaltet: %s",
+  "message.soundcontrol.look_mute.unmuted": "Laut geschaltet: %s",
+  "message.soundcontrol.look_mute.none": "Kein Block oder Mob unter dem Fadenkreuz.",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "Alte Anker in diese Welt verschieben (%s)"
 }

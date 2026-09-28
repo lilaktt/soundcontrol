@@ -15,6 +15,7 @@ public class GuiMixin {
     @Inject(method = "render", at = @At("TAIL"))
     private void onRender(GuiGraphics context, DeltaTracker deltaTracker, CallbackInfo ci) {
         SoundWorldRenderer.render(context);
+        soundcontrol.SoundAnchorRenderer.render(context);
         if (soundcontrol.SoundTracker.getOverlayMode() == 2) {
             soundcontrol.SoundLookupRenderer.render(context);
         }

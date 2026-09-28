@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Abrir ajustes de sonido",
   "key.soundcontrol.toggle_overlay": "Alternar superposición de sonido",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "Renombrar perfil",
   "text.soundcontrol.profiles.title": "Perfiles",
   "text.soundcontrol.profile.name_hint": "Introduce el nombre del perfil...",
-  "text.soundcontrol.profile.name_label": "Nombre del perfil:"
+  "text.soundcontrol.profile.name_label": "Nombre del perfil:",
+  "key.soundcontrol.mute_looked_at": "Silenciar/activar sonido bajo la mira",
+  "text.soundcontrol.modlist.mute": "Silenciar/activar todos los sonidos de este mod",
+  "message.soundcontrol.look_mute.muted": "Silenciado: %s",
+  "message.soundcontrol.look_mute.unmuted": "Activado: %s",
+  "message.soundcontrol.look_mute.none": "No hay bloque o mob bajo la mira para silenciar.",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "Mover anclas anteriores a este mundo (%s)"
 }

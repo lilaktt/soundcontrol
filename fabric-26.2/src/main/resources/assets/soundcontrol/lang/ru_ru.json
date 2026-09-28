@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Открыть настройки звука",
   "key.soundcontrol.toggle_overlay": "Отображение звуков на экране",
@@ -60,5 +60,16 @@
   "text.soundcontrol.profile.rename": "Переименовать профиль",
   "text.soundcontrol.profiles.title": "Профили",
   "text.soundcontrol.profile.name_hint": "Введите имя профиля...",
-  "text.soundcontrol.profile.name_label": "Имя профиля:"
+  "text.soundcontrol.profile.name_label": "Имя профиля:",
+  "message.soundcontrol.look_mute.none": "Нет блока или моба под прицелом для заглушения.",
+  "message.soundcontrol.look_mute.unmuted": "Включено: %s",
+  "text.soundcontrol.button.back": "Назад",
+  "key.soundcontrol.mute_looked_at": "Заглушить/включить звук под прицелом",
+  "message.soundcontrol.look_mute.muted": "Заглушено: %s",
+  "text.soundcontrol.modlist.mute": "Вкл/выкл все звуки этого мода",
+  "text.soundcontrol.anchors.edit_title": "Редактирование якоря: %s",
+  "text.soundcontrol.anchors.search": "Поиск звуков",
+  "text.soundcontrol.anchors.remove": "Удалить переопределение",
+  "text.soundcontrol.anchors.all_mods": "Все пространства имён",
+  "text.soundcontrol.anchors.import_legacy": "Перенести старые якоря в этот мир (%s)"
 }

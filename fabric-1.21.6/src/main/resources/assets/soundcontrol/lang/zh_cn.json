@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "打开声音设置",
   "key.soundcontrol.toggle_overlay": "切换声音叠加",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "重命名配置文件",
   "text.soundcontrol.profiles.title": "配置文件",
   "text.soundcontrol.profile.name_hint": "请输入配置文件名称...",
-  "text.soundcontrol.profile.name_label": "配置文件名称:"
+  "text.soundcontrol.profile.name_label": "配置文件名称:",
+  "key.soundcontrol.mute_looked_at": "静音/取消静音准星下的声音",
+  "text.soundcontrol.modlist.mute": "静音/取消静音此模组的所有声音",
+  "message.soundcontrol.look_mute.muted": "已静音：%s",
+  "message.soundcontrol.look_mute.unmuted": "已取消静音：%s",
+  "message.soundcontrol.look_mute.none": "准星下没有可以静音的方块或生物。",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "将旧锚点移至此世界（%s）"
 }

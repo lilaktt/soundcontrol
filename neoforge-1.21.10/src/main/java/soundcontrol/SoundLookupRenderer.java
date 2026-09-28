@@ -20,11 +20,14 @@ public class SoundLookupRenderer {
     public static boolean enabled = false;
     private static final List<String> currentSounds = new ArrayList<>();
     private static String currentTarget = "";
+    private static java.lang.ref.WeakReference<Entity> lastEntity = new java.lang.ref.WeakReference<>(null);
+    private static long nextEntityRefresh;
 
     public static void tick(Minecraft client) {
         if (!enabled || client.level == null || client.player == null) {
             currentSounds.clear();
             currentTarget = "";
+            lastEntity.clear();
             return;
         }
 
@@ -32,10 +35,13 @@ public class SoundLookupRenderer {
         if (hit == null || hit.getType() == HitResult.Type.MISS) {
             currentSounds.clear();
             currentTarget = "";
+            lastEntity.clear();
             return;
         }
 
         if (hit instanceof BlockHitResult blockHit) {
+            if (lastEntity.get() != null) currentTarget = "";
+            lastEntity.clear();
             BlockState state = client.level.getBlockState(blockHit.getBlockPos());
             Block block = state.getBlock();
             String blockId = BuiltInRegistries.BLOCK.getKey(block).toString();
@@ -54,7 +60,8 @@ public class SoundLookupRenderer {
 
                 for (var soundId : client.getSoundManager().getAvailableSounds()) {
                     String path = soundId.getPath();
-                    if (path.startsWith(soundPrefix)) {
+                    if (soundId.getNamespace().equals(BuiltInRegistries.BLOCK.getKey(block).getNamespace())
+                            && path.startsWith(soundPrefix)) {
                         String action = path.substring(soundPrefix.length());
                         String entry = capitalize(action) + ": " + soundId;
                         if (!currentSounds.contains(entry)) {
@@ -71,19 +78,18 @@ public class SoundLookupRenderer {
             Entity entity = entityHit.getEntity();
             String entityId = BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()).toString();
 
-            if (!entityId.equals(currentTarget)) {
+            long now = System.currentTimeMillis();
+            if (entity != lastEntity.get() || !entityId.equals(currentTarget) || now >= nextEntityRefresh) {
+                lastEntity = new java.lang.ref.WeakReference<>(entity);
+                nextEntityRefresh = now + 500;
                 currentTarget = entityId;
                 currentSounds.clear();
 
-                String entityPath = entityId.contains(":") ? entityId.substring(entityId.indexOf(':') + 1) : entityId;
-                String soundPrefix = "entity." + entityPath + ".";
-
-                for (var soundId : client.getSoundManager().getAvailableSounds()) {
-                    String path = soundId.getPath();
-                    if (path.startsWith(soundPrefix)) {
-                        String action = path.substring(soundPrefix.length());
-                        addIfValid(capitalize(action) + ": " + soundId);
-                    }
+                for (String soundId : EntitySoundResolver.resolve(client, entity)) {
+                    String path = soundId.substring(soundId.indexOf(':') + 1);
+                    int separator = Math.max(path.lastIndexOf('.'), Math.max(path.lastIndexOf('/'), path.lastIndexOf('_')));
+                    String action = separator >= 0 ? capitalize(path.substring(separator + 1)) : "Sound";
+                    addIfValid(action + ": " + soundId);
                 }
 
                 if (currentSounds.isEmpty()) {

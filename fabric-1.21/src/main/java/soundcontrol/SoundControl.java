@@ -14,6 +14,7 @@ import org.lwjgl.glfw.GLFW;
 public class SoundControl implements ClientModInitializer {
     private static KeyBinding openMenuKey;
     private static KeyBinding toggleOverlayKey;
+    private static KeyBinding muteLookedAtSoundKey;
 
     @Override
     public void onInitializeClient() {
@@ -33,6 +34,10 @@ public class SoundControl implements ClientModInitializer {
                 "category.soundcontrol.main"
         ));
 
+        muteLookedAtSoundKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.soundcontrol.mute_looked_at", InputUtil.Type.KEYSYM,
+                GLFW.GLFW_KEY_UNKNOWN, "category.soundcontrol.main"));
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openMenuKey.wasPressed()) {
                 if (client.currentScreen == null) {
@@ -42,6 +47,9 @@ public class SoundControl implements ClientModInitializer {
             while (toggleOverlayKey.wasPressed()) {
                 SoundTracker.cycleOverlayMode();
             }
+                        while (muteLookedAtSoundKey.wasPressed()) {
+                if (client.currentScreen == null) SoundWorldRenderer.toggleSoundUnderCrosshair(client);
+            }
             if (SoundTracker.getOverlayMode() == 2) {
                 SoundLookupRenderer.tick(client);
             }
@@ -49,6 +57,7 @@ public class SoundControl implements ClientModInitializer {
 
         HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
             SoundWorldRenderer.render(drawContext);
+            soundcontrol.anchor.SoundAnchorRenderer.render(drawContext);
             if (SoundTracker.getOverlayMode() == 2) {
                 SoundLookupRenderer.render(drawContext);
             }

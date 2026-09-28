@@ -1,13 +1,21 @@
 package soundcontrol.render;
 
+
+import soundcontrol.ModSoundCatalog;
 import soundcontrol.SoundConfig;
 import soundcontrol.SoundControl;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -20,30 +28,28 @@ public class SoundWorldRenderer {
       new CopyOnWriteArrayList<>();
   private static final long DISPLAY_DURATION_MS = 2500;
   private static final long FADE_DURATION_MS = 500;
+  private static final long SELECTION_MEMORY_MS = 8000;
+  private static final long TOGGLE_ANIMATION_MS = 700;
+
+
 
   public static class SoundEvent3D {
     public final SoundInstance sound;
     public final String soundId;
     public long createdAt;
+    public long lastSeenAt;
+    public long toggleAnimationAt;
+    public boolean toggleMuted;
 
     public SoundEvent3D(SoundInstance sound, String soundId) {
       this.sound = sound;
       this.soundId = soundId;
       this.createdAt = System.currentTimeMillis();
+      this.lastSeenAt = this.createdAt;
     }
   }
 
   public static void recordSound(SoundInstance sound, String soundId) {
-    if (SoundConfig.getVolumeModifier(soundId) <= 0.0f) return;
-
-    
-    Minecraft client = Minecraft.getInstance();
-    if (client.player != null) {
-      String dim = client.player.level().dimension().toString();
-      float anchorMod = SoundConfig.getAnchorVolumeModifier(soundId, dim, sound.getX(), sound.getY(), sound.getZ());
-      if (anchorMod == 0.0f) return;
-    }
-
     Iterator<SoundEvent3D> it = activeSounds.iterator();
     while (it.hasNext()) {
       SoundEvent3D existing = it.next();
@@ -59,6 +65,122 @@ public class SoundWorldRenderer {
     activeSounds.add(new SoundEvent3D(sound, soundId));
     while (activeSounds.size() > 50) {
       activeSounds.remove(0);
+    }
+  }
+
+  public static boolean toggleSoundUnderCrosshair(Minecraft client) {
+    if (client.player == null || client.level == null) return false;
+    if (!(client.hitResult instanceof BlockHitResult blockHit
+        && blockHit.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK)
+        && !(client.hitResult instanceof net.minecraft.world.phys.EntityHitResult entityHit
+        && entityHit.getEntity() instanceof net.minecraft.world.entity.Mob)) {
+      client.gui.setOverlayMessage(Component.translatable("message.soundcontrol.look_mute.none"), false);
+      return false;
+    }
+    if (toggleLookedAtBlockSounds(client)) return true;
+
+    java.util.Set<String> ids = new java.util.LinkedHashSet<>();
+    String label;
+    var target = ((net.minecraft.world.phys.EntityHitResult) client.hitResult).getEntity();
+    var entityId = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(target.getType());
+    // Select the entire registered family, even when the mob has not made a sound.
+    // Keep the namespace and trailing dot so other mods and similarly named mobs are excluded.
+    String prefix = entityId.getNamespace() + ":entity." + entityId.getPath() + ".";
+    for (var id : net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.keySet()) {
+        if (id.toString().startsWith(prefix)) ids.add(id.toString());
+    }
+    // Resource packs may also provide sound events outside the game registry.
+    for (var id : client.getSoundManager().getAvailableSounds()) {
+        if (id.toString().startsWith(prefix)) ids.add(id.toString());
+    }
+    label = target.getName().getString();
+    if (ids.isEmpty()) {
+        client.gui.setOverlayMessage(Component.translatable("message.soundcontrol.look_mute.none"), false);
+        return false;
+    }
+    boolean muted = SoundConfig.toggleSoundsMuted(ids);
+    long now = System.currentTimeMillis();
+    for (SoundEvent3D event : activeSounds) {
+        if (ids.contains(event.soundId)) {
+            event.toggleAnimationAt = now;
+            event.toggleMuted = muted;
+            event.createdAt = now;
+            event.lastSeenAt = now;
+        }
+    }
+    if (muted) {
+        for (String id : ids) stopSoundId(client, id);
+    }
+    client.gui.setOverlayMessage(Component.translatable(
+        muted ? "message.soundcontrol.look_mute.muted" : "message.soundcontrol.look_mute.unmuted",
+        label), false);
+    return true;
+  }
+
+  private static boolean toggleLookedAtBlockSounds(Minecraft client) {
+    if (!(client.hitResult instanceof BlockHitResult hit)
+        || hit.getType() != net.minecraft.world.phys.HitResult.Type.BLOCK) return false;
+
+    SoundType sounds = client.level.getBlockState(hit.getBlockPos()).getSoundType();
+    Set<String> ids = new LinkedHashSet<>();
+    ids.add(sounds.getBreakSound().location().toString());
+    ids.add(sounds.getStepSound().location().toString());
+    ids.add(sounds.getPlaceSound().location().toString());
+    ids.add(sounds.getHitSound().location().toString());
+    ids.add(sounds.getFallSound().location().toString());
+
+    var blockId = BuiltInRegistries.BLOCK.getKey(client.level.getBlockState(hit.getBlockPos()).getBlock());
+    String blockPrefix = "block." + blockId.getPath() + ".";
+    for (var soundId : client.getSoundManager().getAvailableSounds()) {
+      if (soundId.getNamespace().equals(blockId.getNamespace())
+          && soundId.getPath().startsWith(blockPrefix)) {
+        ids.add(soundId.toString());
+      }
+    }
+    for (SoundEvent3D event : activeSounds) {
+      if (Math.abs(event.sound.getX() - (hit.getBlockPos().getX() + 0.5)) <= 2.0
+          && Math.abs(event.sound.getY() - (hit.getBlockPos().getY() + 0.5)) <= 2.0
+          && Math.abs(event.sound.getZ() - (hit.getBlockPos().getZ() + 0.5)) <= 2.0) {
+        ids.add(event.soundId);
+      }
+    }
+
+    boolean muted = SoundConfig.toggleSoundsMuted(ids);
+    long now = System.currentTimeMillis();
+    for (SoundEvent3D event : activeSounds) {
+      if (ids.contains(event.soundId)) {
+        event.toggleAnimationAt = now;
+        event.toggleMuted = muted;
+        event.createdAt = now;
+        event.lastSeenAt = now;
+      }
+    }
+    if (muted) {
+      for (String id : ids) stopSoundId(client, id);
+    }
+    String blockName = client.level.getBlockState(hit.getBlockPos()).getBlock().getName().getString();
+    client.gui.setOverlayMessage(Component.translatable(
+        muted ? "message.soundcontrol.look_mute.muted" : "message.soundcontrol.look_mute.unmuted",
+        blockName), false);
+    return true;
+  }
+
+  public static void stopModSounds(Minecraft client, String modId) {
+    for (var id : client.getSoundManager().getAvailableSounds()) {
+      if (ModSoundCatalog.ownsSound(modId, id.toString())) {
+        client.getSoundManager().stop(id, null);
+      }
+    }
+    for (SoundEvent3D event : activeSounds){
+      if (ModSoundCatalog.ownsSound(modId, event.soundId)) client.getSoundManager().stop(event.sound);
+    }
+  }
+
+  private static void stopSoundId(Minecraft client, String soundId) {
+    var id = net.minecraft.resources.Identifier.tryParse(soundId);
+    if (id != null) client.getSoundManager().stop(id, null);
+    for (SoundEvent3D event : activeSounds) {
+      if (event.soundId.equals(soundId)) client.getSoundManager().stop(event.sound);
     }
   }
 
@@ -91,11 +213,10 @@ public class SoundWorldRenderer {
 
         if (active) {
             sound.createdAt = now;
+            sound.lastSeenAt = now;
         }
 
-        long age = now - sound.createdAt;
-        long duration = isShortSound ? 800 : DISPLAY_DURATION_MS;
-        if (age > duration) {
+        if (now - sound.lastSeenAt > SELECTION_MEMORY_MS) {
             toRemove.add(sound);
         }
     }
@@ -108,8 +229,13 @@ public class SoundWorldRenderer {
         long duration = isShortSound ? 800 : DISPLAY_DURATION_MS;
         long fade = isShortSound ? 300 : FADE_DURATION_MS;
         long remaining = duration - age;
+        long toggleAge = now - sound.toggleAnimationAt;
+        boolean toggling = sound.toggleAnimationAt > 0 && toggleAge < TOGGLE_ANIMATION_MS;
+        boolean muted = SoundConfig.getVolumeModifier(sound.soundId) <= 0.0f;
+        if (muted && !toggling) continue;
 
         float alpha = remaining < fade ? (float) remaining / fade : 1.0f;
+        if (toggling && sound.toggleMuted) alpha = 1.0f - (float) toggleAge / TOGGLE_ANIMATION_MS;
         if (alpha <= 0.01f) continue;
 
         double dx = sound.sound.getX() - camPos.x;
@@ -164,10 +290,16 @@ public class SoundWorldRenderer {
 
                 renderedRects.add(new int[]{renderX, renderY, textWidth, font.lineHeight});
 
-                int alphaInt = (int) (alpha * 255);
-                int color = (alphaInt << 24) | 0x55FFFF;
+                int alphaInt = Math.max(0, Math.min(255, (int) (alpha * 255)));
+                int color = (alphaInt << 24) | (toggling ? (sound.toggleMuted ? 0xFF3333 : 0x55FF88) : 0x55FFFF);
 
                 context.text(font, displayName, renderX, renderY, color, true);
+                if (toggling) {
+                    String mark = sound.toggleMuted ? "×" : "+";
+                    int markColor = (alphaInt << 24) | (sound.toggleMuted ? 0xFF2020 : 0x55FF55);
+                    int markX = screenX - font.width(mark) / 2;
+                    context.text(font, mark, markX, renderY + font.lineHeight + 2, markColor, true);
+                }
             }
         }
     }

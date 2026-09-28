@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Otwórz ustawienia dźwięku",
   "key.soundcontrol.toggle_overlay": "Przełącz nakładkę dźwiękową",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "Zmień nazwę profilu",
   "text.soundcontrol.profiles.title": "Profile",
   "text.soundcontrol.profile.name_hint": "Wpisz nazwę profilu...",
-  "text.soundcontrol.profile.name_label": "Nazwa profilu:"
+  "text.soundcontrol.profile.name_label": "Nazwa profilu:",
+  "key.soundcontrol.mute_looked_at": "Wycisz/włącz dźwięk pod celownikiem",
+  "text.soundcontrol.modlist.mute": "Wycisz/włącz wszystkie dźwięki tego moda",
+  "message.soundcontrol.look_mute.muted": "Wyciszono: %s",
+  "message.soundcontrol.look_mute.unmuted": "Włączono: %s",
+  "message.soundcontrol.look_mute.none": "Brak bloku lub moba pod celownikiem do wyciszenia.",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "Przenieś stare kotwice do tego świata (%s)"
 }

@@ -3,7 +3,7 @@ package soundcontrol.anchor;
 import soundcontrol.gui.AllSoundsPickerScreen;
 import soundcontrol.gui.RecentSoundsPickerScreen;
 import soundcontrol.SoundConfig;
-import soundcontrol.SoundControl;
+import soundcontrol.AnchorWorldContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -12,83 +12,85 @@ import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.*;
 
 public class SoundAnchorEditScreen extends Screen {
     private final Screen parent;
+    private final String worldKey = AnchorWorldContext.currentKey();
     private final SoundAnchor anchor;
     EditBox searchBox;
     private AnchorSoundList soundList;
+    private String searchQuery = "";
 
     public SoundAnchorEditScreen(Screen parent, SoundAnchor anchor) {
-        super(Component.literal("Edit Anchor: " + anchor.getName()));
+        super(Component.translatable("text.soundcontrol.anchors.edit_title", anchor.getName()));
         this.parent = parent;
         this.anchor = anchor;
     }
 
     @Override
     protected void init() {
-        this.searchBox = new EditBox(this.font, this.width / 2 - 90, 18, 180, 16, Component.literal("Search"));
+        this.searchBox = new EditBox(this.font, this.width / 2 - 90, 18, 180, 16, Component.translatable("text.soundcontrol.anchors.search"));
+        this.searchBox.setMaxLength(256);
+        this.searchBox.setValue(searchQuery);
         this.searchBox.setResponder(this::onSearch);
-        this.addWidget(this.searchBox);
         this.addRenderableWidget(this.searchBox);
 
         this.soundList = new AnchorSoundList(this.minecraft, this.width, this.height - 88, 40, 25);
-        this.addWidget(this.soundList);
         this.addRenderableWidget(this.soundList);
 
+        int footerWidth = Math.min(360, this.width - 20), footerX = (this.width - footerWidth) / 2, buttonWidth = (footerWidth - 12) / 4;
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.recent"), button -> {
-            this.minecraft.setScreen(new RecentSoundsPickerScreen(this, this.anchor));
-        }).bounds(this.width / 2 - 165, this.height - 42, 70, 20).build());
+            this.minecraft.setScreen(new AllSoundsPickerScreen(this, this.anchor, true));
+        }).bounds(footerX, this.height - 42, buttonWidth, 20).build());
 
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.browse"), button -> {
             this.minecraft.setScreen(new AllSoundsPickerScreen(this, this.anchor));
-        }).bounds(this.width / 2 - 90, this.height - 42, 80, 20).build());
+        }).bounds(footerX + buttonWidth + 4, this.height - 42, buttonWidth, 20).build());
 
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.clear"), button -> {
             this.anchor.getSoundOverrides().clear();
-            SoundConfig.save();
-            loadSounds("");
-        }).bounds(this.width / 2 + 0, this.height - 42, 70, 20).build());
+            SoundConfig.saveSettings();
+            loadSounds(this.searchBox.getValue());
+        }).bounds(footerX + 2 * (buttonWidth + 4), this.height - 42, buttonWidth, 20).build());
 
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, button -> this.onClose())
-                .bounds(this.width / 2 + 80, this.height - 42, 80, 20).build());
+                .bounds(footerX + 3 * (buttonWidth + 4), this.height - 42, buttonWidth, 20).build());
 
-        loadSounds("");
+        loadSounds(searchQuery);
     }
 
     void loadSounds(String query) {
+        if (this.soundList == null) return;
         this.soundList.clear();
-        String lowerQuery = query.toLowerCase();
+        String lowerQuery = query.toLowerCase(Locale.ROOT);
         List<Map.Entry<String, SoundConfig.SoundSettings>> overrides = new ArrayList<>(anchor.getSoundOverrides().entrySet());
         overrides.sort(Comparator.comparing(Map.Entry::getKey));
         for (var entry : overrides) {
-            if (entry.getKey().toLowerCase().contains(lowerQuery)) {
+            if (entry.getKey().toLowerCase(Locale.ROOT).contains(lowerQuery)) {
                 this.soundList.add(new AnchorSoundEntry(entry.getKey(), anchor, this));
             }
         }
     }
 
-    private void onSearch(String query) { loadSounds(query); }
+    private void onSearch(String query) { searchQuery = query; loadSounds(query); }
 
     public void addSoundOverride(String soundId) {
         if (!this.anchor.getSoundOverrides().containsKey(soundId)) {
             SoundConfig.SoundSettings s = new SoundConfig.SoundSettings();
             s.muted = true;
             this.anchor.getSoundOverrides().put(soundId, s);
-            SoundConfig.save();
+            SoundConfig.saveSettings();
         }
         loadSounds(this.searchBox != null ? this.searchBox.getValue() : "");
     }
 
     public void removeSoundOverride(String soundId) {
         this.anchor.getSoundOverrides().remove(soundId);
-        SoundConfig.save();
+        SoundConfig.saveSettings();
         loadSounds(this.searchBox != null ? this.searchBox.getValue() : "");
     }
 
@@ -98,11 +100,13 @@ public class SoundAnchorEditScreen extends Screen {
         context.centeredText(this.font, this.title, this.width / 2, 5, 0xFF55FFFF);
     }
 
-    @Override
-    public boolean keyPressed(KeyEvent input) {
-        if (input.key() == GLFW.GLFW_KEY_ESCAPE) { this.onClose(); return true; }
-        if (this.searchBox.keyPressed(input) || this.searchBox.isFocused()) return true;
-        return super.keyPressed(input);
+
+    @Override public void tick() {
+        super.tick();
+        // Do not leave an editor holding another world's anchor after disconnect/reconnect.
+        if (!java.util.Objects.equals(worldKey, AnchorWorldContext.currentKey())) {
+            this.minecraft.setScreen(null);
+        }
     }
 
     @Override public void onClose() { this.minecraft.setScreen(this.parent); }
@@ -112,7 +116,8 @@ public class SoundAnchorEditScreen extends Screen {
         public AnchorSoundList(Minecraft client, int width, int height, int y, int itemHeight) {
             super(client, width, height, y, itemHeight);
         }
-        @Override public int getRowWidth() { return 360; }
+        @Override public int getRowWidth() { return Math.min(360, this.width - 24); }
+        @Override protected int scrollBarX() { return this.width / 2 + getRowWidth() / 2 + 4; }
         public void clear() { this.clearEntries(); }
         public void add(AnchorSoundEntry entry) { this.addEntry(entry); }
     }
@@ -131,29 +136,30 @@ public class SoundAnchorEditScreen extends Screen {
             this.parentScreen = parentScreen;
             SoundConfig.SoundSettings s = anchor.getSoundOverrides().getOrDefault(soundId, new SoundConfig.SoundSettings());
 
-            this.muteButton = Button.builder(Component.literal(s.muted ? "Unmute" : "Mute"), b -> {
+            this.muteButton = Button.builder(Component.translatable(s.muted ? "text.soundcontrol.button.unmute" : "text.soundcontrol.button.mute"), b -> {
                 SoundConfig.SoundSettings ss = anchor.getSoundOverrides().computeIfAbsent(soundId, k -> new SoundConfig.SoundSettings());
                 ss.muted = !ss.muted;
-                b.setMessage(Component.literal(ss.muted ? "Unmute" : "Mute"));
-                SoundConfig.save();
+                b.setMessage(Component.translatable(ss.muted ? "text.soundcontrol.button.unmute" : "text.soundcontrol.button.mute"));
+                SoundConfig.saveSettings();
             }).bounds(0, 0, 50, 20).build();
 
             this.slider = new VolumeSlider(0, 0, 100, 20, s.volume, soundId, anchor);
 
             this.removeButton = Button.builder(Component.literal("\u2715"), b -> {
                 anchor.getSoundOverrides().remove(soundId);
-                SoundConfig.save();
+                SoundConfig.saveSettings();
                 parentScreen.loadSounds(parentScreen.searchBox != null ? parentScreen.searchBox.getValue() : "");
             }).bounds(0, 0, 20, 20).build();
-            this.removeButton.setTooltip(Tooltip.create(Component.literal("Remove override")));
+            this.removeButton.setTooltip(Tooltip.create(Component.translatable("text.soundcontrol.anchors.remove")));
         }
 
         @Override
         public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             int x = this.getX(); int y = this.getY();
             var font = Minecraft.getInstance().font;
-            String display = soundId.contains(":") ? soundId.substring(soundId.indexOf(':') + 1) : soundId;
-            int maxW = 155;
+            String display = soundId;
+            int controlX = x + parentScreen.soundList.getRowWidth() - 182;
+            int maxW = Math.max(20, controlX - x - 5);
             String truncated = font.plainSubstrByWidth(display, maxW);
             if (truncated.length() < display.length()) {
                 display = font.plainSubstrByWidth(display, maxW - font.width("...")) + "...";
@@ -161,9 +167,9 @@ public class SoundAnchorEditScreen extends Screen {
                 display = truncated;
             }
             context.text(font, display, x + 2, y + 5, 0xFFFFFFFF);
-            this.muteButton.setX(x + 160); this.muteButton.setY(y); this.muteButton.extractRenderState(context, mouseX, mouseY, tickDelta);
-            this.slider.setX(x + 215); this.slider.setY(y); this.slider.extractRenderState(context, mouseX, mouseY, tickDelta);
-            this.removeButton.setX(x + 320); this.removeButton.setY(y); this.removeButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+            this.muteButton.setX(controlX); this.muteButton.setY(y); this.muteButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+            this.slider.setX(controlX + 55); this.slider.setY(y); this.slider.extractRenderState(context, mouseX, mouseY, tickDelta);
+            this.removeButton.setX(controlX + 160); this.removeButton.setY(y); this.removeButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         }
 
         @Override public List<? extends net.minecraft.client.gui.components.events.GuiEventListener> children() { return List.of(muteButton, slider, removeButton); }
@@ -180,7 +186,7 @@ public class SoundAnchorEditScreen extends Screen {
         @Override protected void updateMessage() { this.setMessage(Component.literal((int)(this.value * 200) + "%")); }
         @Override protected void applyValue() {
             SoundConfig.SoundSettings s = anchor.getSoundOverrides().computeIfAbsent(soundId, k -> new SoundConfig.SoundSettings());
-            s.volume = (float)(this.value * 2.0); SoundConfig.save();
+            s.volume = (float)(this.value * 2.0); SoundConfig.saveSettings();
         }
     }
 }

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "soundcontrol.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "SoundTrackerMixin",
+    "SoundEngineMixin",
+    "ChannelMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "AnchorWorldRenderMixin"
+  ]
+}

@@ -1,0 +1,53 @@
+
+plugins {
+    id 'net.neoforged.moddev' version '2.0.147'
+}
+
+version = "1.6.0-neo-26.3"
+
+base {
+    archivesName = "soundcontrol-neoforge-26.3"
+}
+
+neoForge {
+    version = "26.3.0.6-beta"
+
+    runs {
+        client {
+            client()
+        }
+    }
+
+    mods {
+        soundcontrol {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    implementation project(':common')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 25
+}
+
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+tasks.withType(ProcessResources).configureEach {
+    def expandProps = ["version": project.version, "mod_name": "Sound Control", "mod_authors": "lilaktt", "mod_description": "Total control over Minecraft audio", "minecraft_version": "26.3", "neo_version": "26.3.0.6-beta"]
+    inputs.properties expandProps
+    filesMatching("META-INF/neoforge.mods.toml") { expand expandProps }
+}
+
+jar {
+    from project(':common').sourceSets.main.output
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

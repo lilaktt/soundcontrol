@@ -9,6 +9,7 @@ pluginManagement {
 include 'common'
 
 
+include 'fabric-1.20.1'
 include 'fabric-1.21' 
 include 'fabric-1.21.3'
 include 'fabric-1.21.4'
@@ -16,14 +17,20 @@ include 'fabric-1.21.6'
 include 'fabric-1.21.9'
 include 'fabric-26.1'
 include 'fabric-26.2'
+include 'fabric-26.3'
 
 
+include 'neoforge-1.20.1'
 include 'neoforge-1.21.1'
 include 'neoforge-1.21.9'
 include 'neoforge-1.21.10'
 include 'neoforge-1.21.11'
 include 'neoforge-26.1'
+include 'neoforge-26.2'
+include 'neoforge-26.3'
 
 rootProject.name = 'soundcontrol'
 
 
+
+project(':fabric-1.21.3').projectDir = file('fabric-1.21.2')

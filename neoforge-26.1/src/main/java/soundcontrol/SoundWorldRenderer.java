@@ -23,6 +23,8 @@ public class SoundWorldRenderer {
     public final SoundInstance sound;
     public final String soundId;
     public long createdAt;
+    public long toggleAnimationAt;
+    public boolean toggleMuted;
 
     public SoundEvent3D(SoundInstance sound, String soundId) {
       this.sound = sound;
@@ -32,15 +34,10 @@ public class SoundWorldRenderer {
   }
 
   public static void recordSound(SoundInstance sound, String soundId) {
-    if (SoundConfig.getVolumeModifier(soundId) <= 0.0f) return;
+        EntitySoundResolver.record(sound, soundId);
+
 
     
-    Minecraft client = Minecraft.getInstance();
-    if (client.player != null) {
-      String dim = client.player.level().dimension().toString();
-      float anchorMod = SoundConfig.getAnchorVolumeModifier(soundId, dim, sound.getX(), sound.getY(), sound.getZ());
-      if (anchorMod == 0.0f) return;
-    }
 
     Iterator<SoundEvent3D> it = activeSounds.iterator();
     while (it.hasNext()) {
@@ -58,6 +55,68 @@ public class SoundWorldRenderer {
     while (activeSounds.size() > 50) {
       activeSounds.remove(0);
     }
+  }
+
+  public static boolean toggleSoundUnderCrosshair(Minecraft client) {
+    if (client.player == null || client.level == null) return false;
+    if (!(client.hitResult instanceof net.minecraft.world.phys.BlockHitResult blockHit
+        && blockHit.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK)
+        && !(client.hitResult instanceof net.minecraft.world.phys.EntityHitResult entityHit
+        && entityHit.getEntity() instanceof net.minecraft.world.entity.LivingEntity
+                && !(entityHit.getEntity() instanceof net.minecraft.world.entity.player.Player))) {
+      client.gui.setOverlayMessage(net.minecraft.network.chat.Component.translatable("message.soundcontrol.look_mute.none"), false);
+      return false;
+    }
+    java.util.Set<String> ids = new java.util.LinkedHashSet<>();
+    String label = "";
+    long now = System.currentTimeMillis();
+    if (client.hitResult instanceof net.minecraft.world.phys.BlockHitResult hit
+        && hit.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK) {
+      var state = client.level.getBlockState(hit.getBlockPos());
+      var sounds = state.getSoundType(client.level, hit.getBlockPos(), client.player);
+      ids.add(sounds.getBreakSound().location().toString());
+      ids.add(sounds.getStepSound().location().toString());
+      ids.add(sounds.getPlaceSound().location().toString());
+      ids.add(sounds.getHitSound().location().toString());
+      ids.add(sounds.getFallSound().location().toString());
+      var blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(state.getBlock());
+      String prefix = blockId.getNamespace() + ":block." + blockId.getPath() + ".";
+      for (var id : client.getSoundManager().getAvailableSounds()) {
+        if (id.toString().startsWith(prefix)) ids.add(id.toString());
+      }
+      for (SoundEvent3D event : activeSounds) {
+        if (now - event.createdAt <= 8000
+            && Math.abs(event.sound.getX() - hit.getBlockPos().getX() - 0.5) <= 2
+            && Math.abs(event.sound.getY() - hit.getBlockPos().getY() - 0.5) <= 2
+            && Math.abs(event.sound.getZ() - hit.getBlockPos().getZ() - 0.5) <= 2) ids.add(event.soundId);
+      }
+      label = state.getBlock().getName().getString();
+    } else {
+      var target = ((net.minecraft.world.phys.EntityHitResult) client.hitResult).getEntity();
+      ids.addAll(EntitySoundResolver.resolve(client, target));
+      label = target.getName().getString();
+    }
+    if (ids.isEmpty()) {
+      client.gui.setOverlayMessage(net.minecraft.network.chat.Component.translatable("message.soundcontrol.look_mute.none"), false);
+      return false;
+    }
+    boolean muted = SoundConfig.toggleSoundsMuted(ids);
+    for (SoundEvent3D event : activeSounds) {
+      if (ids.contains(event.soundId)) {
+        event.toggleAnimationAt = now;
+        event.toggleMuted = muted;
+        event.createdAt = now;
+      }
+    }
+    if (muted) {
+      for (String id : ids) {
+        var parsed = net.minecraft.resources.Identifier.tryParse(id);
+        if (parsed != null) client.getSoundManager().stop(parsed, null);
+      }
+    }
+    client.gui.setOverlayMessage(net.minecraft.network.chat.Component.translatable(
+        muted ? "message.soundcontrol.look_mute.muted" : "message.soundcontrol.look_mute.unmuted", label), false);
+    return true;
   }
 
   public static void render(GuiGraphicsExtractor context) {
@@ -88,7 +147,7 @@ public class SoundWorldRenderer {
       if (active) sound.createdAt = now;
       long age = now - sound.createdAt;
       long duration = isShortSound ? 800 : DISPLAY_DURATION_MS;
-      if (age > duration) toRemove.add(sound);
+      if (age > 8000) toRemove.add(sound);
     }
     if (!toRemove.isEmpty()) activeSounds.removeAll(toRemove);
 
@@ -101,7 +160,11 @@ public class SoundWorldRenderer {
       long fade = isShortSound ? 300 : FADE_DURATION_MS;
       long remaining = duration - age;
 
-      float alpha = remaining < fade ? (float) remaining / fade : 1.0f;
+      long toggleAge = now - sound.toggleAnimationAt;
+      boolean toggling = sound.toggleAnimationAt > 0 && toggleAge < 700;
+      if (SoundConfig.getVolumeModifier(sound.soundId) <= 0 && !toggling) continue;
+      float alpha = toggling ? 1f - (float) toggleAge / 700
+          : remaining < fade ? (float) remaining / fade : 1f;
       if (alpha <= 0.01f) continue;
 
       double dx = sound.sound.getX() - camPos.x;
@@ -157,9 +220,11 @@ public class SoundWorldRenderer {
           renderedRects.add(new int[] {renderX, renderY, textWidth, font.lineHeight});
 
           int alphaInt = (int) (alpha * 255);
-          int color = (alphaInt << 24) | 0x55FFFF;
+          int color = (alphaInt << 24) | (toggling ? (sound.toggleMuted ? 0xFF3333 : 0x55FF88) : 0x55FFFF);
 
           context.text(font, displayName, renderX, renderY, color, true);
+          if (toggling) context.text(font, sound.toggleMuted ? "×" : "+", screenX,
+              renderY + font.lineHeight + 2, color, true);
         }
       }
     }

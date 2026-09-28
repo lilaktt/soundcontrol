@@ -11,7 +11,7 @@ Ever wondered which sound is coming from where? Tired of that one machine noise?
 ---
 
 ##  Sound Anchors — Spatial Audio Zones
-**Currently available on Minecraft 26.1.x and 26.2 only** · Support for older versions is planned.
+**Sound Anchors are available across all 17 Fabric/NeoForge modules, from 1.20.1 through 26.3.**
 
 Create sound override zones directly in your world:
 
@@ -105,9 +105,9 @@ The **SoundList Overlay** pulls directly from the game registry — works for va
 | Copy Sound ID to clipboard | — | ✅ | ✅ |
 | SoundList Overlay — sounds at crosshair | — | ✅ | ✅ |
 | Recent Sounds screen | — | ✅ | ✅ |
-|  Sound Anchors — spatial audio zones | — | 🔄 | ✅ |
+| Sound Anchors - spatial audio zones | Yes | Yes | Yes |
 
-> **Note for 1.20–1.20.1 users:** the newest feature available is the 3D Sound Radar. Newer features are actively being ported — follow the project for updates.
+> **1.6.0:** anchors now have separate lists per save folder/server address. See [migration and testing notes](tools/anchors/README.md).
 
 ---
 
@@ -139,3 +139,10 @@ Fully translated into **12 languages:**
 ---
 
 *Found a bug or want a new feature? Open an issue on [GitHub](https://github.com/lilaktt/soundcontrol/issues) or join the [Discord](https://discord.gg/ytUC4fAwas).*
+
+## Release 1.6.0
+
+See [CHANGELOG.md](CHANGELOG.md) for one-key muting, Sound Anchor ports, world isolation and fixes.
+
+Build with JDK 25 and JDK 17/21 toolchains available: `./gradlew build --continue`.
+The `fabric-1.21.2` folder is exposed as Gradle project `:fabric-1.21.3` and targets the 1.21.2-1.21.3 range.

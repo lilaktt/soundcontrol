@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Abrir configurações de som",
   "key.soundcontrol.toggle_overlay": "Alternar sobreposição de som",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "Renomear perfil",
   "text.soundcontrol.profiles.title": "Perfis",
   "text.soundcontrol.profile.name_hint": "Digite o nome do perfil...",
-  "text.soundcontrol.profile.name_label": "Nome do perfil:"
+  "text.soundcontrol.profile.name_label": "Nome do perfil:",
+  "key.soundcontrol.mute_looked_at": "Mutar/desmutar som sob a mira",
+  "text.soundcontrol.modlist.mute": "Mutar/desmutar todos os sons deste mod",
+  "message.soundcontrol.look_mute.muted": "Mutado: %s",
+  "message.soundcontrol.look_mute.unmuted": "Desmutado: %s",
+  "message.soundcontrol.look_mute.none": "Nenhum bloco ou mob sob a mira para mutar.",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "Mover âncoras antigas para este mundo (%s)"
 }

@@ -1,0 +1,99 @@
+package soundcontrol.mixin;
+
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundEngine;
+import net.minecraft.sounds.SoundSource;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import soundcontrol.RecentSoundsPickerScreen;
+import soundcontrol.SoundConfig;
+import soundcontrol.SoundTracker;
+import soundcontrol.SoundWorldRenderer;
+
+@Mixin(SoundEngine.class)
+public abstract class SoundEngineMixin {
+
+    // Use both named and SRG names via aliases so it works in both dev and prod.
+    @Inject(method = {"play(Lnet/minecraft/client/resources/sounds/SoundInstance;)V",
+                       "m_120312_(Lnet/minecraft/client/resources/sounds/SoundInstance;)V"},
+            at = @At("HEAD"), require = 1)
+    private void soundcontrol$recordPlayedSound(SoundInstance sound, CallbackInfo ci) {
+        record(sound);
+    }
+
+    @Inject(method = {"calculateVolume(Lnet/minecraft/client/resources/sounds/SoundInstance;)F",
+                       "m_120327_(Lnet/minecraft/client/resources/sounds/SoundInstance;)F"},
+            at = @At("RETURN"), cancellable = true, require = 1)
+    private void modifyVolume(SoundInstance sound, CallbackInfoReturnable<Float> cir) {
+        if (sound != null && sound.getLocation() != null) {
+            String id = sound.getLocation().toString();
+            float modifier = soundcontrol$anchorVolume(sound);
+            cir.setReturnValue(cir.getReturnValue() * modifier);
+        }
+    }
+
+    @Inject(method = {"queueTickingSound", "m_120282_"},
+            at = @At("HEAD"), require = 0)
+    private void soundcontrol$recordQueuedSound(net.minecraft.client.resources.sounds.TickableSoundInstance sound,
+                                                CallbackInfo ci) {
+        record(sound);
+    }
+
+    private static void record(SoundInstance sound) {
+        if (sound != null && sound.getLocation() != null) {
+            String id = sound.getLocation().toString();
+            SoundTracker.recordSound(id);
+            SoundWorldRenderer.recordSound(sound, id);
+            RecentSoundsPickerScreen.recordRecentSound(id, sound.getX(), sound.getY(), sound.getZ());
+        }
+    }
+
+
+    @org.spongepowered.asm.mixin.Unique
+    private static float soundcontrol$anchorVolume(SoundInstance sound) {
+        String id = sound.getLocation().toString();
+        float profile = SoundConfig.getVolumeModifier(id);
+        // A zone must never undo an explicit profile/global mute. UI/relative sounds have no world origin.
+        if (profile <= 0f || sound.isRelative()) return profile;
+        var client = net.minecraft.client.Minecraft.getInstance();
+        if (client.level == null) return profile;
+        float anchor = SoundConfig.getAnchorVolumeModifier(id, client.level.dimension().toString(), sound.getX(), sound.getY(), sound.getZ());
+        return anchor >= 0f ? anchor : profile;
+    }
+
+    @org.spongepowered.asm.mixin.Shadow(aliases = {"f_120226_"})
+    @org.spongepowered.asm.mixin.Final
+    private java.util.Map<SoundInstance, net.minecraft.client.sounds.ChannelAccess.ChannelHandle> instanceToChannel;
+
+    @org.spongepowered.asm.mixin.Shadow(aliases = {"m_120327_"})
+    protected abstract float calculateVolume(SoundInstance sound);
+
+    @org.spongepowered.asm.mixin.Unique
+    private boolean soundcontrol$hadAnchors;
+
+    @org.spongepowered.asm.mixin.injection.Inject(method = {"tick(Z)V", "m_120302_(Z)V"}, at = @At("TAIL"))
+    private void soundcontrol$refreshAnchors(boolean paused, org.spongepowered.asm.mixin.injection.callback.CallbackInfo ci) {
+        if (paused) return;
+        boolean hasAnchors = !SoundConfig.getAnchors().isEmpty();
+        if (!hasAnchors && !soundcontrol$hadAnchors) return;
+        soundcontrol$hadAnchors = hasAnchors;
+        for (var entry : instanceToChannel.entrySet()) {
+            if (entry.getKey().isRelative()) continue;
+            float volume = calculateVolume(entry.getKey());
+            entry.getValue().execute(channel -> channel.setVolume(volume));
+        }
+    }
+
+    @org.spongepowered.asm.mixin.Shadow(aliases = {"m_235257_"})
+    protected abstract float calculateVolume(float volume, SoundSource category);
+
+    @org.spongepowered.asm.mixin.injection.Redirect(method = {"play", "m_120312_"},
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/sounds/SoundEngine;calculateVolume(FLnet/minecraft/sounds/SoundSource;)F"))
+    private float soundcontrol$initialAnchorVolume(SoundEngine engine, float volume, SoundSource category, SoundInstance sound) {
+        return calculateVolume(volume, category) * soundcontrol$anchorVolume(sound);
+    }
+}

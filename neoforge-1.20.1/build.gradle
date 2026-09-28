@@ -1,0 +1,59 @@
+plugins {
+    id 'net.neoforged.moddev.legacyforge' version '2.0.135'
+}
+
+version = "1.6.0-neo-1.20.1"
+group = "soundcontrol"
+
+base {
+    archivesName = "soundcontrol-neoforge-1.20.1"
+}
+
+legacyForge {
+    version = "1.20.1-47.3.0"
+
+    runs {
+        client {
+            client()
+        }
+    }
+
+    mods {
+        soundcontrol {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+            "MixinConfigs": "soundcontrol.mixins.json"
+        ])
+    }
+}
+
+tasks.withType(ProcessResources).configureEach {
+    def expandProps = ["version": project.version]
+    inputs.properties expandProps
+    filesMatching("META-INF/mods.toml") { expand expandProps }
+}

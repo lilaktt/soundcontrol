@@ -28,9 +28,28 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
     private String lastSelectedMod = "";
     private int lastViewMode = 0;
     private int lastFilterMode = 0;
+    private int listWidth = 0;
 
     public SoundListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
         super(client, width, height, y, itemHeight);
+    }
+
+    public void setWidth(int newWidth) {
+        this.listWidth = newWidth;
+    }
+
+    @Override
+    protected int scrollBarX() {
+        int currentWidth = (this.listWidth > 0) ? this.listWidth : this.width;
+        return this.getX() + currentWidth - 6;
+    }
+
+    @Override
+    protected void renderListBackground(GuiGraphics ctx) {
+        int oldWidth = this.width;
+        if (this.listWidth > 0) this.width = this.listWidth;
+        super.renderListBackground(ctx);
+        this.width = oldWidth;
     }
 
     public void loadEntries(int viewMode) {
@@ -148,13 +167,12 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
+        int currentWidth = (this.listWidth > 0) ? this.listWidth : this.width;
+        if (mouseX >= this.getX() + currentWidth) return false;
         if (Minecraft.getInstance().screen instanceof SoundControlScreen screen) {
-            if (screen.getViewMode() == 2 && mouseX > screen.width - 125) {
-                return false;
-            }
-            if (mouseY > screen.height - 40) {
-                return false;
-            }
+            if (mouseX < SoundControlScreen.PROFILE_W) return false;
+            if (screen.getViewMode() == 2 && mouseX > screen.width - 125) return false;
+            if (mouseY > screen.height - 40) return false;
         }
         return super.isMouseOver(mouseX, mouseY);
     }

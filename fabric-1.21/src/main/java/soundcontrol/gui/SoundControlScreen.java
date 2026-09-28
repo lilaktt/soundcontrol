@@ -41,6 +41,14 @@ public class SoundControlScreen extends Screen {
 
     @Override
     protected void init() {
+        if (this.client.world != null) {
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("\u2693"),
+                    b -> this.client.setScreen(new soundcontrol.anchor.SoundAnchorScreen(this)))
+                .dimensions(this.width - 50, this.height - 28, 20, 20)
+                .tooltip(net.minecraft.client.gui.tooltip.Tooltip.of(Text.translatable("text.soundcontrol.anchors.title"))).build());
+        }
+
+
 
         this.profileList = new ProfileListWidget(this.client, this.height - 116, 72, this);
         this.addSelectableChild(this.profileList);
@@ -149,15 +157,14 @@ public class SoundControlScreen extends Screen {
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
 
+        ctx.fill(0, 0, this.width, this.height, 0xC0101010);
         super.render(ctx, mouseX, mouseY, delta);
 
+        this.soundList.render(ctx, mouseX, mouseY, delta);
+
+        // The sound list spans the full screen and paints a translucent background.
+        // Draw the profile panel after it so that background cannot darken profile buttons.
         ctx.fill(0, 72, PROFILE_W, this.height - 44, 0x80202030);
-
-        if (this.profileAddBtn != null)
-            this.profileAddBtn.render(ctx, mouseX, mouseY, delta);
-        if (this.profileFolderBtn != null)
-            this.profileFolderBtn.render(ctx, mouseX, mouseY, delta);
-
         ctx.drawTextWithShadow(this.textRenderer,
             Text.translatable("text.soundcontrol.profiles.title"),
             6, 56, 0xFFCCCCDD);
@@ -165,7 +172,6 @@ public class SoundControlScreen extends Screen {
         this.profileList.render(ctx, mouseX, mouseY, delta);
         this.profileList.tick();
 
-        this.soundList.render(ctx, mouseX, mouseY, delta);
         if (this.viewMode == 2) this.modList.render(ctx, mouseX, mouseY, delta);
         this.searchBox.render(ctx, mouseX, mouseY, delta);
 

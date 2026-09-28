@@ -84,10 +84,12 @@ public class SoundListWidget extends ObjectSelectionList<SoundListWidget.SoundEn
         this.lastFilterMode = filterMode;
         this.clearEntries();
         String lowerQuery = query.toLowerCase();
-        if (filterMode == 2) {
+                if (filterMode == 1 || filterMode == 2) {
             List<String> favoriteIds = new ArrayList<>();
             for (var e : SoundConfig.getSounds().entrySet()) {
-                if (e.getValue().favorite) {
+                if (filterMode == 2 ? e.getValue().favorite
+                        : e.getValue().muted || e.getValue().overrideParent
+                        || Math.abs(e.getValue().volume - 1f) >= 0.01f) {
                     favoriteIds.add(e.getKey());
                 }
             }
@@ -214,7 +216,7 @@ public class SoundListWidget extends ObjectSelectionList<SoundListWidget.SoundEn
                 SoundConfig.SoundSettings s = SoundConfig.computeSound(this.soundId, k -> new SoundConfig.SoundSettings());
                 s.muted = !s.muted;
                 button.setMessage(Component.translatable(s.muted ? "text.soundcontrol.button.unmute" : "text.soundcontrol.button.mute"));
-                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(this.soundId);
+                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite && !s.overrideParent) SoundConfig.removeSound(this.soundId);
                 SoundConfig.save();
                 parentList.refilter();
             }).bounds(0, 0, 50, 20).build();
@@ -229,7 +231,7 @@ public class SoundListWidget extends ObjectSelectionList<SoundListWidget.SoundEn
                 protected void applyValue() {
                     SoundConfig.SoundSettings s = SoundConfig.computeSound(soundId, k -> new SoundConfig.SoundSettings());
                     s.volume = (float) (this.value * 2.0f);
-                    if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(soundId);
+                    if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite && !s.overrideParent) SoundConfig.removeSound(soundId);
                     SoundConfig.save();
                 }
             };
@@ -238,7 +240,7 @@ public class SoundListWidget extends ObjectSelectionList<SoundListWidget.SoundEn
                 SoundConfig.SoundSettings s = SoundConfig.computeSound(this.soundId, k -> new SoundConfig.SoundSettings());
                 s.favorite = !s.favorite;
                 button.setMessage(Component.literal(s.favorite ? "★" : "☆"));
-                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(this.soundId);
+                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite && !s.overrideParent) SoundConfig.removeSound(this.soundId);
                 SoundConfig.save();
                 parentList.refilter();
             }).bounds(0, 0, 20, 20)
@@ -251,6 +253,7 @@ public class SoundListWidget extends ObjectSelectionList<SoundListWidget.SoundEn
                 if (wasFavorite) {
                     current.volume = 1.0f;
                     current.muted = false;
+                    current.overrideParent = false;
                 } else {
                     SoundConfig.removeSound(this.soundId);
                 }

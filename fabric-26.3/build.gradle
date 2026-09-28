@@ -1,0 +1,42 @@
+
+plugins {
+    id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT'
+    id 'maven-publish'
+}
+
+version = "1.6.0-26.3"
+
+base {
+    archivesName = "soundcontrol-fabric-26.3"
+}
+
+repositories {
+    maven { url = "https://maven.fabricmc.net/" }
+    maven { url = "https://maven.terraformersmc.com/" }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:26.3"
+    implementation "net.fabricmc:fabric-loader:0.19.5"
+    implementation "net.fabricmc.fabric-api:fabric-api:0.161.0+26.3"
+    implementation "com.terraformersmc:modmenu:21.0.0-beta.1"
+
+    
+    implementation project(':common')
+}
+
+processResources {
+    inputs.property "version", project.version
+    filesMatching("fabric.mod.json") { expand "version": project.version }
+}
+
+java {
+    withSourcesJar()
+    toolchain { languageVersion = JavaLanguageVersion.of(25) }
+}
+
+jar {
+    from project(':common').sourceSets.main.output
+    from(rootProject.file('LICENSE')) { rename { 'LICENSE' } }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

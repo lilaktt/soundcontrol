@@ -13,6 +13,7 @@ import org.lwjgl.glfw.GLFW;
 public class SoundControl {
     public static KeyMapping openMenuKey;
     public static KeyMapping toggleOverlayKey;
+    public static KeyMapping muteLookedAtSoundKey;
 
     public SoundControl(IEventBus modEventBus) {
         SoundConfig.load();
@@ -36,6 +37,8 @@ public class SoundControl {
                 CATEGORY
         );
 
+        muteLookedAtSoundKey = new KeyMapping("key.soundcontrol.mute_looked_at", GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
+        event.register(muteLookedAtSoundKey);
         event.register(openMenuKey);
         event.register(toggleOverlayKey);
     }
@@ -48,6 +51,9 @@ public class SoundControl {
             if (client.screen == null) {
                 client.setScreen(new SoundControlScreen());
             }
+        }
+        while (muteLookedAtSoundKey.consumeClick()) {
+            if (client.screen == null) SoundWorldRenderer.toggleSoundUnderCrosshair(client);
         }
         while (toggleOverlayKey.consumeClick()) {
             SoundTracker.cycleOverlayMode();

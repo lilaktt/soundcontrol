@@ -93,7 +93,18 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
         this.lastViewMode = viewMode;
         this.lastFilterMode = filterMode;
         this.clearEntries();
-        String lowerQuery = query.toLowerCase();
+                String lowerQuery = query.toLowerCase(java.util.Locale.ROOT);
+        if (filterMode == 1 || filterMode == 2) {
+            SoundConfig.getSounds().entrySet().stream()
+                    .filter(e -> filterMode == 2 ? e.getValue().favorite
+                            : e.getValue().muted || e.getValue().overrideParent
+                            || Math.abs(e.getValue().volume - 1f) >= 0.01f)
+                    .map(java.util.Map.Entry::getKey).sorted()
+                    .filter(id -> id.toLowerCase(java.util.Locale.ROOT).contains(lowerQuery))
+                    .forEach(id -> this.addEntry(new SoundEntry(id, 1, this)));
+            this.setScrollAmount(0);
+            return;
+        }
         for (SoundEntry entry : this.allEntries) {
 
             if (filterMode == 1) {
@@ -199,7 +210,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
                 SoundConfig.SoundSettings s = SoundConfig.computeSound(this.soundId, k -> new SoundConfig.SoundSettings());
                 s.muted = !s.muted;
                 button.setMessage(Text.translatable(s.muted ? "text.soundcontrol.button.unmute" : "text.soundcontrol.button.mute"));
-                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(this.soundId);
+                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite && !s.overrideParent) SoundConfig.removeSound(this.soundId);
                 SoundConfig.save();
                 parentList.refilter();
             }).dimensions(0, 0, 50, 20).build();
@@ -208,7 +219,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
                 SoundConfig.SoundSettings s = SoundConfig.computeSound(this.soundId, k -> new SoundConfig.SoundSettings());
                 s.favorite = !s.favorite;
                 button.setMessage(Text.literal(s.favorite ? "★" : "☆"));
-                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(this.soundId);
+                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite && !s.overrideParent) SoundConfig.removeSound(this.soundId);
                 SoundConfig.save();
                 parentList.refilter();
             }).dimensions(0, 0, 20, 20).tooltip(Tooltip.of(Text.translatable("tooltip.soundcontrol.favorite"))).build();
@@ -227,7 +238,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
                 protected void applyValue() {
                     SoundConfig.SoundSettings s = SoundConfig.computeSound(soundId, k -> new SoundConfig.SoundSettings());
                     s.volume = (float) (this.value * 2.0f);
-                    if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(soundId);
+                    if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite && !s.overrideParent) SoundConfig.removeSound(soundId);
                     SoundConfig.save();
                 }
 
@@ -245,6 +256,7 @@ public class SoundListWidget extends ElementListWidget<SoundListWidget.SoundEntr
                 if (wasFavorite) {
                     current.volume = 1.0f;
                     current.muted = false;
+                    current.overrideParent = false;
                 } else {
                     SoundConfig.removeSound(this.soundId);
                 }

@@ -2,6 +2,7 @@ package soundcontrol;
 
 import soundcontrol.render.SoundLookupRenderer;
 import soundcontrol.gui.SoundControlScreen;
+import soundcontrol.render.SoundWorldRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
@@ -13,6 +14,7 @@ public class SoundControl implements ClientModInitializer {
     public static final KeyMapping.Category SOUND_CONTROL = KeyMapping.Category.register(Identifier.parse("soundcontrol:main"));
     public static KeyMapping openMenuKey;
     public static KeyMapping toggleOverlayKey;
+    public static KeyMapping muteLookedAtSoundKey;
 
     @Override
     public void onInitializeClient() {
@@ -30,6 +32,12 @@ public class SoundControl implements ClientModInitializer {
                 SOUND_CONTROL
         ));
 
+        muteLookedAtSoundKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.soundcontrol.mute_looked_at",
+                GLFW.GLFW_KEY_UNKNOWN,
+                SOUND_CONTROL
+        ));
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openMenuKey.consumeClick()) {
                 if (client.screen == null) {
@@ -38,6 +46,11 @@ public class SoundControl implements ClientModInitializer {
             }
             while (toggleOverlayKey.consumeClick()) {
                 SoundTracker.cycleOverlayMode();
+            }
+            while (muteLookedAtSoundKey.consumeClick()) {
+                if (client.screen == null) {
+                    SoundWorldRenderer.toggleSoundUnderCrosshair(client);
+                }
             }
             if (SoundTracker.getOverlayMode() == 2) {
                 SoundLookupRenderer.tick(client);

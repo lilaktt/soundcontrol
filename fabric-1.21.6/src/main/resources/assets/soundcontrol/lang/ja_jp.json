@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "サウンド設定を開く",
   "key.soundcontrol.toggle_overlay": "サウンドオーバーレイを切り替え",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "プロファイル名を変更",
   "text.soundcontrol.profiles.title": "プロファイル",
   "text.soundcontrol.profile.name_hint": "プロファイル名を入力...",
-  "text.soundcontrol.profile.name_label": "プロファイル名:"
+  "text.soundcontrol.profile.name_label": "プロファイル名:",
+  "key.soundcontrol.mute_looked_at": "照準下のサウンドをミュート/ミュート解除",
+  "text.soundcontrol.modlist.mute": "このMODの全サウンドをミュート/ミュート解除",
+  "message.soundcontrol.look_mute.muted": "ミュート: %s",
+  "message.soundcontrol.look_mute.unmuted": "ミュート解除: %s",
+  "message.soundcontrol.look_mute.none": "照準下にミュートするブロックやモブがありません。",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "以前のアンカーをこのワールドに移動 (%s)"
 }

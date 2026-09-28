@@ -1,5 +1,7 @@
 package soundcontrol.gui;
 
+
+import soundcontrol.ModSoundCatalog;
 import soundcontrol.SoundCategory;
 import soundcontrol.SoundConfig;
 import soundcontrol.SoundControl;
@@ -127,31 +129,26 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
         this.clearEntries();
         String lowerQuery = query.toLowerCase();
 
-        if (filterMode == 2) {
-            List<String> favoriteIds = new ArrayList<>();
-            for (var e : SoundConfig.getSounds().entrySet()) {
-                if (e.getValue().favorite) {
-                    favoriteIds.add(e.getKey());
+        if (filterMode == 1 || filterMode == 2) {
+            List<String> configuredIds = new ArrayList<>();
+            for (var configured : SoundConfig.getSounds().entrySet()) {
+                SoundConfig.SoundSettings settings = configured.getValue();
+                boolean include = filterMode == 2
+                        ? settings.favorite
+                        : settings.muted || settings.overrideParent || Math.abs(settings.volume - 1.0f) >= 0.01f;
+                if (include && configured.getKey().toLowerCase().contains(lowerQuery)) {
+                    configuredIds.add(configured.getKey());
                 }
             }
-            Collections.sort(favoriteIds);
-            for (String id : favoriteIds) {
-                if (id.toLowerCase().contains(lowerQuery)) {
-                    this.addEntry(new SoundEntry(id, 1, this.getRowWidth(), this));
-                }
+            Collections.sort(configuredIds);
+            for (String id : configuredIds) {
+                this.addEntry(new SoundEntry(id, 1, this.getRowWidth(), this));
             }
             this.setSize(this.width, this.height);
             return;
         }
 
         for (SoundEntry entry : this.allEntries) {
-
-            if (filterMode == 1) {
-                if (!SoundConfig.containsSound(entry.soundId)) continue;
-                SoundConfig.SoundSettings s = SoundConfig.getSound(entry.soundId);
-                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f) continue;
-            }
-
             boolean matchCategory = false;
 
             if (viewMode == 2) {
@@ -159,7 +156,7 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
                     if (selectedMod.equals("all")) {
                         matchCategory = !entry.soundId.startsWith("minecraft:") && !entry.soundId.startsWith("#global:");
                     } else {
-                        matchCategory = entry.soundId.startsWith(selectedMod + ":");
+                        matchCategory = ModSoundCatalog.ownsSound(selectedMod, entry.soundId);
                     }
                 } else {
                     matchCategory = false;
@@ -218,10 +215,10 @@ public class SoundListWidget extends ContainerObjectSelectionList<SoundListWidge
             }
 
             boolean isBasicMode = (viewMode == 0);
-            boolean isPlayable = !isBasicMode && !this.soundId.startsWith("#global:");
+            boolean isPlayable = !isBasicMode && !this.soundId.startsWith("#");
 
             Button.Builder playBuilder = Button.builder(Component.literal("▶"), button -> {
-                if (this.soundId.startsWith("#global:")) return;
+                if (this.soundId.startsWith("#")) return;
                 Identifier parsedId = Identifier.tryParse(this.soundId);
                 if (parsedId != null) {
                     Minecraft client = Minecraft.getInstance();

@@ -1,22 +1,21 @@
 package soundcontrol.anchor;
 
 import soundcontrol.SoundConfig;
-import soundcontrol.SoundControl;
+import soundcontrol.AnchorWorldContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
 public class SoundAnchorScreen extends Screen {
     private final Screen parent;
+    private final String worldKey = AnchorWorldContext.currentKey();
     private AnchorListWidget anchorList;
 
     public SoundAnchorScreen(Screen parent) {
@@ -26,12 +25,11 @@ public class SoundAnchorScreen extends Screen {
 
     @Override
     protected void init() {
-        this.anchorList = new AnchorListWidget(this.minecraft, this.width, this.height - 80, 24, 48);
-        this.addWidget(this.anchorList);
+        this.anchorList = new AnchorListWidget(this.minecraft, this.width, this.height - (SoundConfig.getLegacyAnchorCount() > 0 ? 104 : 80), 24, 48);
         this.addRenderableWidget(this.anchorList);
 
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.create"), button -> {
-            if (this.minecraft != null && this.minecraft.player != null) {
+            if (this.minecraft != null && this.minecraft.player != null && AnchorWorldContext.currentKey() != null) {
                 var player = this.minecraft.player;
                 String dim = player.level().dimension().toString();
                 int nextNum = SoundConfig.getAnchors().size() + 1;
@@ -40,10 +38,18 @@ public class SoundAnchorScreen extends Screen {
                     Math.round(player.getX()), Math.round(player.getY()), Math.round(player.getZ()), 16
                 );
                 SoundConfig.getAnchors().add(anchor);
-                SoundConfig.save();
+                SoundConfig.saveSettings();
                 refreshList();
             }
         }).bounds(this.width / 2 - 100, this.height - 50, 200, 20).build());
+
+        if (SoundConfig.getLegacyAnchorCount() > 0) {
+            this.addRenderableWidget(Button.builder(
+                    Component.translatable("text.soundcontrol.anchors.import_legacy", SoundConfig.getLegacyAnchorCount()), b -> {
+                        SoundConfig.importLegacyAnchors();
+                        this.minecraft.setScreen(new SoundAnchorScreen(this.parent));
+                    }).bounds(this.width / 2 - 140, this.height - 74, 280, 20).build());
+        }
 
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, button -> this.onClose())
                 .bounds(this.width / 2 - 100, this.height - 26, 200, 20).build());
@@ -65,10 +71,13 @@ public class SoundAnchorScreen extends Screen {
         context.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFFFF);
     }
 
-    @Override
-    public boolean keyPressed(KeyEvent input) {
-        if (input.key() == GLFW.GLFW_KEY_ESCAPE) { this.onClose(); return true; }
-        return super.keyPressed(input);
+
+    @Override public void tick() {
+        super.tick();
+        // Do not leave an editor holding another world's anchor after disconnect/reconnect.
+        if (!java.util.Objects.equals(worldKey, AnchorWorldContext.currentKey())) {
+            this.minecraft.setScreen(null);
+        }
     }
 
     @Override public void onClose() { this.minecraft.setScreen(this.parent); }
@@ -78,7 +87,9 @@ public class SoundAnchorScreen extends Screen {
         public AnchorListWidget(Minecraft client, int width, int height, int y, int itemHeight) {
             super(client, width, height, y, itemHeight);
         }
-        @Override public int getRowWidth() { return 360; }
+        @Override public int getRowWidth() { return Math.min(248, this.width - 24); }
+        @Override public int getRowLeft() { return (this.width - getRowWidth() - 10) / 2; }
+        @Override protected int scrollBarX() { return getRowLeft() + getRowWidth() + 4; }
         public void clear() { this.clearEntries(); }
         public void add(AnchorEntry entry) { this.addEntry(entry); }
     }
@@ -108,12 +119,12 @@ public class SoundAnchorScreen extends Screen {
 
             this.toggleButton = Button.builder(
                 Component.literal(anchor.isEnabled() ? "\u2713" : "\u2717"),
-                b -> { this.anchor.setEnabled(!this.anchor.isEnabled()); b.setMessage(Component.literal(this.anchor.isEnabled() ? "\u2713" : "\u2717")); SoundConfig.save(); }
+                b -> { this.anchor.setEnabled(!this.anchor.isEnabled()); b.setMessage(Component.literal(this.anchor.isEnabled() ? "\u2713" : "\u2717")); SoundConfig.saveSettings(); }
             ).bounds(0, 0, 20, 20).build();
 
             this.nameBox = new EditBox(font, 0, 0, 80, 16, Component.literal(""));
             this.nameBox.setValue(anchor.getName());
-            this.nameBox.setResponder(name -> { this.anchor.setName(name); SoundConfig.save(); });
+            this.nameBox.setResponder(name -> { this.anchor.setName(name); SoundConfig.saveSettings(); });
 
             this.modeButton = Button.builder(
                 Component.literal("radius".equals(anchor.getShapeMode()) ? "\u25CF R" : "\u25A0 Box"),
@@ -125,13 +136,14 @@ public class SoundAnchorScreen extends Screen {
                         this.anchor.setShapeMode("radius");
                         b.setMessage(Component.literal("\u25CF R"));
                     }
-                    SoundConfig.save();
+                    updateShapeFields();
+                    SoundConfig.saveSettings();
                 }
             ).bounds(0, 0, 42, 20).build();
 
             this.showRadiusButton = Button.builder(
                 Component.literal(anchor.isShowRadius() ? "\u25CB" : "\u2022"),
-                b -> { this.anchor.setShowRadius(!this.anchor.isShowRadius()); b.setMessage(Component.literal(this.anchor.isShowRadius() ? "\u25CB" : "\u2022")); SoundConfig.save(); }
+                b -> { this.anchor.setShowRadius(!this.anchor.isShowRadius()); b.setMessage(Component.literal(this.anchor.isShowRadius() ? "\u25CB" : "\u2022")); SoundConfig.saveSettings(); }
             ).bounds(0, 0, 20, 20).build();
 
             this.editButton = Button.builder(Component.translatable("text.soundcontrol.anchors.edit"), b -> {
@@ -139,34 +151,45 @@ public class SoundAnchorScreen extends Screen {
             }).bounds(0, 0, 40, 20).build();
 
             this.deleteButton = Button.builder(Component.literal("\u2715"), b -> {
-                SoundConfig.getAnchors().remove(this.index);
-                SoundConfig.save();
+                SoundConfig.getAnchors().remove(this.anchor);
+                SoundConfig.saveSettings();
                 parentScreen.refreshList();
             }).bounds(0, 0, 20, 20).build();
 
             this.radiusBox = new EditBox(font, 0, 0, 40, 16, Component.literal(""));
             this.radiusBox.setValue(String.valueOf(anchor.getRadius()));
             this.radiusBox.setResponder(val -> {
-                try { int r = Integer.parseInt(val); if (r >= 1 && r <= 999) { this.anchor.setRadius(r); SoundConfig.save(); } } catch (NumberFormatException ignored) {}
+                try { int r = Integer.parseInt(val); if (r >= 1 && r <= 999) { this.anchor.setRadius(r); SoundConfig.saveSettings(); } } catch (NumberFormatException ignored) {}
             });
 
             this.wBox = new EditBox(font, 0, 0, 40, 16, Component.literal(""));
             this.wBox.setValue(String.valueOf(anchor.getBoxW()));
             this.wBox.setResponder(val -> {
-                try { int v = Integer.parseInt(val); if (v >= 1 && v <= 999) { this.anchor.setBoxW(v); SoundConfig.save(); } } catch (NumberFormatException ignored) {}
+                try { int v = Integer.parseInt(val); if (v >= 1 && v <= 999) { this.anchor.setBoxW(v); SoundConfig.saveSettings(); } } catch (NumberFormatException ignored) {}
             });
 
             this.hBox = new EditBox(font, 0, 0, 40, 16, Component.literal(""));
             this.hBox.setValue(String.valueOf(anchor.getBoxH()));
             this.hBox.setResponder(val -> {
-                try { int v = Integer.parseInt(val); if (v >= 1 && v <= 999) { this.anchor.setBoxH(v); SoundConfig.save(); } } catch (NumberFormatException ignored) {}
+                try { int v = Integer.parseInt(val); if (v >= 1 && v <= 999) { this.anchor.setBoxH(v); SoundConfig.saveSettings(); } } catch (NumberFormatException ignored) {}
             });
 
             this.dBox = new EditBox(font, 0, 0, 40, 16, Component.literal(""));
             this.dBox.setValue(String.valueOf(anchor.getBoxD()));
             this.dBox.setResponder(val -> {
-                try { int v = Integer.parseInt(val); if (v >= 1 && v <= 999) { this.anchor.setBoxD(v); SoundConfig.save(); } } catch (NumberFormatException ignored) {}
+                try { int v = Integer.parseInt(val); if (v >= 1 && v <= 999) { this.anchor.setBoxD(v); SoundConfig.saveSettings(); } } catch (NumberFormatException ignored) {}
             });
+            updateShapeFields();
+        }
+
+        private void updateShapeFields() {
+            boolean box = "box".equals(anchor.getShapeMode());
+            radiusBox.visible = radiusBox.active = !box;
+            wBox.visible = wBox.active = box;
+            hBox.visible = hBox.active = box;
+            dBox.visible = dBox.active = box;
+            if (box) radiusBox.setFocused(false);
+            else { wBox.setFocused(false); hBox.setFocused(false); dBox.setFocused(false); }
         }
 
         @Override
@@ -175,7 +198,7 @@ public class SoundAnchorScreen extends Screen {
             int y = this.getY();
             var font = Minecraft.getInstance().font;
 
-            int cx = x + 58;
+            int cx = x + 2;
             this.toggleButton.setX(cx); this.toggleButton.setY(y + 2);
             this.toggleButton.extractRenderState(context, mouseX, mouseY, tickDelta);
             cx += 22;
@@ -202,11 +225,11 @@ public class SoundAnchorScreen extends Screen {
 
             int overrides = anchor.getSoundOverrides().size();
             if (overrides > 0) {
-                context.text(font, overrides + " snd", cx, y + 7, 0xFFFFAA00);
+                context.text(font, font.plainSubstrByWidth(overrides + " snd", 58), x + 184, y + 28, 0xFFFFAA00);
             }
 
             if ("box".equals(anchor.getShapeMode())) {
-                int bx = x + 58;
+                int bx = x + 2;
                 context.text(font, "W:", bx + 4, y + 28, 0xFF999999);
                 this.wBox.setX(bx + 16); this.wBox.setY(y + 24);
                 this.wBox.extractRenderState(context, mouseX, mouseY, tickDelta);
@@ -219,20 +242,20 @@ public class SoundAnchorScreen extends Screen {
                 this.dBox.setX(bx + 132); this.dBox.setY(y + 24);
                 this.dBox.extractRenderState(context, mouseX, mouseY, tickDelta);
             } else {
-                context.text(font, "R:", x + 62, y + 28, 0xFF999999);
-                this.radiusBox.setX(x + 74); this.radiusBox.setY(y + 24);
+                context.text(font, "R:", x + 6, y + 28, 0xFF999999);
+                this.radiusBox.setX(x + 18); this.radiusBox.setY(y + 24);
                 this.radiusBox.extractRenderState(context, mouseX, mouseY, tickDelta);
             }
         }
 
         @Override
         public java.util.List<? extends net.minecraft.client.gui.components.events.GuiEventListener> children() {
-            return java.util.List.of(toggleButton, nameBox, modeButton, showRadiusButton, editButton, deleteButton, radiusBox, wBox, hBox, dBox);
+            return "box".equals(anchor.getShapeMode()) ? java.util.List.of(toggleButton, nameBox, modeButton, showRadiusButton, editButton, deleteButton, wBox, hBox, dBox) : java.util.List.of(toggleButton, nameBox, modeButton, showRadiusButton, editButton, deleteButton, radiusBox);
         }
 
         @Override
         public java.util.List<? extends net.minecraft.client.gui.narration.NarratableEntry> narratables() {
-            return java.util.List.of(toggleButton, nameBox, modeButton, showRadiusButton, editButton, deleteButton, radiusBox, wBox, hBox, dBox);
+            return "box".equals(anchor.getShapeMode()) ? java.util.List.of(toggleButton, nameBox, modeButton, showRadiusButton, editButton, deleteButton, wBox, hBox, dBox) : java.util.List.of(toggleButton, nameBox, modeButton, showRadiusButton, editButton, deleteButton, radiusBox);
         }
     }
 }

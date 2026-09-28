@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Apri impostazioni audio",
   "key.soundcontrol.toggle_overlay": "Attiva/disattiva overlay audio",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "Rinomina profilo",
   "text.soundcontrol.profiles.title": "Profili",
   "text.soundcontrol.profile.name_hint": "Inserisci il nome del profilo...",
-  "text.soundcontrol.profile.name_label": "Nome profilo:"
+  "text.soundcontrol.profile.name_label": "Nome profilo:",
+  "key.soundcontrol.mute_looked_at": "Silenzia/riattiva suono sotto il mirino",
+  "text.soundcontrol.modlist.mute": "Silenzia/riattiva tutti i suoni di questo mod",
+  "message.soundcontrol.look_mute.muted": "Silenziato: %s",
+  "message.soundcontrol.look_mute.unmuted": "Riattivato: %s",
+  "message.soundcontrol.look_mute.none": "Nessun blocco o mob sotto il mirino da silenziare.",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "Sposta le vecchie ancore in questo mondo (%s)"
 }

@@ -1,0 +1,55 @@
+{
+  "mappings": {
+    "soundcontrol/mixin/MobSoundAccessor": {
+      "getAmbientSound": "m_7515_()Lnet/minecraft/sounds/SoundEvent;"
+    },
+    "soundcontrol/mixin/LivingEntitySoundAccessor": {
+      "getHurtSound": "m_7975_(Lnet/minecraft/world/damagesource/DamageSource;)Lnet/minecraft/sounds/SoundEvent;",
+      "getDeathSound": "m_5592_()Lnet/minecraft/sounds/SoundEvent;"
+    },
+    "soundcontrol/mixin/SoundEngineMixin": {
+      "Lnet/minecraft/client/sounds/SoundEngine;calculateVolume(FLnet/minecraft/sounds/SoundSource;)F": "Lnet/minecraft/client/sounds/SoundEngine;m_235257_(FLnet/minecraft/sounds/SoundSource;)F",
+      "calculateVolume(Lnet/minecraft/client/resources/sounds/SoundInstance;)F": "m_120327_(Lnet/minecraft/client/resources/sounds/SoundInstance;)F",
+      "calculateVolume(FLnet/minecraft/sounds/SoundSource;)F": "m_235257_(FLnet/minecraft/sounds/SoundSource;)F",
+      "instanceToChannel:Ljava/util/Map;": "f_120226_:Ljava/util/Map;",
+      "tick(Z)V": "m_120302_(Z)V",
+      "play": "m_120312_(Lnet/minecraft/client/resources/sounds/SoundInstance;)V"
+    },
+    "soundcontrol/mixin/AnchorWorldRenderMixin": {
+      "renderLevel": "m_109599_(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V"
+    }
+  },
+  "data": {
+    "named:srg": {
+      "soundcontrol.mixin.SoundEngineMixin": {
+        "Lnet/minecraft/client/sounds/SoundEngine;play(Lnet/minecraft/client/resources/sounds/SoundInstance;)V": "Lnet/minecraft/client/sounds/SoundEngine;m_120312_(Lnet/minecraft/client/resources/sounds/SoundInstance;)V",
+        "Lnet/minecraft/client/sounds/SoundEngine;calculateVolume(Lnet/minecraft/client/resources/sounds/SoundInstance;)F": "Lnet/minecraft/client/sounds/SoundEngine;m_120327_(Lnet/minecraft/client/resources/sounds/SoundInstance;)F",
+        "Lnet/minecraft/client/sounds/SoundEngine;queueTickingSound(Lnet/minecraft/client/resources/sounds/TickableSoundInstance;)V": "Lnet/minecraft/client/sounds/SoundEngine;m_120282_(Lnet/minecraft/client/resources/sounds/TickableSoundInstance;)V"
+      },
+      "soundcontrol.mixin.AbstractSoundInstanceMixin": {
+        "Lnet/minecraft/client/resources/sounds/AbstractSoundInstance;getVolume()F": "Lnet/minecraft/client/resources/sounds/AbstractSoundInstance;m_7769_()F"
+      },
+      "soundcontrol.mixin.ChannelMixin": {
+        "Lcom/mojang/blaze3d/audio/Channel;source": "Lcom/mojang/blaze3d/audio/Channel;f_83642_"
+      },
+      "soundcontrol/mixin/MobSoundAccessor": {
+        "getAmbientSound": "m_7515_()Lnet/minecraft/sounds/SoundEvent;"
+      },
+      "soundcontrol/mixin/LivingEntitySoundAccessor": {
+        "getHurtSound": "m_7975_(Lnet/minecraft/world/damagesource/DamageSource;)Lnet/minecraft/sounds/SoundEvent;",
+        "getDeathSound": "m_5592_()Lnet/minecraft/sounds/SoundEvent;"
+      },
+      "soundcontrol/mixin/SoundEngineMixin": {
+        "Lnet/minecraft/client/sounds/SoundEngine;calculateVolume(FLnet/minecraft/sounds/SoundSource;)F": "Lnet/minecraft/client/sounds/SoundEngine;m_235257_(FLnet/minecraft/sounds/SoundSource;)F",
+        "calculateVolume(Lnet/minecraft/client/resources/sounds/SoundInstance;)F": "m_120327_(Lnet/minecraft/client/resources/sounds/SoundInstance;)F",
+        "calculateVolume(FLnet/minecraft/sounds/SoundSource;)F": "m_235257_(FLnet/minecraft/sounds/SoundSource;)F",
+        "instanceToChannel:Ljava/util/Map;": "f_120226_:Ljava/util/Map;",
+        "tick(Z)V": "m_120302_(Z)V",
+        "play": "m_120312_(Lnet/minecraft/client/resources/sounds/SoundInstance;)V"
+      },
+      "soundcontrol/mixin/AnchorWorldRenderMixin": {
+        "renderLevel": "m_109599_(Lcom/mojang/blaze3d/vertex/PoseStack;FJZLnet/minecraft/client/Camera;Lnet/minecraft/client/renderer/GameRenderer;Lnet/minecraft/client/renderer/LightTexture;Lorg/joml/Matrix4f;)V"
+      }
+    }
+  }
+}

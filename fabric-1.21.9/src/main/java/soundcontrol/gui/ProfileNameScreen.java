@@ -62,6 +62,7 @@ public class ProfileNameScreen extends Screen {
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
 
+        ctx.fill(0, 0, this.width, this.height, 0xC0101010);
         super.render(ctx, mouseX, mouseY, delta);
         ctx.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, this.height / 2 - 48, 0xFFFFFFFF);
         ctx.drawTextWithShadow(this.textRenderer,

@@ -108,6 +108,7 @@ public class ProfileEditScreen extends Screen {
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        context.fill(0, 0, this.width, this.height, 0xC0101010);
         super.extractRenderState(context, mouseX, mouseY, delta);
         context.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFFFF);
         context.text(this.font,

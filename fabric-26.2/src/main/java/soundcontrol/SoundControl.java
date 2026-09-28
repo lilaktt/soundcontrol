@@ -13,6 +13,7 @@ public class SoundControl implements ClientModInitializer {
     public static final KeyMapping.Category SOUND_CONTROL = KeyMapping.Category.register(Identifier.parse("soundcontrol:main"));
     public static KeyMapping openMenuKey;
     public static KeyMapping toggleOverlayKey;
+    public static KeyMapping muteLookedAtSoundKey;
 
     @Override
     public void onInitializeClient() {
@@ -30,6 +31,9 @@ public class SoundControl implements ClientModInitializer {
                 SOUND_CONTROL
         ));
 
+        muteLookedAtSoundKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.soundcontrol.mute_looked_at", GLFW.GLFW_KEY_UNKNOWN, SOUND_CONTROL));
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openMenuKey.consumeClick()) {
                 if (client.canInterruptScreen()) {
@@ -38,6 +42,9 @@ public class SoundControl implements ClientModInitializer {
             }
             while (toggleOverlayKey.consumeClick()) {
                 SoundTracker.cycleOverlayMode();
+            }
+                        while (muteLookedAtSoundKey.consumeClick()) {
+                if (client.gui.screen() == null) soundcontrol.render.SoundWorldRenderer.toggleSoundUnderCrosshair(client);
             }
             if (SoundTracker.getOverlayMode() == 2) {
                 SoundLookupRenderer.tick(client);

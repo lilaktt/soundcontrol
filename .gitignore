@@ -30,3 +30,32 @@ run/
 # Upload scripts
 *.py
 *.bat
+
+# Local generated files, diagnostics and publishing material
+**/bin/
+**/.eclipse/
+**/__pycache__/
+*.pyc
+*.class
+crash-*.txt
+hs_err_pid*
+replay_pid*
+*.tmp
+*.bak
+*.orig
+*.rej
+*.zip
+*.rar
+*.pem
+*.key
+.env
+.env.*
+CONTEXT.md
+*_build*.txt
+build_log*.txt
+neo_build*.txt
+latest.log
+**/.FullName
+/tools/publishing/
+!tools/test_*.py
+!tools/anchors/*.py

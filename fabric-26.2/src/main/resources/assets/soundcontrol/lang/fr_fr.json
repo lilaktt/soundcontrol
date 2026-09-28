@@ -1,4 +1,4 @@
-﻿{
+{
   "key.category.soundcontrol.main": "Sound Control",
   "key.soundcontrol.open": "Ouvrir les paramètres audio",
   "key.soundcontrol.toggle_overlay": "Basculer l'affichage du son",
@@ -61,5 +61,15 @@
   "text.soundcontrol.profile.rename": "Renommer le profil",
   "text.soundcontrol.profiles.title": "Profils",
   "text.soundcontrol.profile.name_hint": "Entrez le nom du profil...",
-  "text.soundcontrol.profile.name_label": "Nom du profil :"
+  "text.soundcontrol.profile.name_label": "Nom du profil :",
+  "key.soundcontrol.mute_looked_at": "Couper/r\\u00e9tablir le son sous le r\\u00e9ticule",
+  "text.soundcontrol.modlist.mute": "Couper/r\\u00e9tablir tous les sons de ce mod",
+  "message.soundcontrol.look_mute.muted": "Coup\\u00e9 : %s",
+  "message.soundcontrol.look_mute.unmuted": "R\\u00e9tabli : %s",
+  "message.soundcontrol.look_mute.none": "Pas de bloc ou mob sous le r\\u00e9ticule.",
+  "text.soundcontrol.anchors.edit_title": "Edit anchor: %s",
+  "text.soundcontrol.anchors.search": "Search sounds",
+  "text.soundcontrol.anchors.remove": "Remove override",
+  "text.soundcontrol.anchors.all_mods": "All namespaces",
+  "text.soundcontrol.anchors.import_legacy": "Déplacer les anciennes ancres vers ce monde (%s)"
 }

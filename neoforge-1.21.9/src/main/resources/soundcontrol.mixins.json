@@ -3,11 +3,12 @@
   "package": "soundcontrol.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "AbstractSoundInstanceMixin",
     "SoundTrackerMixin",
     "GuiMixin",
     "ChannelMixin",
-    "SoundEngineMixin"
+    "SoundEngineMixin",
+    "MobSoundAccessor",
+    "LivingEntitySoundAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

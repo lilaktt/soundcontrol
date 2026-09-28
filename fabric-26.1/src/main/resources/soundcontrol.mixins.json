@@ -3,7 +3,6 @@
   "package": "soundcontrol.mixin",
   "compatibilityLevel": "JAVA_25",
   "client": [
-    "AbstractSoundInstanceMixin",
     "SoundTrackerMixin",
     "GuiMixin",
     "SoundEngineMixin",

@@ -3,7 +3,7 @@
   "package": "soundcontrol.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AbstractSoundInstanceMixin",
+    
     "SoundTrackerMixin",
     "SoundEngineMixin",
     "ChannelMixin"
