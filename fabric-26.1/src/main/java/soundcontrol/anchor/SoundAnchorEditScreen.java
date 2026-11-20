@@ -1,15 +1,16 @@
 package soundcontrol.anchor;
 
-import soundcontrol.gui.AllSoundsPickerScreen;
-import soundcontrol.gui.RecentSoundsPickerScreen;
-import soundcontrol.SoundConfig;
 import soundcontrol.AnchorWorldContext;
+import soundcontrol.Compat;
+import soundcontrol.SoundConfig;
+import soundcontrol.gui.AllSoundsPickerScreen;
+import soundcontrol.gui.SoundControlScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -22,7 +23,7 @@ public class SoundAnchorEditScreen extends Screen {
     private final String worldKey = AnchorWorldContext.currentKey();
     private final SoundAnchor anchor;
     EditBox searchBox;
-    private AnchorSoundList soundList;
+    AnchorSoundList soundList;
     private String searchQuery = "";
 
     public SoundAnchorEditScreen(Screen parent, SoundAnchor anchor) {
@@ -35,104 +36,86 @@ public class SoundAnchorEditScreen extends Screen {
     protected void init() {
         this.searchBox = new EditBox(this.font, this.width / 2 - 90, 18, 180, 16, Component.translatable("text.soundcontrol.anchors.search"));
         this.searchBox.setMaxLength(256);
-        this.searchBox.setValue(searchQuery);
-        this.searchBox.setResponder(this::onSearch);
+        this.searchBox.setValue(this.searchQuery);
+        this.searchBox.setResponder(query -> { this.searchQuery = query; loadSounds(); });
         this.addRenderableWidget(this.searchBox);
 
         this.soundList = new AnchorSoundList(this.minecraft, this.width, this.height - 88, 40, 25);
         this.addRenderableWidget(this.soundList);
 
         int footerWidth = Math.min(360, this.width - 20), footerX = (this.width - footerWidth) / 2, buttonWidth = (footerWidth - 12) / 4;
-        this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.recent"), button -> {
-            this.minecraft.setScreen(new AllSoundsPickerScreen(this, this.anchor, true));
-        }).bounds(footerX, this.height - 42, buttonWidth, 20).build());
-
-        this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.browse"), button -> {
-            this.minecraft.setScreen(new AllSoundsPickerScreen(this, this.anchor));
-        }).bounds(footerX + buttonWidth + 4, this.height - 42, buttonWidth, 20).build());
-
+        this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.recent"),
+            button -> Compat.setScreen(new AllSoundsPickerScreen(this, this.anchor, true)))
+            .bounds(footerX, this.height - 42, buttonWidth, 20).build());
+        this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.browse"),
+            button -> Compat.setScreen(new AllSoundsPickerScreen(this, this.anchor, false)))
+            .bounds(footerX + buttonWidth + 4, this.height - 42, buttonWidth, 20).build());
         this.addRenderableWidget(Button.builder(Component.translatable("text.soundcontrol.anchors.clear"), button -> {
             this.anchor.getSoundOverrides().clear();
             SoundConfig.saveSettings();
-            loadSounds(this.searchBox.getValue());
+            loadSounds();
         }).bounds(footerX + 2 * (buttonWidth + 4), this.height - 42, buttonWidth, 20).build());
-
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, button -> this.onClose())
-                .bounds(footerX + 3 * (buttonWidth + 4), this.height - 42, buttonWidth, 20).build());
+            .bounds(footerX + 3 * (buttonWidth + 4), this.height - 42, buttonWidth, 20).build());
 
-        loadSounds(searchQuery);
+        loadSounds();
     }
 
-    void loadSounds(String query) {
+    public void loadSounds() {
         if (this.soundList == null) return;
         this.soundList.clear();
-        String lowerQuery = query.toLowerCase(Locale.ROOT);
-        List<Map.Entry<String, SoundConfig.SoundSettings>> overrides = new ArrayList<>(anchor.getSoundOverrides().entrySet());
-        overrides.sort(Comparator.comparing(Map.Entry::getKey));
-        for (var entry : overrides) {
-            if (entry.getKey().toLowerCase(Locale.ROOT).contains(lowerQuery)) {
-                this.soundList.add(new AnchorSoundEntry(entry.getKey(), anchor, this));
-            }
+        String lowerQuery = this.searchQuery.toLowerCase(Locale.ROOT);
+        List<String> ids = new ArrayList<>(this.anchor.getSoundOverrides().keySet());
+        Collections.sort(ids);
+        for (String id : ids) {
+            if (id.toLowerCase(Locale.ROOT).contains(lowerQuery)) this.soundList.add(new AnchorSoundEntry(id, this.anchor, this));
         }
     }
 
-    private void onSearch(String query) { searchQuery = query; loadSounds(query); }
-
-    public void addSoundOverride(String soundId) {
-        if (!this.anchor.getSoundOverrides().containsKey(soundId)) {
-            SoundConfig.SoundSettings s = new SoundConfig.SoundSettings();
-            s.muted = true;
-            this.anchor.getSoundOverrides().put(soundId, s);
-            SoundConfig.saveSettings();
-        }
-        loadSounds(this.searchBox != null ? this.searchBox.getValue() : "");
-    }
-
-    public void removeSoundOverride(String soundId) {
-        this.anchor.getSoundOverrides().remove(soundId);
-        SoundConfig.saveSettings();
-        loadSounds(this.searchBox != null ? this.searchBox.getValue() : "");
+    @Override
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        context.fill(0, 0, this.width, this.height, SoundControlScreen.BACKDROP);
+        context.fill(0, 40, this.width, this.height - 48, SoundControlScreen.LIST_PANEL);
         super.extractRenderState(context, mouseX, mouseY, delta);
         context.centeredText(this.font, this.title, this.width / 2, 5, 0xFF55FFFF);
+        if (this.soundList.children().isEmpty()) {
+            context.centeredText(this.font, Component.translatable("text.soundcontrol.anchors.no_sounds"), this.width / 2, this.height / 2, 0xFF888888);
+        }
     }
-
 
     @Override public void tick() {
         super.tick();
-        // Do not leave an editor holding another world's anchor after disconnect/reconnect.
-        if (!java.util.Objects.equals(worldKey, AnchorWorldContext.currentKey())) {
-            this.minecraft.setScreen(null);
-        }
+        if (!java.util.Objects.equals(worldKey, AnchorWorldContext.currentKey())) Compat.setScreen(null);
     }
 
-    @Override public void onClose() { this.minecraft.setScreen(this.parent); }
+    @Override public void onClose() { SoundConfig.flush(); Compat.setScreen(this.parent); }
     @Override public boolean isPauseScreen() { return false; }
 
-    private static class AnchorSoundList extends ContainerObjectSelectionList<AnchorSoundEntry> {
-        public AnchorSoundList(Minecraft client, int width, int height, int y, int itemHeight) {
+    static class AnchorSoundList extends ContainerObjectSelectionList<AnchorSoundEntry> {
+        AnchorSoundList(Minecraft client, int width, int height, int y, int itemHeight) {
             super(client, width, height, y, itemHeight);
         }
         @Override public int getRowWidth() { return Math.min(360, this.width - 24); }
-        @Override protected int scrollBarX() { return this.width / 2 + getRowWidth() / 2 + 4; }
-        public void clear() { this.clearEntries(); }
-        public void add(AnchorSoundEntry entry) { this.addEntry(entry); }
+        @Override protected int scrollBarX() { return this.getRowLeft() + getRowWidth() + 4; }
+        @Override protected void extractListBackground(GuiGraphicsExtractor context) {}
+        @Override protected void extractListSeparators(GuiGraphicsExtractor context) {}
+        void clear() { this.clearEntries(); }
+        void add(AnchorSoundEntry entry) { this.addEntry(entry); }
     }
 
-    private static class AnchorSoundEntry extends ContainerObjectSelectionList.Entry<AnchorSoundEntry> {
+    static class AnchorSoundEntry extends ContainerObjectSelectionList.Entry<AnchorSoundEntry> {
         private final String soundId;
-        private final SoundAnchor anchor;
         private final SoundAnchorEditScreen parentScreen;
         private final Button muteButton;
         private final Button removeButton;
         private final VolumeSlider slider;
 
-        public AnchorSoundEntry(String soundId, SoundAnchor anchor, SoundAnchorEditScreen parentScreen) {
+        AnchorSoundEntry(String soundId, SoundAnchor anchor, SoundAnchorEditScreen parentScreen) {
             this.soundId = soundId;
-            this.anchor = anchor;
             this.parentScreen = parentScreen;
             SoundConfig.SoundSettings s = anchor.getSoundOverrides().getOrDefault(soundId, new SoundConfig.SoundSettings());
 
@@ -145,49 +128,56 @@ public class SoundAnchorEditScreen extends Screen {
 
             this.slider = new VolumeSlider(0, 0, 100, 20, s.volume, soundId, anchor);
 
-            this.removeButton = Button.builder(Component.literal("\u2715"), b -> {
+            this.removeButton = Button.builder(Component.literal("✕"), b -> {
                 anchor.getSoundOverrides().remove(soundId);
                 SoundConfig.saveSettings();
-                parentScreen.loadSounds(parentScreen.searchBox != null ? parentScreen.searchBox.getValue() : "");
-            }).bounds(0, 0, 20, 20).build();
-            this.removeButton.setTooltip(Tooltip.create(Component.translatable("text.soundcontrol.anchors.remove")));
+                parentScreen.loadSounds();
+            }).bounds(0, 0, 20, 20)
+              .tooltip(Tooltip.create(Component.translatable("text.soundcontrol.anchors.remove")))
+              .build();
         }
 
         @Override
         public void extractContent(GuiGraphicsExtractor context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            int x = this.getX(); int y = this.getY();
+            int x = this.getContentX();
+            int y = this.getContentY();
             var font = Minecraft.getInstance().font;
-            String display = soundId;
-            int controlX = x + parentScreen.soundList.getRowWidth() - 182;
+            int controlX = x + this.parentScreen.soundList.getRowWidth() - 182;
             int maxW = Math.max(20, controlX - x - 5);
-            String truncated = font.plainSubstrByWidth(display, maxW);
-            if (truncated.length() < display.length()) {
-                display = font.plainSubstrByWidth(display, maxW - font.width("...")) + "...";
-            } else {
-                display = truncated;
-            }
-            context.text(font, display, x + 2, y + 5, 0xFFFFFFFF);
-            this.muteButton.setX(controlX); this.muteButton.setY(y); this.muteButton.extractRenderState(context, mouseX, mouseY, tickDelta);
-            this.slider.setX(controlX + 55); this.slider.setY(y); this.slider.extractRenderState(context, mouseX, mouseY, tickDelta);
-            this.removeButton.setX(controlX + 160); this.removeButton.setY(y); this.removeButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+            String display = font.plainSubstrByWidth(this.soundId, maxW);
+            if (display.length() < this.soundId.length()) display = font.plainSubstrByWidth(this.soundId, maxW - font.width("...")) + "...";
+            context.text(font, display, x + 2, y + 6, this.soundId.startsWith("#global:") ? 0xFFFFAA00 : 0xFFFFFFFF);
+            this.muteButton.setX(controlX); this.muteButton.setY(y);
+            this.muteButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+            this.slider.setX(controlX + 55); this.slider.setY(y);
+            this.slider.extractRenderState(context, mouseX, mouseY, tickDelta);
+            this.removeButton.setX(controlX + 160); this.removeButton.setY(y);
+            this.removeButton.extractRenderState(context, mouseX, mouseY, tickDelta);
         }
 
-        @Override public List<? extends net.minecraft.client.gui.components.events.GuiEventListener> children() { return List.of(muteButton, slider, removeButton); }
-        @Override public List<? extends net.minecraft.client.gui.narration.NarratableEntry> narratables() { return List.of(muteButton, slider, removeButton); }
+        @Override public List<? extends net.minecraft.client.gui.components.events.GuiEventListener> children() { return List.of(this.muteButton, this.slider, this.removeButton); }
+        @Override public List<? extends net.minecraft.client.gui.narration.NarratableEntry> narratables() { return List.of(this.muteButton, this.slider, this.removeButton); }
     }
 
-    private static class VolumeSlider extends AbstractSliderButton {
+    static class VolumeSlider extends AbstractSliderButton {
         private final String soundId;
         private final SoundAnchor anchor;
-        public VolumeSlider(int x, int y, int w, int h, float vol, String soundId, SoundAnchor anchor) {
-            super(x, y, w, h, Component.literal((int)(vol * 100) + "%"), vol / 2.0);
-            this.soundId = soundId; this.anchor = anchor;
+
+        VolumeSlider(int x, int y, int w, int h, float volume, String soundId, SoundAnchor anchor) {
+            super(x, y, w, h, Component.translatable("text.soundcontrol.slider.volume", Math.round(volume * 100)),
+                Float.isFinite(volume) ? Math.max(0.0, Math.min(1.0, volume / 2.0)) : 0.5);
+            this.soundId = soundId;
+            this.anchor = anchor;
         }
-        @Override protected void updateMessage() { this.setMessage(Component.literal((int)(this.value * 200) + "%")); }
+
+        @Override protected void updateMessage() {
+            this.setMessage(Component.translatable("text.soundcontrol.slider.volume", (int) Math.round(this.value * 200)));
+        }
+
         @Override protected void applyValue() {
-            SoundConfig.SoundSettings s = anchor.getSoundOverrides().computeIfAbsent(soundId, k -> new SoundConfig.SoundSettings());
-            s.volume = (float)(this.value * 2.0); SoundConfig.saveSettings();
+            SoundConfig.SoundSettings s = this.anchor.getSoundOverrides().computeIfAbsent(this.soundId, k -> new SoundConfig.SoundSettings());
+            s.volume = (float) (this.value * 2.0);
+            SoundConfig.saveSettings();
         }
     }
 }
-

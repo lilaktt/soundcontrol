@@ -1,153 +1,65 @@
 package soundcontrol.render;
 
-import soundcontrol.SoundControl;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import soundcontrol.Compat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.registry.Registries;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.hit.HitResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SoundLookupRenderer {
     public static boolean enabled = false;
-    private static final List<String> currentSounds = new ArrayList<>();
+    private static final List<String> LINES = new ArrayList<>();
     private static String currentTarget = "";
+    private static long nextRefresh;
 
-    public static void tick(MinecraftClient client) {
-        if (!enabled || client.world == null || client.player == null) {
-            currentSounds.clear();
-            currentTarget = "";
-            return;
-        }
-
-        HitResult hit = client.crosshairTarget;
-        if (hit == null || hit.getType() == HitResult.Type.MISS) {
-            currentSounds.clear();
-            currentTarget = "";
-            return;
-        }
-
-        if (hit instanceof BlockHitResult blockHit) {
-            BlockState state = client.world.getBlockState(blockHit.getBlockPos());
-            Block block = state.getBlock();
-            String blockId = Registries.BLOCK.getId(block).toString();
-
-            if (!blockId.equals(currentTarget)) {
-                currentTarget = blockId;
-                currentSounds.clear();
-
-                
-                BlockSoundGroup group = state.getSoundGroup();
-                addSoundGroupSounds(group);
-
-                
-                String blockPath = blockId.contains(":") ? blockId.substring(blockId.indexOf(':') + 1) : blockId;
-                String soundPrefix = "block." + blockPath + ".";
-
-                for (Identifier soundId : client.getSoundManager().getKeys()) {
-                    String path = soundId.getPath();
-                    if (path.startsWith(soundPrefix)) {
-                        String action = path.substring(soundPrefix.length());
-                        String entry = capitalize(action) + ": " + soundId;
-                        if (!currentSounds.contains(entry)) {
-                            addIfValid(entry);
-                        }
-                    }
-                }
-
-                if (currentSounds.isEmpty()) {
-                    currentSounds.add("\u00A77No specific sounds");
-                }
-            }
-        } else if (hit instanceof EntityHitResult entityHit) {
-            Entity entity = entityHit.getEntity();
-            String entityId = Registries.ENTITY_TYPE.getId(entity.getType()).toString();
-
-            if (!entityId.equals(currentTarget)) {
-                currentTarget = entityId;
-                currentSounds.clear();
-
-                String entityPath = entityId.contains(":") ? entityId.substring(entityId.indexOf(':') + 1) : entityId;
-                String soundPrefix = "entity." + entityPath + ".";
-
-                for (Identifier soundId : client.getSoundManager().getKeys()) {
-                    String path = soundId.getPath();
-                    if (path.startsWith(soundPrefix)) {
-                        String action = path.substring(soundPrefix.length());
-                        addIfValid(capitalize(action) + ": " + soundId);
-                    }
-                }
-
-                if (currentSounds.isEmpty()) {
-                    currentSounds.add("\u00A77No registered sounds");
-                }
-            }
-        } else {
-            currentSounds.clear();
-            currentTarget = "";
-        }
+    public static void tick() {
+        if (!enabled || !Compat.inWorld()) { clear(); return; }
+        long now = System.currentTimeMillis();
+        Compat.Target target = Compat.crosshairTarget();
+        if (target == null) { clear(); return; }
+        if (target.id().equals(currentTarget) && now < nextRefresh) return;
+        currentTarget = target.id();
+        nextRefresh = now + 500;
+        LINES.clear();
+        for (String soundId : target.soundIds()) LINES.add(action(soundId) + ": " + soundId);
+        if (LINES.isEmpty()) LINES.add("§7" + net.minecraft.text.Text.translatable("text.soundcontrol.lookup.none").getString());
     }
 
-    private static void addSoundGroupSounds(BlockSoundGroup group) {
-        addIfValid("Break: " + Registries.SOUND_EVENT.getId(group.getBreakSound()));
-        addIfValid("Step: " + Registries.SOUND_EVENT.getId(group.getStepSound()));
-        addIfValid("Place: " + Registries.SOUND_EVENT.getId(group.getPlaceSound()));
-        addIfValid("Hit: " + Registries.SOUND_EVENT.getId(group.getHitSound()));
-        addIfValid("Fall: " + Registries.SOUND_EVENT.getId(group.getFallSound()));
+    private static void clear() {
+        LINES.clear();
+        currentTarget = "";
+        nextRefresh = 0;
     }
 
-    private static void addIfValid(String line) {
-        if (line != null && !line.isEmpty() && !line.endsWith("null")) {
-            currentSounds.add(line);
-        }
-    }
-
-    private static String capitalize(String s) {
-        if (s == null || s.isEmpty()) return s;
-        return Character.toUpperCase(s.charAt(0)) + s.substring(1);
+    private static String action(String soundId) {
+        String path = soundId.substring(soundId.indexOf(':') + 1);
+        int separator = Math.max(path.lastIndexOf('.'), path.lastIndexOf('/'));
+        String action = separator >= 0 ? path.substring(separator + 1) : path;
+        return action.isEmpty() ? "Sound" : Character.toUpperCase(action.charAt(0)) + action.substring(1);
     }
 
     public static void render(DrawContext context) {
-        if (!enabled || currentSounds.isEmpty()) return;
-
-        MinecraftClient client = MinecraftClient.getInstance();
-        TextRenderer font = client.textRenderer;
-
-        int centerX = context.getScaledWindowWidth() / 2;
-        int centerY = context.getScaledWindowHeight() / 2;
-
-        int startX = centerX + 12;
-        int startY = centerY - (currentSounds.size() * 10) / 2;
-
-        String header = currentTarget.contains(":") ? currentTarget.substring(currentTarget.indexOf(':') + 1) : currentTarget;
-        context.drawTextWithShadow(font, "\u00A7e\u00A7l" + header, startX, startY - 12, 0xFFFFAA00);
-
-        for (int i = 0; i < currentSounds.size(); i++) {
-            String line = currentSounds.get(i);
+        if (!enabled || LINES.isEmpty()) return;
+        TextRenderer font = MinecraftClient.getInstance().textRenderer;
+        int startX = context.getScaledWindowWidth() / 2 + 12;
+        int startY = context.getScaledWindowHeight() / 2 - (LINES.size() * 10) / 2;
+        String header = currentTarget.substring(currentTarget.indexOf(':') + 1);
+        context.drawText(font, "§l" + header, startX, startY - 12, 0xFFFFAA00, true);
+        for (int i = 0; i < LINES.size(); i++) {
+            String line = LINES.get(i);
             int y = startY + i * 10;
-
-            int colonIdx = line.indexOf(": ");
-            if (colonIdx > 0) {
-                String action = line.substring(0, colonIdx + 2);
-                String soundId = line.substring(colonIdx + 2);
-                if (soundId.contains(":")) {
-                    soundId = soundId.substring(soundId.indexOf(':') + 1);
-                }
-                context.drawTextWithShadow(font, action, startX, y, 0xFF88CCFF);
-                context.drawTextWithShadow(font, soundId, startX + font.getWidth(action), y, 0xFFCCCCCC);
+            int colon = line.indexOf(": ");
+            if (colon > 0) {
+                String action = line.substring(0, colon + 2);
+                String soundId = line.substring(colon + 2);
+                soundId = soundId.substring(soundId.indexOf(':') + 1);
+                context.drawText(font, action, startX, y, 0xFF88CCFF, true);
+                context.drawText(font, soundId, startX + font.getWidth(action), y, 0xFFCCCCCC, true);
             } else {
-                context.drawTextWithShadow(font, line, startX, y, 0xFFAAAAAA);
+                context.drawText(font, line, startX, y, 0xFFAAAAAA, true);
             }
         }
     }
 }
-

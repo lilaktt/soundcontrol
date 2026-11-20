@@ -1,127 +1,114 @@
 package soundcontrol.gui;
 
-import soundcontrol.SoundControl;
+import soundcontrol.Compat;
+import soundcontrol.SoundConfig;
+import soundcontrol.render.SoundWorldRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.TreeMap;
 
 public class ModListWidget extends ElementListWidget<ModListWidget.ModEntry> {
+    public static final int PANEL_WIDTH = 120;
     private final SoundControlScreen parent;
 
-    public ModListWidget(MinecraftClient client, int width, int height, int y, int itemHeight, SoundControlScreen parent) {
-        super(client, width, height, y, y + height, itemHeight);
-        this.setRenderBackground(false);
-        this.setRenderHorizontalShadows(false);
-        this.setRenderHeader(false, 0);
+    public ModListWidget(MinecraftClient client, int height, int y, SoundControlScreen parent) {
+        super(client, PANEL_WIDTH, height, y, y + height, 17); this.setRenderBackground(false); this.setRenderHorizontalShadows(false);
         this.parent = parent;
-        this.loadEntries();
     }
 
-    @Override
-    protected void renderBackground(DrawContext context) {
-        context.fill(this.left, this.top, this.right, this.bottom, 0x80000000);
+    public void place(int x) {
+        this.setLeftPos(x);
+        reload();
     }
 
-    private void loadEntries() {
+    public void reload() {
         this.clearEntries();
         this.addEntry(new ModEntry("all", this));
-
-        Set<String> namespaces = new HashSet<>();
-        Collection<Identifier> soundIds = MinecraftClient.getInstance().getSoundManager().getKeys();
-        for (Identifier id : soundIds) {
-            String namespace = id.getNamespace();
-            if (!namespace.equals("minecraft")) {
-                namespaces.add(namespace);
-            }
+        TreeMap<String, String> mods = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        for (String id : Compat.clientSoundIds()) {
+            String namespace = id.substring(0, id.indexOf(':'));
+            if (!namespace.equals("minecraft")) mods.putIfAbsent(Compat.modName(namespace) + "\u0000" + namespace, namespace);
         }
+        for (String namespace : mods.values()) this.addEntry(new ModEntry(namespace, this));
+    }
 
-        List<String> sortedNamespaces = new ArrayList<>(namespaces);
-        Collections.sort(sortedNamespaces);
-
-        for (String namespace : sortedNamespaces) {
-            this.addEntry(new ModEntry(namespace, this));
-        }
+    public boolean hasMod(String namespace) {
+        for (ModEntry entry : this.children()) if (entry.modId.equals(namespace)) return true;
+        return false;
     }
 
     @Override
     public int getRowWidth() {
-        return 100;
+        return PANEL_WIDTH - 12;
     }
 
     @Override
     protected int getScrollbarPositionX() {
-        return this.left + this.width - 6;
+        return this.getRowLeft() + this.getRowWidth() + 2;
     }
 
-    public void selectMod(String modId) {
-        this.parent.setSelectedMod(modId);
-    }
-
-    public class ModEntry extends ElementListWidget.Entry<ModEntry> {
+    public static class ModEntry extends ElementListWidget.Entry<ModEntry> {
         private final String modId;
         private final ModListWidget parentList;
         private final ButtonWidget button;
+        private final ButtonWidget muteButton;
 
-        public ModEntry(String modId, ModListWidget parentList) {
+        ModEntry(String modId, ModListWidget parentList) {
             this.modId = modId;
             this.parentList = parentList;
-
-            String displayText = this.modId.equals("all") ? Text.translatable("text.soundcontrol.modlist.all").getString() : this.modId;
-
-            this.button = ButtonWidget.builder(Text.literal(displayText), b -> {
-                this.parentList.selectMod(this.modId);
-            }).dimensions(0, 0, 100, 15).build();
+            boolean all = modId.equals("all");
+            this.button = ButtonWidget.builder(Text.literal(label()), b -> parentList.parent.setSelectedMod(this.modId))
+                .dimensions(0, 0, all ? PANEL_WIDTH - 12 : PANEL_WIDTH - 32, 15).build();
+            this.muteButton = all ? null : ButtonWidget.builder(Text.literal("M"), b -> {
+                boolean muted = SoundConfig.toggleModMuted(this.modId);
+                if (muted) SoundWorldRenderer.stopNamespace(this.modId);
+                parentList.parent.refilter();
+            }).dimensions(0, 0, 18, 15)
+              .tooltip(Tooltip.of(Text.translatable("text.soundcontrol.modlist.mute")))
+              .build();
         }
 
         public String getModId() {
             return this.modId;
         }
 
-        @Override
-        public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            this.button.setX(x);
-            this.button.setY(y);
-
-            boolean isSelected = parentList.parent.getSelectedMod().equals(this.modId);
-            String prefix = isSelected ? "▶ " : "";
-            String displayText = this.modId.equals("all") ? Text.translatable("text.soundcontrol.modlist.all").getString() : this.modId;
-            this.button.setMessage(Text.literal(prefix + displayText));
-
-            this.button.render(context, mouseX, mouseY, tickDelta);
+        private String label() {
+            return this.modId.equals("all") ? Text.translatable("text.soundcontrol.modlist.all").getString() : Compat.modName(this.modId);
         }
 
         @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-            if (this.parentList.parent.getViewMode() != 2) return false;
-            if (mouseButton == 0) {
-                this.parentList.selectMod(this.modId);
-                MinecraftClient.getInstance().getSoundManager().play(net.minecraft.client.sound.PositionedSoundInstance.master(net.minecraft.sound.SoundEvents.UI_BUTTON_CLICK, 1.0F));
-                return true;
+        public void render(DrawContext context, int index, int y, int x, int entryW, int entryH, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            var font = MinecraftClient.getInstance().textRenderer;
+            boolean selected = parentList.parent.getSelectedMod().equals(this.modId);
+            boolean muted = this.muteButton != null && SoundConfig.isModMuted(this.modId);
+            String text = (selected ? "▶ " : "") + label();
+            text = font.trimToWidth(text, this.button.getWidth() - 8);
+            this.button.setMessage(Text.literal((muted ? "§c" : "") + text));
+            this.button.setX(x);
+            this.button.setY(y);
+            this.button.render(context, mouseX, mouseY, tickDelta);
+            if (this.muteButton != null) {
+                this.muteButton.setMessage(Text.literal(muted ? "§cU" : "M"));
+                this.muteButton.setX(x + PANEL_WIDTH - 30);
+                this.muteButton.setY(y);
+                this.muteButton.render(context, mouseX, mouseY, tickDelta);
             }
-            return false;
         }
 
         @Override
         public List<? extends net.minecraft.client.gui.Element> children() {
-            if (this.parentList.parent.getViewMode() != 2) return List.of();
-            return List.of(this.button);
+            return this.muteButton == null ? List.of(this.button) : List.of(this.button, this.muteButton);
         }
 
         @Override
         public List<? extends net.minecraft.client.gui.Selectable> selectableChildren() {
-            if (this.parentList.parent.getViewMode() != 2) return List.of();
-            return List.of(this.button);
+            return this.muteButton == null ? List.of(this.button) : List.of(this.button, this.muteButton);
         }
     }
 }
-

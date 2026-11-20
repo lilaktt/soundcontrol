@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-version = "1.6.0-26.3"
+version = "1.7.0-26.3"
 
 base {
     archivesName = "soundcontrol-fabric-26.3"
@@ -22,7 +22,6 @@ dependencies {
     implementation "com.terraformersmc:modmenu:21.0.0-beta.1"
 
     
-    implementation project(':common')
 }
 
 processResources {
@@ -36,7 +35,6 @@ java {
 }
 
 jar {
-    from project(':common').sourceSets.main.output
     from(rootProject.file('LICENSE')) { rename { 'LICENSE' } }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

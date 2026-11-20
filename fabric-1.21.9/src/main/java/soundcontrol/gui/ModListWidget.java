@@ -1,79 +1,84 @@
 package soundcontrol.gui;
 
-import soundcontrol.ModSoundCatalog;
+import soundcontrol.Compat;
 import soundcontrol.SoundConfig;
-import soundcontrol.SoundControl;
 import soundcontrol.render.SoundWorldRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.TreeMap;
 
 public class ModListWidget extends ElementListWidget<ModListWidget.ModEntry> {
+    public static final int PANEL_WIDTH = 120;
     private final SoundControlScreen parent;
 
-    public ModListWidget(MinecraftClient client, int width, int height, int y, int itemHeight, SoundControlScreen parent) {
-        super(client, width, height, y, itemHeight);
+    public ModListWidget(MinecraftClient client, int height, int y, SoundControlScreen parent) {
+        super(client, PANEL_WIDTH, height, y, 17);
         this.parent = parent;
+    }
 
+    public void place(int x) {
+        this.setX(x);
+        reload();
+    }
+
+    public void reload() {
+        this.clearEntries();
         this.addEntry(new ModEntry("all", this));
-
-        Set<String> mappedNamespaces = new HashSet<>();
-        for (ModSoundCatalog.ModInfo mod : ModSoundCatalog.getMods()) {
-            this.addEntry(new ModEntry(mod.id(), this));
-            mappedNamespaces.addAll(mod.namespaces());
+        TreeMap<String, String> mods = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        for (String id : Compat.clientSoundIds()) {
+            String namespace = id.substring(0, id.indexOf(':'));
+            if (!namespace.equals("minecraft")) mods.putIfAbsent(Compat.modName(namespace) + "\u0000" + namespace, namespace);
         }
-        client.getSoundManager().getKeys().stream()
-                .map(Identifier::getNamespace)
-                .filter(namespace -> !namespace.equals("minecraft") && !mappedNamespaces.contains(namespace))
-                .distinct()
-                .sorted()
-                .forEach(namespace -> this.addEntry(new ModEntry(namespace, this)));
+        for (String namespace : mods.values()) this.addEntry(new ModEntry(namespace, this));
+    }
+
+    public boolean hasMod(String namespace) {
+        for (ModEntry entry : this.children()) if (entry.modId.equals(namespace)) return true;
+        return false;
     }
 
     @Override
     public int getRowWidth() {
-        return 100;
+        return PANEL_WIDTH - 12;
     }
 
     @Override
     protected int getScrollbarX() {
-        return this.getX() + this.width - 6;
+        return this.getRowLeft() + this.getRowWidth() + 2;
     }
 
-    public void selectMod(String modId) {
-        this.parent.setSelectedMod(modId);
+    @Override
+    protected void drawMenuListBackground(DrawContext context) {
     }
 
-    public class ModEntry extends ElementListWidget.Entry<ModEntry> {
+    @Override
+    protected void drawHeaderAndFooterSeparators(DrawContext context) {
+    }
+
+    public static class ModEntry extends ElementListWidget.Entry<ModEntry> {
         private final String modId;
         private final ModListWidget parentList;
         private final ButtonWidget button;
         private final ButtonWidget muteButton;
 
-        public ModEntry(String modId, ModListWidget parentList) {
+        ModEntry(String modId, ModListWidget parentList) {
             this.modId = modId;
             this.parentList = parentList;
-
-            String displayText = this.modId.equals("all") ? Text.translatable("text.soundcontrol.modlist.all").getString() : ModSoundCatalog.getDisplayName(this.modId);
-
-            int nameWidth = this.modId.equals("all") ? 100 : 80;
-            this.button = ButtonWidget.builder(Text.literal(displayText), b -> {
-                this.parentList.selectMod(this.modId);
-            }).dimensions(0, 0, nameWidth, 15).build();
-
-            this.muteButton = this.modId.equals("all") ? null : ButtonWidget.builder(Text.literal("M"), b -> {
+            boolean all = modId.equals("all");
+            this.button = ButtonWidget.builder(Text.literal(label()), b -> parentList.parent.setSelectedMod(this.modId))
+                .dimensions(0, 0, all ? PANEL_WIDTH - 12 : PANEL_WIDTH - 32, 15).build();
+            this.muteButton = all ? null : ButtonWidget.builder(Text.literal("M"), b -> {
                 boolean muted = SoundConfig.toggleModMuted(this.modId);
-                if (muted) SoundWorldRenderer.stopModSounds(MinecraftClient.getInstance(), this.modId);
-                this.parentList.parent.refreshAfterProfileChange();
+                if (muted) SoundWorldRenderer.stopNamespace(this.modId);
+                parentList.parent.refilter();
             }).dimensions(0, 0, 18, 15)
-              .tooltip(net.minecraft.client.gui.tooltip.Tooltip.of(Text.translatable("text.soundcontrol.modlist.mute")))
+              .tooltip(Tooltip.of(Text.translatable("text.soundcontrol.modlist.mute")))
               .build();
         }
 
@@ -81,35 +86,39 @@ public class ModListWidget extends ElementListWidget<ModListWidget.ModEntry> {
             return this.modId;
         }
 
-        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            int x = this.parentList.getRowLeft();
-            int y = this.getY();
+        private String label() {
+            return this.modId.equals("all") ? Text.translatable("text.soundcontrol.modlist.all").getString() : Compat.modName(this.modId);
+        }
 
+        @Override
+        public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+            int x = this.getContentX();
+            int y = this.getContentY();
+            var font = MinecraftClient.getInstance().textRenderer;
+            boolean selected = parentList.parent.getSelectedMod().equals(this.modId);
+            boolean muted = this.muteButton != null && SoundConfig.isModMuted(this.modId);
+            String text = (selected ? "▶ " : "") + label();
+            text = font.trimToWidth(text, this.button.getWidth() - 8);
+            this.button.setMessage(Text.literal((muted ? "§c" : "") + text));
             this.button.setX(x);
             this.button.setY(y);
-
-            boolean isSelected = parentList.parent.getSelectedMod().equals(this.modId);
-            boolean muted = !this.modId.equals("all") && SoundConfig.isModMuted(this.modId);
-            String prefix = isSelected ? "▶ " : "";
-            String displayText = this.modId.equals("all") ? Text.translatable("text.soundcontrol.modlist.all").getString() : ModSoundCatalog.getDisplayName(this.modId);
-            this.button.setMessage(Text.literal(prefix + displayText).styled(style -> muted ? style.withColor(0xFF5555) : style));
-
             this.button.render(context, mouseX, mouseY, tickDelta);
             if (this.muteButton != null) {
-                this.muteButton.setX(x + 82);
+                this.muteButton.setMessage(Text.literal(muted ? "§cU" : "M"));
+                this.muteButton.setX(x + PANEL_WIDTH - 30);
                 this.muteButton.setY(y);
-                this.muteButton.setMessage(Text.literal(muted ? "U" : "M"));
                 this.muteButton.render(context, mouseX, mouseY, tickDelta);
             }
         }
 
+        @Override
         public List<? extends net.minecraft.client.gui.Element> children() {
             return this.muteButton == null ? List.of(this.button) : List.of(this.button, this.muteButton);
         }
 
+        @Override
         public List<? extends net.minecraft.client.gui.Selectable> selectableChildren() {
             return this.muteButton == null ? List.of(this.button) : List.of(this.button, this.muteButton);
         }
     }
 }
-

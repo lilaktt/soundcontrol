@@ -2,7 +2,7 @@ plugins {
     id 'net.neoforged.moddev.legacyforge' version '2.0.135'
 }
 
-version = "1.6.0-neo-1.20.1"
+version = "1.7.0-neo-1.20.1"
 group = "soundcontrol"
 
 base {
@@ -23,6 +23,10 @@ legacyForge {
             sourceSet sourceSets.main
         }
     }
+}
+
+mixin {
+    config 'soundcontrol.mixins.json'
 }
 
 repositories {

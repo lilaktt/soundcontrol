@@ -7,17 +7,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import soundcontrol.SoundTracker;
-import soundcontrol.SoundWorldRenderer;
+import soundcontrol.anchor.SoundAnchorRenderer;
+import soundcontrol.render.SoundLookupRenderer;
+import soundcontrol.render.SoundWorldRenderer;
 
 @Mixin(Gui.class)
 public class GuiMixin {
     @Inject(method = "render", at = @At("TAIL"))
-    private void onRender(GuiGraphics context, DeltaTracker deltaTracker, CallbackInfo ci) {
+    private void soundcontrol$renderOverlays(GuiGraphics context, DeltaTracker deltaTracker, CallbackInfo ci) {
         SoundWorldRenderer.render(context);
-        soundcontrol.SoundAnchorRenderer.render(context);
-        if (soundcontrol.SoundTracker.getOverlayMode() == 2) {
-            soundcontrol.SoundLookupRenderer.render(context);
-        }
+        SoundLookupRenderer.render(context);
+        SoundAnchorRenderer.render(context);
     }
 }

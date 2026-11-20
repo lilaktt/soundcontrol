@@ -1,30 +1,34 @@
 package soundcontrol;
 
 import soundcontrol.anchor.SoundAnchor;
-
 import soundcontrol.api.SoundControlAPI;
 import com.google.gson.*;
-import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 import java.util.*;
 import java.util.function.Function;
 
 public class SoundConfig {
-    static final File SC_DIR = new File(FabricLoader.getInstance().getConfigDir().toFile(), "soundcontrol");
-    public static final File CONFIGS_DIR = new File(SC_DIR, "configs");
-    static final File SETTINGS_FILE = new File(SC_DIR, "settings.json");
+    static final Path SC_DIR = Platform.configDir().resolve("soundcontrol");
+    public static final Path CONFIGS_DIR = SC_DIR.resolve("configs");
+    static final Path SETTINGS_FILE = SC_DIR.resolve("settings.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Logger LOGGER = LoggerFactory.getLogger("soundcontrol");
+    public static final String DEFAULT_PROFILE = "default";
+    private static final long SAVE_DELAY_MS = 750;
 
     public static class AppSettings {
-        public String activeProfile = "default";
-        public List<SoundAnchor> anchors = new ArrayList<>(); // Unassigned legacy anchors; explicit import only.
-        public Map<String, List<SoundAnchor>> anchorsByWorld = new LinkedHashMap<>();
+        public String activeProfile = DEFAULT_PROFILE;
         public int radarX = 10;
         public int radarY = -1;
+        public List<SoundAnchor> anchors = new ArrayList<>();
+        public Map<String, List<SoundAnchor>> anchorsByWorld = new LinkedHashMap<>();
     }
     private static AppSettings SETTINGS = new AppSettings();
 
@@ -36,9 +40,9 @@ public class SoundConfig {
     }
 
     public static class SoundProfile {
-        public String name = "default";
+        public String name = DEFAULT_PROFILE;
         public Map<String, SoundSettings> sounds = new LinkedHashMap<>();
-        public transient File file;
+        public transient Path file;
     }
 
     private static final List<SoundProfile> PROFILES = new ArrayList<>();
@@ -46,22 +50,35 @@ public class SoundConfig {
     private static long lastSwitchTime = 0;
     private static final long SWITCH_DELAY_MS = 500;
 
-    private static Map<String, SoundSettings> EDIT_TARGET = null;
-
-
+    private static final Set<SoundProfile> DIRTY_PROFILES = new LinkedHashSet<>();
+    private static boolean settingsDirty;
+    private static long lastChange;
+    private static boolean shutdownHookInstalled;
 
     private static Map<String, SoundSettings> sounds() {
-        if (EDIT_TARGET != null) return EDIT_TARGET;
         return ACTIVE_PROFILE != null ? ACTIVE_PROFILE.sounds : Collections.emptyMap();
     }
 
     public static SoundSettings getSound(String id)   { return sounds().get(id); }
     public static void putSound(String id, SoundSettings s) { sounds().put(id, s); }
     public static void removeSound(String id)          { sounds().remove(id); }
-    public static boolean containsSound(String id)     { return sounds().containsKey(id); }
+    public static boolean containsSound(String id)     { return sounds().get(id) != null; }
     public static Map<String, SoundSettings> getSounds() { return Collections.unmodifiableMap(sounds()); }
     public static SoundSettings computeSound(String id, Function<String, SoundSettings> fn) {
-        return sounds().computeIfAbsent(id, fn);
+        SoundSettings existing = sounds().get(id);
+        if (existing != null) return existing;
+        SoundSettings created = fn.apply(id);
+        sounds().put(id, created);
+        return created;
+    }
+
+    public static boolean isEdited(SoundSettings s) {
+        return s != null && (s.muted || s.overrideParent || Math.abs(s.volume - 1.0f) >= 0.01f);
+    }
+
+    public static void removeIfDefault(String id) {
+        SoundSettings s = sounds().get(id);
+        if (s != null && !isEdited(s) && !s.favorite) sounds().remove(id);
     }
 
     public static boolean toggleSoundsMuted(Collection<String> ids) {
@@ -69,17 +86,44 @@ public class SoundConfig {
         if (unique.isEmpty()) return false;
         boolean mute = !unique.stream().allMatch(id -> getVolumeModifier(id) <= 0f);
         for (String id : unique) {
-            SoundSettings setting = sounds().computeIfAbsent(id, key -> new SoundSettings());
-            setting.muted = mute;
-            setting.overrideParent = true;
-            if (!mute && setting.volume <= 0f) setting.volume = 1f;
+            if (mute) {
+                SoundSettings setting = computeSound(id, key -> new SoundSettings());
+                setting.muted = true;
+                setting.overrideParent = true;
+                continue;
+            }
+            SoundSettings setting = sounds().get(id);
+            if (setting != null) {
+                setting.muted = false;
+                setting.overrideParent = false;
+                if (setting.volume <= 0f) setting.volume = 1f;
+                removeIfDefault(id);
+            }
+            if (getVolumeModifier(id) <= 0f) {
+                SoundSettings override = computeSound(id, key -> new SoundSettings());
+                override.muted = false;
+                override.overrideParent = true;
+                if (override.volume <= 0f) override.volume = 1f;
+            }
         }
         save();
         return mute;
     }
 
-    public static void setEditTarget(Map<String, SoundSettings> target) { EDIT_TARGET = target; }
-    public static void clearEditTarget() { EDIT_TARGET = null; }
+    public static boolean isModMuted(String namespace) {
+        SoundSettings setting = sounds().get("#mod:" + namespace);
+        return setting != null && setting.muted;
+    }
+
+    public static boolean toggleModMuted(String namespace) {
+        String key = "#mod:" + namespace;
+        SoundSettings setting = computeSound(key, ignored -> new SoundSettings());
+        setting.muted = !setting.muted;
+        boolean muted = setting.muted;
+        removeIfDefault(key);
+        save();
+        return muted;
+    }
 
     public static int getRadarX() { return SETTINGS.radarX; }
     public static int getRadarY() { return SETTINGS.radarY; }
@@ -95,221 +139,332 @@ public class SoundConfig {
 
     public static boolean switchProfile(String name) {
         if (System.currentTimeMillis() - lastSwitchTime < SWITCH_DELAY_MS) return false;
+        SoundProfile target = findProfile(name);
+        if (target == null) return false;
         lastSwitchTime = System.currentTimeMillis();
+        activate(target);
+        return true;
+    }
+
+    private static void activate(SoundProfile profile) {
+        flush();
+        ACTIVE_PROFILE = profile;
+        SETTINGS.activeProfile = profile.name;
+        saveSettingsNow();
+    }
+
+    public static SoundProfile findProfile(String name) {
+        for (SoundProfile p : PROFILES) if (p.name.equals(name)) return p;
+        return null;
+    }
+
+    public static boolean isNameTaken(String name, SoundProfile except) {
+        String trimmed = name.trim();
         for (SoundProfile p : PROFILES) {
-            if (p.name.equals(name)) {
-                ACTIVE_PROFILE = p;
-                SETTINGS.activeProfile = name;
-                saveSettings();
-                return true;
-            }
+            if (p != except && p.name.equalsIgnoreCase(trimmed)) return true;
         }
         return false;
     }
 
     public static SoundProfile createProfile(String name) {
         SoundProfile p = new SoundProfile();
-        p.name = name;
-        p.file = new File(CONFIGS_DIR, sanitize(name) + ".json");
+        p.name = name.trim();
+        p.file = uniqueFile(p.name, null);
         PROFILES.add(p);
-        saveProfile(p);
+        saveProfileNow(p);
+        activate(p);
         return p;
     }
 
-    public static void deleteProfile(SoundProfile profile) {
-        if (profile.name.equals("default")) {
-            profile.sounds.clear();
-            saveProfile(profile);
+    public static void renameProfile(SoundProfile profile, String newName) {
+        String name = newName.trim();
+        if (name.isEmpty() || DEFAULT_PROFILE.equals(profile.name) || isNameTaken(name, profile)) return;
+        Path oldFile = profile.file;
+        profile.name = name;
+        profile.file = uniqueFile(name, profile);
+        if (!saveProfileNow(profile)) {
+            profile.file = oldFile;
             return;
         }
-        if (profile.file != null && profile.file.exists()) profile.file.delete();
-        PROFILES.remove(profile);
-        if (ACTIVE_PROFILE == profile) switchProfile("default");
+        if (oldFile != null && !oldFile.equals(profile.file)) {
+            try { Files.deleteIfExists(oldFile); } catch (IOException e) { LOGGER.warn("Could not delete old profile file {}", oldFile, e); }
+        }
+        if (ACTIVE_PROFILE == profile) {
+            SETTINGS.activeProfile = name;
+            saveSettingsNow();
+        }
     }
 
-    
-    public static void refreshProfiles() {
-        CONFIGS_DIR.mkdirs();
-
-        PROFILES.removeIf(p -> p.file != null && !p.file.exists() && !p.name.equals("default"));
-
-        File defFile = new File(CONFIGS_DIR, "default.json");
-        boolean hasDefault = PROFILES.stream().anyMatch(p -> p.name.equals("default"));
-        if (!hasDefault) {
-            SoundProfile def = new SoundProfile();
-            def.name = "default";
-            def.file = defFile;
-            if (!defFile.exists()) saveProfileToFile(def);
-            PROFILES.add(0, def);
+    public static void deleteProfile(SoundProfile profile) {
+        if (DEFAULT_PROFILE.equals(profile.name)) {
+            profile.sounds.clear();
+            saveProfileNow(profile);
+            return;
         }
+        DIRTY_PROFILES.remove(profile);
+        try {
+            if (profile.file != null) Files.deleteIfExists(profile.file);
+        } catch (IOException e) {
+            LOGGER.warn("Could not delete profile file {}", profile.file, e);
+        }
+        PROFILES.remove(profile);
+        if (ACTIVE_PROFILE == profile) activate(getDefaultProfile());
+    }
 
-        File[] files = CONFIGS_DIR.listFiles((d, n) -> n.endsWith(".json"));
-        if (files != null) {
-            for (File f : files) {
-                boolean alreadyLoaded = PROFILES.stream().anyMatch(p -> p.file != null && p.file.equals(f));
-                if (!alreadyLoaded) {
-                    try (FileReader r = new FileReader(f)) {
-                        SoundProfile p = GSON.fromJson(r, SoundProfile.class);
-                        if (p == null) p = new SoundProfile();
-                        if (p.sounds == null) p.sounds = new LinkedHashMap<>();
-                        if (p.name == null || p.name.isEmpty()) p.name = f.getName().replace(".json", "");
-                        p.file = f;
-                        PROFILES.add(p);
-                    } catch (Exception e) {
-                        LOGGER.warn("Failed to load profile: {}", f.getName(), e);
-                    }
-                }
+    public static void refreshProfiles() {
+        ensureDirectories();
+        PROFILES.removeIf(p -> p.file != null && !Files.exists(p.file) && !DEFAULT_PROFILE.equals(p.name)
+                && !DIRTY_PROFILES.contains(p));
+        if (findProfile(DEFAULT_PROFILE) == null) PROFILES.add(0, loadOrCreateDefault());
+        for (Path f : profileFiles()) {
+            if (PROFILES.stream().noneMatch(p -> f.equals(p.file))) {
+                SoundProfile p = readProfile(f);
+                if (p != null && findProfile(p.name) == null) PROFILES.add(p);
             }
         }
-
-        if (ACTIVE_PROFILE != null && !PROFILES.contains(ACTIVE_PROFILE)) {
-            ACTIVE_PROFILE = PROFILES.isEmpty() ? null : PROFILES.get(0);
-            if (ACTIVE_PROFILE != null) SETTINGS.activeProfile = ACTIVE_PROFILE.name;
+        if (ACTIVE_PROFILE == null || !PROFILES.contains(ACTIVE_PROFILE)) {
+            ACTIVE_PROFILE = getDefaultProfile();
+            SETTINGS.activeProfile = ACTIVE_PROFILE.name;
+            saveSettingsNow();
         }
     }
 
     public static void load() {
-        SC_DIR.mkdirs();
-        CONFIGS_DIR.mkdirs();
-
-        if (SETTINGS_FILE.exists()) {
-            try (java.io.Reader r = java.nio.file.Files.newBufferedReader(SETTINGS_FILE.toPath(), java.nio.charset.StandardCharsets.UTF_8)) {
+        ensureDirectories();
+        installShutdownHook();
+        if (Files.exists(SETTINGS_FILE)) {
+            try (Reader r = Files.newBufferedReader(SETTINGS_FILE, StandardCharsets.UTF_8)) {
                 AppSettings s = GSON.fromJson(r, AppSettings.class);
                 if (s != null) SETTINGS = s;
             } catch (Exception e) {
-                LOGGER.warn("Failed to load soundcontrol settings", e);
+                LOGGER.warn("Failed to load soundcontrol settings, keeping a copy and starting fresh", e);
+                quarantine(SETTINGS_FILE);
             }
         }
-
-        File defFile = new File(CONFIGS_DIR, "default.json");
-        if (!defFile.exists()) {
-            SoundProfile def = new SoundProfile();
-            def.name = "default";
-            def.file = defFile;
-            saveProfileToFile(def);
-        }
+        if (SETTINGS.activeProfile == null) SETTINGS.activeProfile = DEFAULT_PROFILE;
+        if (SETTINGS.anchors == null) SETTINGS.anchors = new ArrayList<>();
+        if (SETTINGS.anchorsByWorld == null) SETTINGS.anchorsByWorld = new LinkedHashMap<>();
 
         PROFILES.clear();
-        File[] files = CONFIGS_DIR.listFiles((d, n) -> n.endsWith(".json"));
-        if (files != null) {
-            Arrays.sort(files, Comparator.comparing(f -> f.getName().equals("default.json") ? "" : f.getName()));
-            for (File f : files) {
-                try (FileReader r = new FileReader(f)) {
-                    SoundProfile p = GSON.fromJson(r, SoundProfile.class);
-                    if (p == null) p = new SoundProfile();
-                    if (p.sounds == null) p.sounds = new LinkedHashMap<>();
-                    if (p.name == null || p.name.isEmpty()) p.name = f.getName().replace(".json", "");
-                    p.file = f;
-                    PROFILES.add(p);
-                } catch (Exception e) {
-                    LOGGER.warn("Failed to load profile: {}", f.getName(), e);
-                }
+        PROFILES.add(loadOrCreateDefault());
+        for (Path f : profileFiles()) {
+            if (f.getFileName().toString().equals("default.json")) continue;
+            SoundProfile p = readProfile(f);
+            if (p == null) continue;
+            if (findProfile(p.name) != null) {
+                LOGGER.warn("Skipping profile file {}: the name '{}' is already used", f.getFileName(), p.name);
+                continue;
             }
+            PROFILES.add(p);
         }
 
-        ACTIVE_PROFILE = null;
-        for (SoundProfile p : PROFILES) {
-            if (p.name.equals(SETTINGS.activeProfile)) { ACTIVE_PROFILE = p; break; }
-        }
-        if (ACTIVE_PROFILE == null && !PROFILES.isEmpty()) {
-            ACTIVE_PROFILE = PROFILES.get(0);
+        ACTIVE_PROFILE = findProfile(SETTINGS.activeProfile);
+        if (ACTIVE_PROFILE == null) {
+            ACTIVE_PROFILE = getDefaultProfile();
             SETTINGS.activeProfile = ACTIVE_PROFILE.name;
         }
 
-        File oldFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "soundcontrol.json");
-        if (oldFile.exists()) migrateOldConfig(oldFile);
+        Path oldFile = Platform.configDir().resolve("soundcontrol.json");
+        if (Files.exists(oldFile)) migrateOldConfig(oldFile);
     }
 
-    private static void migrateOldConfig(File oldFile) {
-        try (FileReader r = new FileReader(oldFile)) {
+    private static void ensureDirectories() {
+        try { Files.createDirectories(CONFIGS_DIR); } catch (IOException e) { LOGGER.error("Cannot create {}", CONFIGS_DIR, e); }
+    }
+
+    private static List<Path> profileFiles() {
+        List<Path> files = new ArrayList<>();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(CONFIGS_DIR, "*.json")) {
+            for (Path p : stream) if (Files.isRegularFile(p)) files.add(p);
+        } catch (IOException e) {
+            LOGGER.warn("Cannot list profiles in {}", CONFIGS_DIR, e);
+        }
+        files.sort(Comparator.comparing(p -> p.getFileName().toString().toLowerCase(Locale.ROOT)));
+        return files;
+    }
+
+    private static SoundProfile loadOrCreateDefault() {
+        Path defFile = CONFIGS_DIR.resolve("default.json");
+        SoundProfile def = Files.exists(defFile) ? readProfile(defFile) : null;
+        if (def == null) {
+            def = new SoundProfile();
+            def.file = defFile;
+            saveProfileNow(def);
+        }
+        def.name = DEFAULT_PROFILE;
+        def.file = defFile;
+        return def;
+    }
+
+    private static SoundProfile readProfile(Path f) {
+        try (Reader r = Files.newBufferedReader(f, StandardCharsets.UTF_8)) {
+            SoundProfile p = GSON.fromJson(r, SoundProfile.class);
+            if (p == null) p = new SoundProfile();
+            if (p.sounds == null) p.sounds = new LinkedHashMap<>();
+            p.sounds.entrySet().removeIf(e -> e.getKey() == null || e.getValue() == null);
+            String fileName = f.getFileName().toString();
+            if (p.name == null || p.name.isBlank()) p.name = fileName.substring(0, fileName.length() - 5);
+            p.name = p.name.trim();
+            if (DEFAULT_PROFILE.equalsIgnoreCase(p.name) && !fileName.equals("default.json")) p.name = p.name + " (2)";
+            p.file = f;
+            return p;
+        } catch (Exception e) {
+            LOGGER.warn("Failed to load profile {}, it was renamed so it is not overwritten", f.getFileName(), e);
+            quarantine(f);
+            return null;
+        }
+    }
+
+    private static void quarantine(Path file) {
+        try {
+            Files.move(file, file.resolveSibling(file.getFileName() + ".broken-" + System.currentTimeMillis()),
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ignored) {}
+    }
+
+    private static void migrateOldConfig(Path oldFile) {
+        try (Reader r = Files.newBufferedReader(oldFile, StandardCharsets.UTF_8)) {
             JsonObject obj = GSON.fromJson(r, JsonObject.class);
-            if (obj != null && obj.has("sounds")) {
+            JsonObject sounds = null;
+            if (obj != null && obj.has("sounds") && obj.get("sounds").isJsonObject()) {
+                sounds = obj.getAsJsonObject("sounds");
+            } else if (obj != null && obj.entrySet().stream().allMatch(e -> e.getValue().isJsonObject())) {
+                sounds = obj;
+            }
+            if (obj != null && obj.has("radarX") && obj.has("radarY")) {
+                SETTINGS.radarX = obj.get("radarX").getAsInt();
+                SETTINGS.radarY = obj.get("radarY").getAsInt();
+                saveSettingsNow();
+            }
+            if (sounds != null) {
                 SoundProfile def = getDefaultProfile();
-                JsonObject sounds = obj.getAsJsonObject("sounds");
                 for (Map.Entry<String, JsonElement> e : sounds.entrySet()) {
                     SoundSettings s = GSON.fromJson(e.getValue(), SoundSettings.class);
-                    if (s != null) def.sounds.put(e.getKey(), s);
+                    if (s != null) def.sounds.putIfAbsent(e.getKey(), s);
                 }
-                saveProfile(def);
-                LOGGER.info("Migrated soundcontrol.json to default profile");
+                saveProfileNow(def);
+                LOGGER.info("Migrated soundcontrol.json to the default profile");
             }
+            r.close();
+            Files.move(oldFile, oldFile.resolveSibling("soundcontrol.json.migrated"), StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             LOGGER.warn("Could not migrate old config", e);
         }
-        oldFile.renameTo(new File(oldFile.getParent(), "soundcontrol.json.migrated"));
     }
 
     private static SoundProfile getDefaultProfile() {
-        for (SoundProfile p : PROFILES) { if (p.name.equals("default")) return p; }
-        return createProfile("default");
+        SoundProfile def = findProfile(DEFAULT_PROFILE);
+        if (def == null) {
+            def = loadOrCreateDefault();
+            PROFILES.add(0, def);
+        }
+        return def;
     }
 
     public static void save() {
-        if (EDIT_TARGET != null) {
-
-            for (SoundProfile p : PROFILES) {
-                if (p.sounds == EDIT_TARGET) { saveProfileToFile(p); return; }
-            }
-        }
-        if (ACTIVE_PROFILE != null) saveProfileToFile(ACTIVE_PROFILE);
+        if (ACTIVE_PROFILE != null) saveProfile(ACTIVE_PROFILE);
     }
 
     public static void saveProfile(SoundProfile profile) {
-        if (profile.file == null)
-            profile.file = new File(CONFIGS_DIR, sanitize(profile.name) + ".json");
-        saveProfileToFile(profile);
-    }
-
-    private static void saveProfileToFile(SoundProfile profile) {
-        if (profile.file == null)
-            profile.file = new File(CONFIGS_DIR, sanitize(profile.name) + ".json");
-        try (FileWriter w = new FileWriter(profile.file)) {
-            GSON.toJson(profile, w);
-        } catch (IOException e) {
-            LOGGER.error("Failed to save profile: {}", profile.name, e);
-        }
+        DIRTY_PROFILES.add(profile);
+        lastChange = System.currentTimeMillis();
     }
 
     public static void saveSettings() {
-        SC_DIR.mkdirs();
-        java.nio.file.Path destination = SETTINGS_FILE.toPath();
-        java.nio.file.Path temporary = null;
+        settingsDirty = true;
+        lastChange = System.currentTimeMillis();
+    }
+
+    public static void tick() {
+        if ((settingsDirty || !DIRTY_PROFILES.isEmpty()) && System.currentTimeMillis() - lastChange >= SAVE_DELAY_MS) flush();
+    }
+
+    public static synchronized void flush() {
+        for (SoundProfile p : new ArrayList<>(DIRTY_PROFILES)) {
+            if (PROFILES.contains(p)) saveProfileNow(p);
+        }
+        DIRTY_PROFILES.clear();
+        if (settingsDirty) saveSettingsNow();
+    }
+
+    private static void installShutdownHook() {
+        if (shutdownHookInstalled) return;
+        shutdownHookInstalled = true;
+        Runtime.getRuntime().addShutdownHook(new Thread(SoundConfig::flush, "soundcontrol-save"));
+    }
+
+    private static boolean saveProfileNow(SoundProfile profile) {
+        if (profile.file == null) profile.file = uniqueFile(profile.name, profile);
+        DIRTY_PROFILES.remove(profile);
+        return writeAtomically(profile.file, profile);
+    }
+
+    private static void saveSettingsNow() {
+        settingsDirty = false;
+        writeAtomically(SETTINGS_FILE, SETTINGS);
+    }
+
+    private static boolean writeAtomically(Path destination, Object value) {
+        Path temporary = null;
         try {
-            temporary = java.nio.file.Files.createTempFile(SC_DIR.toPath(), "settings-", ".tmp");
-            try (java.io.Writer writer = java.nio.file.Files.newBufferedWriter(temporary, java.nio.charset.StandardCharsets.UTF_8)) {
-                GSON.toJson(SETTINGS, writer);
+            Files.createDirectories(destination.getParent());
+            temporary = Files.createTempFile(destination.getParent(), "soundcontrol-", ".tmp");
+            try (Writer writer = Files.newBufferedWriter(temporary, StandardCharsets.UTF_8)) {
+                GSON.toJson(value, writer);
             }
             try {
-                java.nio.file.Files.move(temporary, destination, java.nio.file.StandardCopyOption.REPLACE_EXISTING,
-                        java.nio.file.StandardCopyOption.ATOMIC_MOVE);
-            } catch (java.nio.file.AtomicMoveNotSupportedException unsupported) {
-                java.nio.file.Files.move(temporary, destination, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                Files.move(temporary, destination, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            } catch (AtomicMoveNotSupportedException unsupported) {
+                Files.move(temporary, destination, StandardCopyOption.REPLACE_EXISTING);
             }
+            return true;
         } catch (IOException exception) {
-            LOGGER.error("Failed to save soundcontrol settings", exception);
+            LOGGER.error("Failed to save {}", destination, exception);
+            return false;
         } finally {
             if (temporary != null) {
-                try { java.nio.file.Files.deleteIfExists(temporary); } catch (IOException ignored) {}
+                try { Files.deleteIfExists(temporary); } catch (IOException ignored) {}
             }
         }
     }
 
     public static void resetSettings() {
-        if (ACTIVE_PROFILE != null) {
-            ACTIVE_PROFILE.sounds.entrySet().removeIf(e -> {
-                SoundSettings s = e.getValue();
-                s.volume = 1.0f;
-                s.muted = false;
-                s.overrideParent = false;
-                return !s.favorite;
-            });
-            saveProfileToFile(ACTIVE_PROFILE);
-        }
+        if (ACTIVE_PROFILE == null) return;
+        ACTIVE_PROFILE.sounds.entrySet().removeIf(e -> {
+            SoundSettings s = e.getValue();
+            s.volume = 1.0f;
+            s.muted = false;
+            s.overrideParent = false;
+            return !s.favorite;
+        });
+        saveProfileNow(ACTIVE_PROFILE);
     }
 
-    public static String sanitize(String name) {
+    private static final Set<String> WINDOWS_RESERVED = Set.of("con", "prn", "aux", "nul",
+            "com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9",
+            "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9");
 
-        return name.replaceAll("[\\\\/:*?\"<>|]", "_").trim();
+    public static String sanitize(String name) {
+        String clean = name.replaceAll("[\\\\/:*?\"<>|\\p{Cntrl}]", "_").trim();
+        clean = clean.replaceAll("[. ]+$", "");
+        if (clean.isEmpty()) clean = "profile";
+        if (WINDOWS_RESERVED.contains(clean.toLowerCase(Locale.ROOT))) clean = "_" + clean;
+        return clean.length() > 64 ? clean.substring(0, 64) : clean;
+    }
+
+    private static Path uniqueFile(String name, SoundProfile owner) {
+        String base = sanitize(name);
+        for (int i = 1; ; i++) {
+            String candidate = i == 1 ? base : base + "-" + i;
+            if (candidate.equalsIgnoreCase(DEFAULT_PROFILE) && !(owner != null && DEFAULT_PROFILE.equals(owner.name))) continue;
+            Path file = CONFIGS_DIR.resolve(candidate + ".json");
+            if (owner != null && file.equals(owner.file)) return file;
+            boolean usedByProfile = PROFILES.stream().anyMatch(p -> p != owner && p.file != null
+                    && p.file.getFileName().toString().equalsIgnoreCase(file.getFileName().toString()));
+            boolean usedOnDisk = profileFiles().stream().anyMatch(f -> f.getFileName().toString()
+                    .equalsIgnoreCase(file.getFileName().toString()) && (owner == null || !f.equals(owner.file)));
+            if (!usedByProfile && !usedOnDisk) return file;
+        }
     }
 
     private static final Set<String> HOSTILE_MOBS = Set.of(
@@ -318,57 +473,74 @@ public class SoundConfig {
             "silverfish","endermite","guardian","elder_guardian","shulker","vindicator",
             "evoker","pillager","ravager","vex","illusioner","warden","wither",
             "ender_dragon","stray","husk","drowned","magma_cube","blaze","wither_skeleton",
-            "bogged","breeze"
+            "bogged","breeze","cave_spider","creaking","parched"
     );
 
     public static String getSoundGroup(String id) {
-        if (id.startsWith("minecraft:entity.")) {
-            String[] p = id.split("\\."); if (p.length >= 2) return "minecraft:entity." + p[1];
-        }
-        if (id.startsWith("minecraft:block.")) {
-            String[] p = id.split("\\."); if (p.length >= 2) return "minecraft:block." + p[1];
+        if (id.startsWith("minecraft:entity.") || id.startsWith("minecraft:block.")) {
+            String[] p = id.split("\\.");
+            if (p.length >= 2) return p[0] + "." + p[1];
         }
         return id;
     }
 
-    private static float vol(SoundSettings s) { return s.muted ? 0f : s.volume; }
+    private static float vol(SoundSettings s) {
+        if (s.muted) return 0f;
+        return Float.isFinite(s.volume) ? Math.max(0f, Math.min(2f, s.volume)) : 1f;
+    }
     private static boolean isDefault(SoundSettings s) {
         return s == null || (!s.muted && Math.abs(s.volume - 1f) < 0.01f);
     }
 
-    public static float getVolumeModifier(String id) {
+    private static List<String> globalKeys(String id) {
+        List<String> keys = new ArrayList<>(2);
+        if (id.contains(".break")) keys.add("#global:break");
+        if (id.contains(".place")) keys.add("#global:place");
+        if (id.contains(".step"))  keys.add("#global:step");
+        if (id.contains(".hit"))   keys.add("#global:hit");
+        if (id.startsWith("minecraft:entity.")) {
+            String[] parts = id.split("\\.");
+            if (parts.length >= 3) {
+                String kind = HOSTILE_MOBS.contains(parts[1]) ? "hostile" : "passive";
+                if (id.contains(".hurt")) keys.add("#global:" + kind + "_hurt");
+                if (id.contains(".ambient")) keys.add("#global:" + kind + "_ambient");
+            }
+        }
+        return keys;
+    }
 
+    public static float getVolumeModifier(String id) {
+        if (id == null) return 1.0f;
         if (ACTIVE_PROFILE != null) {
             float v = lookupIn(ACTIVE_PROFILE.sounds, id);
             if (v >= 0) return v;
-        }
-
-        if (ACTIVE_PROFILE != null && !ACTIVE_PROFILE.name.equals("default")) {
-            for (SoundProfile p : PROFILES) {
-                if (p.name.equals("default")) { float v = lookupIn(p.sounds, id); if (v >= 0) return v; break; }
+            if (!DEFAULT_PROFILE.equals(ACTIVE_PROFILE.name)) {
+                SoundProfile def = findProfile(DEFAULT_PROFILE);
+                if (def != null) {
+                    v = lookupIn(def.sounds, id);
+                    if (v >= 0) return v;
+                }
             }
         }
-
         float apiVol = SoundControlAPI.resolveApiVolume(id);
-        if (apiVol >= 0) return apiVol;
-        return 1f;
+        if (apiVol < 0) apiVol = SoundControlAPI.resolveApiVolume(getSoundGroup(id));
+        if (apiVol < 0) {
+            for (String key : globalKeys(id)) {
+                apiVol = SoundControlAPI.resolveApiVolume(key);
+                if (apiVol >= 0) break;
+            }
+        }
+        return apiVol >= 0 ? apiVol : 1.0f;
     }
 
+    public static float getSoundModifier(String id, boolean relative, double x, double y, double z) {
+        if (id == null) return 1.0f;
+        float profile = getVolumeModifier(id);
+        if (profile <= 0f || relative || !Compat.inWorld()) return profile;
+        float anchor = getAnchorVolumeModifier(id, Compat.dimensionKey(), x, y, z);
+        return anchor >= 0f ? anchor : profile;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /** Only the current world's list is visible to any anchor consumer. */
     public static List<SoundAnchor> getAnchors() {
         String worldKey = AnchorWorldContext.currentKey();
         if (worldKey == null) return Collections.emptyList();
@@ -384,36 +556,27 @@ public class SoundConfig {
         return SETTINGS.anchors.size();
     }
 
-    /** Old settings did not record a world; migrate only by an explicit user action. */
     public static void importLegacyAnchors() {
         if (AnchorWorldContext.currentKey() == null || getLegacyAnchorCount() == 0) return;
         getAnchors().addAll(SETTINGS.anchors);
         SETTINGS.anchors.clear();
-        saveSettings();
+        saveSettingsNow();
     }
 
     public static float getAnchorSettingVolume(Map<String, SoundSettings> overrides, String id) {
         if (id == null || overrides == null) return -1f;
         SoundSettings setting = overrides.get(id);
         if (setting == null) setting = overrides.get(getSoundGroup(id));
-        if (setting == null && id.contains(".break")) setting = overrides.get("#global:break");
-        if (setting == null && id.contains(".place")) setting = overrides.get("#global:place");
-        if (setting == null && id.contains(".step")) setting = overrides.get("#global:step");
-        if (setting == null && id.contains(".hit")) setting = overrides.get("#global:hit");
-        if (setting == null && id.startsWith("minecraft:entity.")) {
-            String[] parts = id.split("\\.");
-            if (parts.length >= 3) {
-                String kind = HOSTILE_MOBS.contains(parts[1]) ? "hostile" : "passive";
-                if (id.contains(".hurt")) setting = overrides.get("#global:" + kind + "_hurt");
-                if (id.contains(".ambient")) setting = overrides.get("#global:" + kind + "_ambient");
+        if (setting == null) {
+            for (String key : globalKeys(id)) {
+                setting = overrides.get(key);
+                if (setting != null) break;
             }
         }
         if (setting == null) return -1f;
-        if (setting.muted) return 0f;
-        return Float.isFinite(setting.volume) ? Math.max(0f, Math.min(2f, setting.volume)) : 1f;
+        return vol(setting);
     }
 
-    /** Overlaps use the quietest matching override; order never changes which zone mutes. */
     public static float getAnchorVolumeModifier(String id, String dimension, double x, double y, double z) {
         float result = -1f;
         for (SoundAnchor anchor : getAnchors()) {
@@ -428,28 +591,18 @@ public class SoundConfig {
     private static float lookupIn(Map<String, SoundSettings> m, String id) {
         SoundSettings s = m.get(id);
         if (s != null && s.overrideParent) return vol(s);
+        int namespaceEnd = id.indexOf(':');
+        if (namespaceEnd > 0) {
+            SoundSettings modSetting = m.get("#mod:" + id.substring(0, namespaceEnd));
+            if (!isDefault(modSetting)) return vol(modSetting);
+        }
         if (!isDefault(s)) return vol(s);
         s = m.get(getSoundGroup(id));
         if (!isDefault(s)) return vol(s);
-        if (id.contains(".break") && m.containsKey("#global:break"))   return vol(m.get("#global:break"));
-        if (id.contains(".place") && m.containsKey("#global:place"))   return vol(m.get("#global:place"));
-        if (id.contains(".step")  && m.containsKey("#global:step"))    return vol(m.get("#global:step"));
-        if (id.contains(".hit")   && m.containsKey("#global:hit"))     return vol(m.get("#global:hit"));
-        if (id.startsWith("minecraft:entity.")) {
-            String[] parts = id.split("\\.");
-            if (parts.length >= 2) {
-                boolean hostile = HOSTILE_MOBS.contains(parts[1]);
-                if (id.contains(".hurt")) {
-                    if (hostile  && m.containsKey("#global:hostile_hurt"))  return vol(m.get("#global:hostile_hurt"));
-                    if (!hostile && m.containsKey("#global:passive_hurt"))  return vol(m.get("#global:passive_hurt"));
-                }
-                if (id.contains(".ambient")) {
-                    if (hostile  && m.containsKey("#global:hostile_ambient")) return vol(m.get("#global:hostile_ambient"));
-                    if (!hostile && m.containsKey("#global:passive_ambient")) return vol(m.get("#global:passive_ambient"));
-                }
-            }
+        for (String key : globalKeys(id)) {
+            SoundSettings global = m.get(key);
+            if (global != null) return vol(global);
         }
         return -1f;
     }
 }
-

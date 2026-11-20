@@ -4,7 +4,6 @@ import soundcontrol.SoundConfig;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Same JSON schema and geometry on every loader/version. */
 public class SoundAnchor {
     private String name = "Anchor";
     private String dimension;
@@ -55,7 +54,6 @@ public class SoundAnchor {
     public void setBoxH(int value) { boxH = size(value); }
     public void setBoxD(int value) { boxD = size(value); }
 
-    /** Accept old 26.x ResourceKey strings as well as portable dimension IDs. */
     public static String normalizeDimension(String value) {
         if (value == null) return "";
         if (value.startsWith("ResourceKey[") && value.endsWith("]")) {

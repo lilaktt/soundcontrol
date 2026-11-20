@@ -3,6 +3,7 @@ loaderVersion="[4,)"
 license="Apache-2.0"
 
 [[mods]]
+displayTest="IGNORE_ALL_VERSION"
 modId="soundcontrol"
 version="${version}"
 logoFile="assets/soundcontrol/icon.png"
@@ -21,12 +22,12 @@ config="soundcontrol.mixins.json"
     type="required"
     versionRange="[21.0,)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 
 [[dependencies.soundcontrol]]
     modId="minecraft"
     type="required"
     versionRange="[1.21,1.21.2)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 

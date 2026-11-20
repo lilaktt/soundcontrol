@@ -1,8 +1,9 @@
 modLoader="javafml"
 loaderVersion="[11,)"
-license="MIT"
+license="Apache-2.0"
 
 [[mods]]
+displayTest="IGNORE_ALL_VERSION"
 modId="soundcontrol"
 version="${version}"
 logoFile="assets/soundcontrol/icon.png"
@@ -19,14 +20,14 @@ config="soundcontrol.mixins.json"
 [[dependencies.soundcontrol]]
     modId="neoforge"
     type="required"
-    versionRange="[26.1,26.2)"
+    versionRange="[26.1,)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 
 [[dependencies.soundcontrol]]
     modId="minecraft"
     type="required"
     versionRange="[26.1,26.2)"
     ordering="NONE"
-    side="BOTH"
+    side="CLIENT"
 

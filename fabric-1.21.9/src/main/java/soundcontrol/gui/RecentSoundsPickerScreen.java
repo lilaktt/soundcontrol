@@ -1,50 +1,48 @@
 package soundcontrol.gui;
 
+import soundcontrol.Compat;
 import soundcontrol.SoundConfig;
-import soundcontrol.SoundControl;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.SliderWidget;
-import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.input.KeyInput;
-import org.lwjgl.glfw.GLFW;
+import net.minecraft.text.Text;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 
 public class RecentSoundsPickerScreen extends Screen {
+    private static final LinkedList<RecentSound> RECENT = new LinkedList<>();
+    private static final int MAX_RECENT = 100;
+
     private final Screen parent;
     private RecentSoundList soundList;
-
-    private static final LinkedList<RecentSound> recentSounds = new LinkedList<>();
-    private static final int MAX_RECENT = 100;
 
     public static class RecentSound {
         public final String soundId;
         public final long timestamp;
         public final double x, y, z;
-        public RecentSound(String soundId, long timestamp, double x, double y, double z) {
+        RecentSound(String soundId, long timestamp, double x, double y, double z) {
             this.soundId = soundId; this.timestamp = timestamp; this.x = x; this.y = y; this.z = z;
         }
     }
 
     public static void recordRecentSound(String soundId, double x, double y, double z) {
-        synchronized (recentSounds) {
-            recentSounds.removeIf(s -> s.soundId.equals(soundId));
-            recentSounds.addFirst(new RecentSound(soundId, System.currentTimeMillis(), x, y, z));
-            while (recentSounds.size() > MAX_RECENT) recentSounds.removeLast();
+        synchronized (RECENT) {
+            RECENT.removeIf(s -> s.soundId.equals(soundId));
+            RECENT.addFirst(new RecentSound(soundId, System.currentTimeMillis(), x, y, z));
+            while (RECENT.size() > MAX_RECENT) RECENT.removeLast();
         }
     }
 
     public static List<RecentSound> getRecentSounds() {
-        synchronized (recentSounds) { return new ArrayList<>(recentSounds); }
+        synchronized (RECENT) { return new ArrayList<>(RECENT); }
     }
 
     public RecentSoundsPickerScreen(Screen parent) {
@@ -54,204 +52,224 @@ public class RecentSoundsPickerScreen extends Screen {
 
     @Override
     protected void init() {
-        this.soundList = new RecentSoundList(this.client, this.width, this.height - 84, 28, 26);
-        this.addSelectableChild(this.soundList);
+        this.soundList = new RecentSoundList(this.client, this.width, this.height - 84, 32, 26);
+        this.addDrawableChild(this.soundList);
 
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.recent.clear"), button -> {
-            synchronized (recentSounds) { recentSounds.clear(); }
+            synchronized (RECENT) { RECENT.clear(); }
             refreshList();
         }).dimensions(this.width / 2 - 160, this.height - 28, 100, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.BACK, button -> this.close())
-                .dimensions(this.width / 2 + 60, this.height - 28, 100, 20).build());
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.button.back"), button -> this.close())
+            .dimensions(this.width / 2 + 60, this.height - 28, 100, 20).build());
 
         refreshList();
     }
 
-    private void refreshList() {
-        this.soundList.clearEntries();
-        for (RecentSound s : getRecentSounds()) {
-            this.soundList.addEntry(new RecentSoundEntry(s, this));
-        }
+    void refreshList() {
+        this.soundList.clear();
+        for (RecentSound s : getRecentSounds()) this.soundList.add(new RecentSoundEntry(s, this));
+    }
+
+    @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        context.fill(0, 0, this.width, this.height, 0xC0101010);
+        context.fill(0, 0, this.width, this.height, SoundControlScreen.BACKDROP);
+        context.fill(0, 32, this.width, this.height - 52, SoundControlScreen.LIST_PANEL);
         super.render(context, mouseX, mouseY, delta);
-        this.soundList.render(context, mouseX, mouseY, delta);
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFFFF);
-        if (getRecentSounds().isEmpty()) {
-            context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("text.soundcontrol.recent.empty"),
-                    this.width / 2, this.height / 2, 0xFF888888);
+        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("text.soundcontrol.recent.subtitle"), this.width / 2, 19, 0xAAFFFF88);
+        if (this.soundList.children().isEmpty()) {
+            context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("text.soundcontrol.recent.empty"), this.width / 2, this.height / 2, 0xFF888888);
         }
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("text.soundcontrol.recent.subtitle"), this.width / 2, 18, 0xAAFFFF88);
     }
 
     @Override
     public boolean keyPressed(KeyInput input) {
-        if (input.key() == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) { this.close(); return true; }
+        int key = input.key();
+        if (key == 256) { this.close(); return true; }
         return super.keyPressed(input);
     }
 
-    @Override public void close() { this.client.setScreen(this.parent); }
+    @Override public void close() { SoundConfig.flush(); Compat.setScreen(this.parent); }
     @Override public boolean shouldPause() { return false; }
 
-    
-
     private static class RecentSoundList extends ElementListWidget<RecentSoundEntry> {
-        public RecentSoundList(MinecraftClient client, int width, int height, int y, int itemHeight) {
+        RecentSoundList(MinecraftClient client, int width, int height, int y, int itemHeight) {
             super(client, width, height, y, itemHeight);
         }
-        @Override public int getRowWidth() { return 380; }
-        @Override protected int getScrollbarX() { return this.getX() + this.width / 2 + 195; }
-        public void clearEntries() { super.clearEntries(); }
-        public int addEntry(RecentSoundEntry entry) { return super.addEntry(entry); }
+        @Override public int getRowWidth() { return Math.max(300, Math.min(380, this.width - 16)); }
+        @Override protected int getScrollbarX() { return this.getRowLeft() + this.getRowWidth() + 4; }
+        @Override protected void drawMenuListBackground(DrawContext context) {}
+        @Override protected void drawHeaderAndFooterSeparators(DrawContext context) {}
+        void clear() { this.clearEntries(); }
+        void add(RecentSoundEntry entry) { this.addEntry(entry); }
     }
-
-    
 
     private static class RecentSoundEntry extends ElementListWidget.Entry<RecentSoundEntry> {
         private final RecentSound sound;
         private final RecentSoundsPickerScreen parentScreen;
+        private final ButtonWidget nameButton;
         private final ButtonWidget playButton;
         private final ButtonWidget muteButton;
-        private final SliderWidget volumeSlider;
+        private final SoundSlider volumeSlider;
         private final ButtonWidget favoriteButton;
         private final ButtonWidget resetButton;
-        private final ButtonWidget nameTooltipButton;
-        private PositionedSoundInstance playingInstance;
+        private Object playingInstance;
         private long copiedAt = 0;
 
-        public RecentSoundEntry(RecentSound sound, RecentSoundsPickerScreen parentScreen) {
+        RecentSoundEntry(RecentSound sound, RecentSoundsPickerScreen parentScreen) {
             this.sound = sound;
             this.parentScreen = parentScreen;
+            String sid = sound.soundId;
 
-            boolean initialMuted = false;
-            float initialVolume = 1.0f;
-            boolean initialFavorite = false;
-            if (SoundConfig.containsSound(sound.soundId)) {
-                SoundConfig.SoundSettings ss = SoundConfig.getSound(sound.soundId);
-                initialMuted = ss.muted;
-                initialVolume = ss.volume;
-                initialFavorite = ss.favorite;
-            }
+            SoundConfig.SoundSettings initial = SoundConfig.getSound(sid);
+            boolean initialMuted = initial != null && initial.muted;
+            float initialVolume = initial != null ? initial.volume : 1.0f;
+            boolean initialFavorite = initial != null && initial.favorite;
 
-            Identifier parsedId = Identifier.tryParse(sound.soundId);
+            this.nameButton = ButtonWidget.builder(Text.literal(""), b -> {
+                Compat.copy(sid);
+                this.copiedAt = System.currentTimeMillis();
+            }).dimensions(0, 0, 170, 22)
+              .tooltip(Tooltip.of(Text.literal(sid)))
+              .build();
+            this.nameButton.setAlpha(0.0f);
 
-            this.playButton = ButtonWidget.builder(Text.literal("\u25B6"), button -> {
-                MinecraftClient client = MinecraftClient.getInstance();
-                if (this.playingInstance != null && client.getSoundManager().isPlaying(this.playingInstance)) {
-                    client.getSoundManager().stop(this.playingInstance);
+            this.playButton = ButtonWidget.builder(Text.literal("▶"), button -> {
+                if (this.playingInstance != null && Compat.isPlaying(this.playingInstance)) {
+                    Compat.stop(this.playingInstance);
                     this.playingInstance = null;
-                } else if (parsedId != null) {
-                    this.playingInstance = PositionedSoundInstance.master(SoundEvent.of(parsedId), 1.0F, 1.0F);
-                    client.getSoundManager().play(this.playingInstance);
+                } else {
+                    this.playingInstance = Compat.playPreview(sid);
                 }
-            }).dimensions(0, 0, 20, 20).tooltip(Tooltip.of(Text.translatable("text.soundcontrol.tooltip.play"))).build();
+            }).dimensions(0, 0, 20, 20).build();
 
-            final String sid = sound.soundId;
-            this.muteButton = ButtonWidget.builder(
-                Text.translatable(initialMuted ? "text.soundcontrol.button.unmute" : "text.soundcontrol.button.mute"),
-                button -> {
+            this.muteButton = ButtonWidget.builder(muteLabel(initialMuted), button -> {
+                SoundConfig.SoundSettings s = SoundConfig.computeSound(sid, k -> new SoundConfig.SoundSettings());
+                s.muted = !s.muted;
+                button.setMessage(muteLabel(s.muted));
+                SoundConfig.removeIfDefault(sid);
+                SoundConfig.save();
+            }).dimensions(0, 0, 38, 20).build();
+
+            this.volumeSlider = new SoundSlider(0, 0, 80, 20, volumeLabel(initialVolume), clampSlider(initialVolume / 2.0)) {
+                @Override
+                protected void updateMessage() {
+                    this.setMessage(volumeLabel(this.value * 2.0));
+                }
+
+                @Override
+                protected void applyValue() {
                     SoundConfig.SoundSettings s = SoundConfig.computeSound(sid, k -> new SoundConfig.SoundSettings());
-                    s.muted = !s.muted;
-                    button.setMessage(Text.translatable(s.muted ? "text.soundcontrol.button.unmute" : "text.soundcontrol.button.mute"));
-                    if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(sid);
+                    s.volume = (float) (this.value * 2.0);
+                    SoundConfig.removeIfDefault(sid);
                     SoundConfig.save();
                 }
-            ).dimensions(0, 0, 38, 20).tooltip(Tooltip.of(Text.translatable("text.soundcontrol.tooltip.mute"))).build();
+            };
 
-            class VSlider extends SliderWidget {
-                public VSlider(int x, int y, int w, int h, Text msg, double val) { super(x, y, w, h, msg, val); }
-                @Override protected void updateMessage() { this.setMessage(Text.translatable("text.soundcontrol.slider.volume", (int)(this.value * 200))); }
-                @Override protected void applyValue() {
-                    SoundConfig.SoundSettings s = SoundConfig.computeSound(sid, k -> new SoundConfig.SoundSettings());
-                    s.volume = (float)(this.value * 2.0f);
-                    if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(sid);
-                    SoundConfig.save();
-                }
-                public void resetValue() { this.value = 0.5; this.updateMessage(); }
-            }
-            this.volumeSlider = new VSlider(0, 0, 80, 20, Text.translatable("text.soundcontrol.slider.volume", (int)(initialVolume * 100)), initialVolume / 2.0f);
-
-            this.favoriteButton = ButtonWidget.builder(Text.literal(initialFavorite ? "\u2605" : "\u2606"), button -> {
+            this.favoriteButton = ButtonWidget.builder(Text.literal(initialFavorite ? "★" : "☆"), button -> {
                 SoundConfig.SoundSettings s = SoundConfig.computeSound(sid, k -> new SoundConfig.SoundSettings());
                 s.favorite = !s.favorite;
-                button.setMessage(Text.literal(s.favorite ? "\u2605" : "\u2606"));
-                if (!s.muted && Math.abs(s.volume - 1.0f) < 0.01f && !s.favorite) SoundConfig.removeSound(sid);
+                button.setMessage(Text.literal(s.favorite ? "★" : "☆"));
+                SoundConfig.removeIfDefault(sid);
                 SoundConfig.save();
-            }).dimensions(0, 0, 20, 20).tooltip(Tooltip.of(Text.translatable("tooltip.soundcontrol.favorite"))).build();
+            }).dimensions(0, 0, 20, 20)
+              .tooltip(Tooltip.of(Text.translatable("tooltip.soundcontrol.favorite")))
+              .build();
 
-            this.resetButton = ButtonWidget.builder(Text.literal("\u27F2"), button -> {
-                SoundConfig.SoundSettings cur = SoundConfig.getSound(sid);
-                boolean wasFav = cur != null && cur.favorite;
-                if (wasFav) { cur.volume = 1.0f; cur.muted = false; } else { SoundConfig.removeSound(sid); }
+            this.resetButton = ButtonWidget.builder(Text.literal("⟲"), button -> {
+                SoundConfig.SoundSettings current = SoundConfig.getSound(sid);
+                if (current != null) {
+                    current.volume = 1.0f;
+                    current.muted = false;
+                    current.overrideParent = false;
+                }
+                SoundConfig.removeIfDefault(sid);
                 SoundConfig.save();
-                this.muteButton.setMessage(Text.translatable("text.soundcontrol.button.mute"));
-                ((VSlider) this.volumeSlider).resetValue();
-            }).dimensions(0, 0, 20, 20).tooltip(Tooltip.of(Text.translatable("text.soundcontrol.tooltip.reset"))).build();
+                this.muteButton.setMessage(muteLabel(false));
+                this.volumeSlider.resetValue(0.5);
+            }).dimensions(0, 0, 20, 20)
+              .tooltip(Tooltip.of(Text.translatable("text.soundcontrol.tooltip.reset")))
+              .build();
+        }
 
-            this.nameTooltipButton = ButtonWidget.builder(Text.empty(), b -> {
-                MinecraftClient.getInstance().keyboard.setClipboard(sound.soundId);
-                this.copiedAt = System.currentTimeMillis();
-            }).dimensions(0, 0, 170, 20).build();
-            this.nameTooltipButton.setAlpha(0.0f);
-            this.nameTooltipButton.setTooltip(Tooltip.of(Text.literal(sound.soundId)));
+        private static Text muteLabel(boolean muted) {
+            return Text.translatable(muted ? "text.soundcontrol.button.unmute" : "text.soundcontrol.button.mute");
+        }
+
+        private static Text volumeLabel(double volume) {
+            return Text.translatable("text.soundcontrol.slider.volume", (int) Math.round(volume * 100));
+        }
+
+        private static double clampSlider(double value) {
+            return Double.isFinite(value) ? Math.max(0.0, Math.min(1.0, value)) : 0.5;
+        }
+
+        private abstract static class SoundSlider extends SliderWidget {
+            SoundSlider(int x, int y, int width, int height, Text message, double value) {
+                super(x, y, width, height, message, value);
+            }
+
+            void resetValue(double value) {
+                this.value = value;
+                this.updateMessage();
+            }
         }
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            int x = this.parentScreen.soundList.getRowLeft();
-            int y = this.getY();
+            int x = this.getContentX();
+            int y = this.getContentY();
+            int rowWidth = this.parentScreen.soundList.getRowWidth();
             var font = MinecraftClient.getInstance().textRenderer;
+            int btnX = x + rowWidth - 202;
+            int nameWidth = btnX - x - 8;
 
-            String display = sound.soundId.contains(":") ? sound.soundId.substring(sound.soundId.indexOf(':') + 1) : sound.soundId;
-            int maxW = 165;
-            String truncated = font.trimToWidth(display, maxW);
-            if (truncated.length() < display.length()) {
-                display = font.trimToWidth(display, maxW - font.getWidth("...")) + "...";
-            } else {
-                display = truncated;
-            }
-            boolean showCopied = (System.currentTimeMillis() - this.copiedAt) < 2000;
-            int nameColor = showCopied ? 0xFF55FF55 : 0xFFFFFFFF;
-            context.drawTextWithShadow(font, display, x + 2, y + 3, nameColor);
-            if (showCopied) {
-                int checkX = x + 2 + font.getWidth(display) + 4;
-                context.drawTextWithShadow(font, "✔", checkX, y + 3, 0xFF55FF55);
-            }
+            String raw = sound.soundId.substring(sound.soundId.indexOf(':') + 1);
+            String display = font.trimToWidth(raw, nameWidth);
+            if (display.length() < raw.length()) display = font.trimToWidth(raw, nameWidth - font.getWidth("...")) + "...";
+            boolean showCopied = System.currentTimeMillis() - this.copiedAt < 2000;
+            context.drawText(font, display, x + 2, y + 3, showCopied ? 0xFF55FF55 : 0xFFFFFFFF, true);
+            if (showCopied) context.drawText(font, "✔", x + 2 + font.getWidth(display) + 4, y + 3, 0xFF55FF55, true);
 
-            long secsAgo = (System.currentTimeMillis() - sound.timestamp) / 1000;
-            String timeStr = secsAgo < 60 ? secsAgo + "s" : secsAgo < 3600 ? (secsAgo / 60) + "m" : (secsAgo / 3600) + "h";
-            context.drawTextWithShadow(font, timeStr, x + 2, y + 14, 0xFF888888);
-            String posStr = String.format(Locale.US, "(%.0f, %.0f, %.0f)", sound.x, sound.y, sound.z);
-            context.drawTextWithShadow(font, posStr, x + 30, y + 14, 0xFF666666);
+            long secsAgo = Math.max(0, (System.currentTimeMillis() - sound.timestamp) / 1000);
+            String time = secsAgo < 60 ? secsAgo + "s" : secsAgo < 3600 ? (secsAgo / 60) + "m" : (secsAgo / 3600) + "h";
+            context.drawText(font, time, x + 2, y + 14, 0xFF888888, true);
+            context.drawText(font, String.format(Locale.ROOT, "(%.0f, %.0f, %.0f)", sound.x, sound.y, sound.z), x + 30, y + 14, 0xFF666666, true);
 
-            boolean isPlaying = this.playingInstance != null && MinecraftClient.getInstance().getSoundManager().isPlaying(this.playingInstance);
-            this.playButton.setMessage(Text.literal(isPlaying ? "\u25A0" : "\u25B6"));
+            this.nameButton.setX(x);
+            this.nameButton.setY(y);
+            this.nameButton.setWidth(nameWidth + 4);
+            this.nameButton.render(context, mouseX, mouseY, tickDelta);
 
-            this.nameTooltipButton.setX(x + 2); this.nameTooltipButton.setY(y);
-            this.nameTooltipButton.render(context, mouseX, mouseY, tickDelta);
+            boolean playing = this.playingInstance != null && Compat.isPlaying(this.playingInstance);
+            if (!playing) this.playingInstance = null;
+            this.playButton.setMessage(Text.literal(playing ? "■" : "▶"));
 
-            this.playButton.setX(x + 178); this.playButton.setY(y + 3);
+            this.playButton.setX(btnX); this.playButton.setY(y + 3);
             this.playButton.render(context, mouseX, mouseY, tickDelta);
-            this.muteButton.setX(x + 200); this.muteButton.setY(y + 3);
+            this.muteButton.setX(btnX + 22); this.muteButton.setY(y + 3);
             this.muteButton.render(context, mouseX, mouseY, tickDelta);
-            this.volumeSlider.setX(x + 240); this.volumeSlider.setY(y + 3);
+            this.volumeSlider.setX(btnX + 62); this.volumeSlider.setY(y + 3);
             this.volumeSlider.render(context, mouseX, mouseY, tickDelta);
-            this.favoriteButton.setX(x + 322); this.favoriteButton.setY(y + 3);
+            this.favoriteButton.setX(btnX + 144); this.favoriteButton.setY(y + 3);
             this.favoriteButton.render(context, mouseX, mouseY, tickDelta);
-            this.resetButton.setX(x + 344); this.resetButton.setY(y + 3);
+            this.resetButton.setX(btnX + 166); this.resetButton.setY(y + 3);
             this.resetButton.render(context, mouseX, mouseY, tickDelta);
         }
 
-        @Override public List<? extends net.minecraft.client.gui.Element> children() {
-            return List.of(nameTooltipButton, playButton, muteButton, volumeSlider, favoriteButton, resetButton);
+        @Override
+        public List<? extends net.minecraft.client.gui.Element> children() {
+            return List.of(this.playButton, this.muteButton, this.volumeSlider, this.favoriteButton, this.resetButton, this.nameButton);
         }
-        @Override public List<? extends net.minecraft.client.gui.Selectable> selectableChildren() {
-            return List.of(playButton, muteButton, volumeSlider, favoriteButton, resetButton);
+
+        @Override
+        public List<? extends net.minecraft.client.gui.Selectable> selectableChildren() {
+            return List.of(this.playButton, this.muteButton, this.volumeSlider, this.favoriteButton, this.resetButton, this.nameButton);
         }
     }
 }
-

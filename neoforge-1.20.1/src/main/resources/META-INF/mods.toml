@@ -1,8 +1,9 @@
 modLoader="javafml"
 loaderVersion="[47,)"
-license="MPL-2.0"
+license="Apache-2.0"
 
 [[mods]]
+displayTest="IGNORE_ALL_VERSION"
 modId="soundcontrol"
 version="${version}"
 logoFile="assets/soundcontrol/icon.png"

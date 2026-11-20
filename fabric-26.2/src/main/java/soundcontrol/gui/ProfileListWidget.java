@@ -1,70 +1,67 @@
 package soundcontrol.gui;
 
+import soundcontrol.Compat;
 import soundcontrol.SoundConfig;
-import soundcontrol.SoundControl;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileListWidget extends ContainerObjectSelectionList<ProfileListWidget.ProfileEntry> {
-    final SoundControlScreen parent;
     public static final int PANEL_WIDTH = 130;
-
-    private long lastRefreshMs = 0;
     private static final long REFRESH_INTERVAL_MS = 1500;
+    final SoundControlScreen parent;
+    private long lastRefreshMs = 0;
+    private List<SoundConfig.SoundProfile> shown = new ArrayList<>();
 
     public ProfileListWidget(Minecraft mc, int height, int top, SoundControlScreen parent) {
         super(mc, PANEL_WIDTH, height, top, 26);
         this.parent = parent;
-        this.setX(0);
+    }
+
+    public void place(int x) {
+        this.setX(x);
         reload();
     }
 
     public void reload() {
         SoundConfig.refreshProfiles();
-        this.clearEntries();
-        for (SoundConfig.SoundProfile profile : SoundConfig.getProfiles()) {
-            this.addEntry(new ProfileEntry(profile, this));
-        }
-        lastRefreshMs = System.currentTimeMillis();
+        rebuildEntries();
     }
 
-    
+    private void rebuildEntries() {
+        this.clearEntries();
+        this.shown = new ArrayList<>(SoundConfig.getProfiles());
+        for (SoundConfig.SoundProfile profile : this.shown) this.addEntry(new ProfileEntry(profile, this));
+        this.lastRefreshMs = System.currentTimeMillis();
+    }
+
     public void tick() {
         long now = System.currentTimeMillis();
-        if (now - lastRefreshMs >= REFRESH_INTERVAL_MS) {
-            int before = SoundConfig.getProfiles().size();
-            SoundConfig.refreshProfiles();
-            int after = SoundConfig.getProfiles().size();
-            if (before != after) {
-                this.clearEntries();
-                for (SoundConfig.SoundProfile profile : SoundConfig.getProfiles()) {
-                    this.addEntry(new ProfileEntry(profile, this));
-                }
-                parent.refreshAfterProfileChange();
-            }
-            lastRefreshMs = now;
+        if (now - this.lastRefreshMs < REFRESH_INTERVAL_MS) return;
+        this.lastRefreshMs = now;
+        SoundConfig.SoundProfile activeBefore = SoundConfig.getActiveProfile();
+        SoundConfig.refreshProfiles();
+        if (!this.shown.equals(SoundConfig.getProfiles())) {
+            rebuildEntries();
+            if (activeBefore != SoundConfig.getActiveProfile()) this.parent.refreshAfterProfileChange();
         }
     }
 
-    @Override public int getRowWidth()    { return PANEL_WIDTH - 12; }
-    @Override protected int scrollBarX()  { return PANEL_WIDTH - 6; }
-
-    @Override
-    public boolean isMouseOver(double mouseX, double mouseY) {
-        if (mouseX < 0 || mouseX >= PANEL_WIDTH) return false;
-        return super.isMouseOver(mouseX, mouseY);
-    }
+    @Override public int getRowWidth() { return PANEL_WIDTH - 12; }
+    @Override protected int scrollBarX() { return this.getRowLeft() + this.getRowWidth() + 2; }
 
     @Override
     protected void extractListBackground(GuiGraphicsExtractor context) {
+    }
 
+    @Override
+    protected void extractListSeparators(GuiGraphicsExtractor context) {
     }
 
     public static class ProfileEntry extends ContainerObjectSelectionList.Entry<ProfileEntry> {
@@ -73,81 +70,85 @@ public class ProfileListWidget extends ContainerObjectSelectionList<ProfileListW
         private final Button activateButton;
         private final Button renameButton;
         private final Button deleteButton;
+        private long deleteArmedAt;
 
-        public ProfileEntry(SoundConfig.SoundProfile profile, ProfileListWidget widget) {
+        ProfileEntry(SoundConfig.SoundProfile profile, ProfileListWidget widget) {
             this.profile = profile;
             this.widget = widget;
+            boolean isDefault = SoundConfig.DEFAULT_PROFILE.equals(profile.name);
 
-            int activateW = profile.name.equals("default") ? PANEL_WIDTH - 12 : PANEL_WIDTH - 48;
-            this.activateButton = Button.builder(Component.literal(""), b -> {
-                if (SoundConfig.getActiveProfile() != profile) {
-                    boolean ok = SoundConfig.switchProfile(profile.name);
-                    if (ok) {
-                        widget.reload();
-                        widget.parent.refreshAfterProfileChange();
-                    }
+            this.activateButton = Button.builder(Component.literal(profile.name), b -> {
+                if (SoundConfig.getActiveProfile() != profile && SoundConfig.switchProfile(profile.name)) {
+                    widget.parent.refreshAfterProfileChange();
                 }
-            }).bounds(0, 0, activateW, 22).build();
+            }).bounds(0, 0, isDefault ? PANEL_WIDTH - 12 : PANEL_WIDTH - 52, 24).build();
 
-            if (profile.name.equals("default")) {
+            if (isDefault) {
                 this.renameButton = null;
                 this.deleteButton = null;
             } else {
-                this.renameButton = Button.builder(Component.literal("\u270E"), b ->
-                    Minecraft.getInstance().setScreenAndShow(new ProfileRenameScreen(widget.parent, profile, widget))
-                ).bounds(0, 0, 18, 18)
-                 .tooltip(Tooltip.create(Component.translatable("text.soundcontrol.profile.rename")))
-                 .build();
-
-                this.deleteButton = Button.builder(Component.literal("\u2715"), b -> {
+                this.renameButton = Button.builder(Component.literal("✎"),
+                        b -> Compat.setScreen(new ProfileNameScreen(widget.parent, profile)))
+                    .bounds(0, 0, 18, 18)
+                    .tooltip(Tooltip.create(Component.translatable("text.soundcontrol.profile.rename")))
+                    .build();
+                this.deleteButton = Button.builder(Component.literal("✕"), b -> {
+                    long now = System.currentTimeMillis();
+                    if (now - this.deleteArmedAt > 3000) {
+                        this.deleteArmedAt = now;
+                        return;
+                    }
                     SoundConfig.deleteProfile(profile);
-                    widget.reload();
                     widget.parent.refreshAfterProfileChange();
                 }).bounds(0, 0, 18, 18)
-                 .tooltip(Tooltip.create(Component.translatable("text.soundcontrol.profile.delete")))
-                 .build();
+                  .tooltip(Tooltip.create(Component.translatable("text.soundcontrol.profile.delete")))
+                  .build();
             }
         }
 
         @Override
-        public void extractContent(GuiGraphicsExtractor ctx, int mouseX, int mouseY,
-                                   boolean hovered, float delta) {
-            int y = this.getY();
-            Minecraft mc = Minecraft.getInstance();
-            boolean active = SoundConfig.getActiveProfile() == profile;
+        public void extractContent(GuiGraphicsExtractor ctx, int mouseX, int mouseY, boolean hovered, float delta) {
+            int x = this.getContentX();
+            int y = this.getContentY();
+            var font = Minecraft.getInstance().font;
+            boolean active = SoundConfig.getActiveProfile() == this.profile;
 
-            if (active)       ctx.fill(0, y, PANEL_WIDTH - 2, y + 24, 0x5555FF55);
-            else if (hovered) ctx.fill(0, y, PANEL_WIDTH - 2, y + 24, 0x22FFFFFF);
+            if (active) ctx.fill(x - 2, y, x + PANEL_WIDTH - 10, y + 24, 0x5555FF55);
+            else if (hovered) ctx.fill(x - 2, y, x + PANEL_WIDTH - 10, y + 24, 0x22FFFFFF);
+            if (active) ctx.text(font, "●", x + 2, y + 8, 0xFF55FF55);
 
-            if (active) ctx.text(mc.font, Component.literal("\u25CF"), 4, y + 8, 0xFF55FF55, true);
+            int maxNameWidth = this.renameButton != null ? PANEL_WIDTH - 66 : PANEL_WIDTH - 26;
+            ctx.text(font, font.plainSubstrByWidth(this.profile.name, maxNameWidth), x + 12, y + 8, active ? 0xFF55FF55 : 0xFFFFFFFF);
 
-            int maxNameW = (renameButton != null) ? PANEL_WIDTH - 56 : PANEL_WIDTH - 20;
-            String name = mc.font.plainSubstrByWidth(profile.name, maxNameW);
-            ctx.text(mc.font, Component.literal(name), 14, y + 8,
-                active ? 0xFF55FF55 : 0xFFFFFFFF, true);
+            this.activateButton.setX(x);
+            this.activateButton.setY(y);
 
-            activateButton.setX(0); activateButton.setY(y);
-
-            if (renameButton != null) {
-                renameButton.setX(PANEL_WIDTH - 42); renameButton.setY(y + 3);
-                renameButton.extractRenderState(ctx, mouseX, mouseY, delta);
+            if (this.renameButton != null) {
+                this.renameButton.setX(x + PANEL_WIDTH - 52);
+                this.renameButton.setY(y + 3);
+                this.renameButton.extractRenderState(ctx, mouseX, mouseY, delta);
             }
-            if (deleteButton != null) {
-                deleteButton.setX(PANEL_WIDTH - 22); deleteButton.setY(y + 3);
-                deleteButton.extractRenderState(ctx, mouseX, mouseY, delta);
+            if (this.deleteButton != null) {
+                boolean armed = System.currentTimeMillis() - this.deleteArmedAt <= 3000;
+                this.deleteButton.setMessage(Component.literal(armed ? "§c?" : "✕"));
+                this.deleteButton.setTooltip(Tooltip.create(Component.translatable(
+                        armed ? "text.soundcontrol.profile.delete_confirm" : "text.soundcontrol.profile.delete")));
+                this.deleteButton.setX(x + PANEL_WIDTH - 32);
+                this.deleteButton.setY(y + 3);
+                this.deleteButton.extractRenderState(ctx, mouseX, mouseY, delta);
             }
         }
 
         @Override
         public List<? extends net.minecraft.client.gui.components.events.GuiEventListener> children() {
-            if (renameButton != null && deleteButton != null) return List.of(renameButton, deleteButton, activateButton);
-            return List.of(activateButton);
+            if (this.renameButton != null) return List.of(this.renameButton, this.deleteButton, this.activateButton);
+            return List.of(this.activateButton);
         }
+
         @Override
-        public List<? extends NarratableEntry> narratables() {
-            if (renameButton != null && deleteButton != null) return List.of(renameButton, deleteButton, activateButton);
-            return List.of(activateButton);
+        public List<? extends net.minecraft.client.gui.narration.NarratableEntry> narratables() {
+            if (this.renameButton != null) return List.of(this.renameButton, this.deleteButton, this.activateButton);
+            return List.of(this.activateButton);
         }
     }
 }
-

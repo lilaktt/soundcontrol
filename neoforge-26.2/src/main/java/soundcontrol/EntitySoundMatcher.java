@@ -5,7 +5,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-/** Pure ID matching; never treats an entire mod namespace as one mob's sounds. */
 public final class EntitySoundMatcher {
     private EntitySoundMatcher() {}
 
@@ -21,7 +20,6 @@ public final class EntitySoundMatcher {
                 .map(id -> normalize(path(id)))
                 .filter(other -> other.length() > name.length())
                 .toList();
-        // Actual getters/observations may identify a family named differently from the entity.
         Set<String> actualFamilies = new LinkedHashSet<>();
         for (String id : actualSounds) {
             String family = family(id);
@@ -33,7 +31,7 @@ public final class EntitySoundMatcher {
             if (!namespace(id).equals(namespace)) continue;
             if (vanilla) {
                 if (id.startsWith(vanillaPrefix)) result.add(id);
-                continue; // Preserve vanilla's strict entity-name boundary.
+                continue;
             }
             String fullName = normalize(path(id));
             String soundName = normalize(stripKind(path(id)));
@@ -64,7 +62,6 @@ public final class EntitySoundMatcher {
         return path.replace('.', '_').replace('/', '_').replace('-', '_');
     }
 
-    /** Expand only explicit action families, not an arbitrary shared prefix such as "boss_". */
     private static String family(String id) {
         int colon = id.indexOf(':');
         int split = Math.max(id.lastIndexOf('.'), Math.max(id.lastIndexOf('/'), id.lastIndexOf('_')));
@@ -73,7 +70,6 @@ public final class EntitySoundMatcher {
         if (!Set.of("ambient", "idle", "hurt", "death", "step", "attack", "roar", "growl")
                 .contains(action)) return null;
         String stem = id.substring(colon + 1, split);
-        // These are generic sound kinds, not an identified mob family.
         if (Set.of("entity", "mob", "mobs", "entities", "generic", "entity.generic").contains(stem)) return null;
         return id.substring(0, split + 1);
     }

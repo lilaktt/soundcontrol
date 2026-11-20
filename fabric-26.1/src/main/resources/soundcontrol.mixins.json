@@ -1,12 +1,14 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "soundcontrol.mixin",
   "compatibilityLevel": "JAVA_25",
   "client": [
-    "SoundTrackerMixin",
-    "GuiMixin",
     "SoundEngineMixin",
-    "ChannelMixin"
+    "ChannelMixin",
+    "MobSoundAccessor",
+    "LivingEntitySoundAccessor",
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,6 +1,5 @@
 package soundcontrol.util;
 
-import soundcontrol.SoundControl;
 import soundcontrol.gui.SoundControlScreen;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

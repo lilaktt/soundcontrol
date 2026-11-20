@@ -1,222 +1,222 @@
 package soundcontrol.gui;
 
+import soundcontrol.Compat;
 import soundcontrol.SoundCategory;
 import soundcontrol.SoundConfig;
-import soundcontrol.SoundControl;
+import soundcontrol.anchor.SoundAnchorScreen;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 public class SoundControlScreen extends Screen {
+    public static final int PROFILE_W = ProfileListWidget.PANEL_WIDTH;
+    public static final int MOD_W = ModListWidget.PANEL_WIDTH;
+    static final int LIST_TOP = 72;
+    public static final int BACKDROP = 0xC0101010;
+    public static final int PANEL = 0x80202030;
+    public static final int LIST_PANEL = 0x50000000;
+
+    private final Screen parent;
     private TextFieldWidget searchBox;
     private SoundListWidget soundList;
     private ModListWidget modList;
     private ProfileListWidget profileList;
-    private ButtonWidget profileAddBtn;
-    private ButtonWidget profileFolderBtn;
     private SoundCategory currentCategory = SoundCategory.ALL;
     private int viewMode = 0;
-    public int getViewMode() { return this.viewMode; }
-    private String selectedMod = "";
     private int filterMode = 0;
-    private String initialSearch = "";
-    private int initialViewMode = -1;
+    private String selectedMod = "all";
+    private String query = "";
 
-    public static final int PROFILE_W = ProfileListWidget.PANEL_WIDTH;
-
-    public SoundControlScreen() { super(Text.translatable("text.soundcontrol.title")); }
-
-    public void setInitialSearch(String s)  { this.initialSearch = s; }
-    public void setInitialViewMode(int m)   { this.initialViewMode = m; }
-
-    private Text filterText() {
-        if (this.filterMode == 1) return Text.translatable("text.soundcontrol.filter.edited");
-        if (this.filterMode == 2) return Text.translatable("text.soundcontrol.filter.favorites");
-        return Text.translatable("text.soundcontrol.filter.all");
+    public SoundControlScreen(Screen parent) {
+        super(Text.translatable("text.soundcontrol.title"));
+        this.parent = parent;
     }
+
+    public SoundControlScreen() { this(null); }
+
+    public void setInitialSearch(String q) { this.query = q == null ? "" : q; this.viewMode = 1; }
+
+    public SoundControlScreen withViewMode(int mode) { this.viewMode = Math.floorMod(mode, 3); return this; }
+
+    private int listBottom() { return this.height - 44; }
 
     @Override
     protected void init() {
-        if (this.client.world != null) {
-            this.addDrawableChild(ButtonWidget.builder(Text.literal("\u2693"),
-                    b -> this.client.setScreen(new soundcontrol.anchor.SoundAnchorScreen(this)))
-                .dimensions(this.width - 50, this.height - 28, 20, 20)
-                .tooltip(net.minecraft.client.gui.tooltip.Tooltip.of(Text.translatable("text.soundcontrol.anchors.title"))).build());
-        }
+        int listHeight = Math.max(20, listBottom() - LIST_TOP);
 
+        this.profileList = new ProfileListWidget(this.client, listHeight, LIST_TOP, this);
+        this.profileList.place(0);
+        this.addDrawableChild(this.profileList);
 
-
-        this.profileList = new ProfileListWidget(this.client, this.height - 116, 72, this);
-        this.addSelectableChild(this.profileList);
-
-        this.profileAddBtn = this.addDrawableChild(ButtonWidget.builder(Text.literal("+"),
-                b -> this.client.setScreen(new ProfileNameScreen(this, this.profileList)))
-            .dimensions(PROFILE_W - 22, 52, 20, 18)
-            .tooltip(net.minecraft.client.gui.tooltip.Tooltip.of(
-                Text.translatable("text.soundcontrol.profile.add")))
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("+"),
+                b -> Compat.setScreen(new ProfileNameScreen(this, null)))
+            .dimensions(PROFILE_W - 22, 50, 20, 20)
+            .tooltip(Tooltip.of(Text.translatable("text.soundcontrol.profile.add")))
             .build());
 
-        this.profileFolderBtn = this.addDrawableChild(ButtonWidget.builder(
-                Text.translatable("text.soundcontrol.profile.open_folder"),
+        this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.profile.open_folder"),
                 b -> openConfigFolder())
             .dimensions(2, this.height - 42, PROFILE_W - 4, 14).build());
 
-        this.searchBox = new TextFieldWidget(this.textRenderer,
-            this.width / 2 - 100, 22, 180, 20, Text.literal(""));
-        this.searchBox.setChangedListener(q -> refilter());
-        this.addSelectableChild(this.searchBox);
+        boolean mods = this.viewMode == 2;
+        int soundListWidth = this.width - PROFILE_W - (mods ? MOD_W : 0);
+        int centre = PROFILE_W + soundListWidth / 2;
+        int searchWidth = Math.max(80, Math.min(186, soundListWidth - 112));
+        int searchX = centre - (searchWidth + 104) / 2;
+        this.searchBox = new TextFieldWidget(this.textRenderer, searchX, 22, searchWidth, 20, Text.translatable("text.soundcontrol.search"));
+        this.searchBox.setMaxLength(256);
+        this.searchBox.setText(this.query);
+        this.searchBox.setChangedListener(q -> { this.query = q; refilter(); });
+        this.addDrawableChild(this.searchBox);
 
         this.addDrawableChild(ButtonWidget.builder(filterText(), b -> {
             this.filterMode = (this.filterMode + 1) % 3;
             b.setMessage(filterText());
             refilter();
-        }).dimensions(this.width / 2 + 90, 22, 100, 20).build());
+        }).dimensions(searchX + searchWidth + 4, 22, 100, 20).build());
 
-        int bw = 60, sx = this.width / 2 - (bw * 3 + 10) / 2;
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.category.all"),
-            b -> { this.currentCategory = SoundCategory.ALL;    refilter(); }).dimensions(sx, 46, bw, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.category.mobs"),
-            b -> { this.currentCategory = SoundCategory.MOBS;   refilter(); }).dimensions(sx + bw + 5, 46, bw, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.category.blocks"),
-            b -> { this.currentCategory = SoundCategory.BLOCKS; refilter(); }).dimensions(sx + (bw + 5) * 2, 46, bw, 20).build());
+        if (!mods) {
+            int bw = 60, sx = centre - (bw * 3 + 10) / 2;
+            this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.category.all"),
+                b -> setCategory(SoundCategory.ALL)).dimensions(sx, 46, bw, 20).build());
+            this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.category.mobs"),
+                b -> setCategory(SoundCategory.MOBS)).dimensions(sx + bw + 5, 46, bw, 20).build());
+            this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.category.blocks"),
+                b -> setCategory(SoundCategory.BLOCKS)).dimensions(sx + (bw + 5) * 2, 46, bw, 20).build());
+        }
 
-        this.soundList = new SoundListWidget(this.client, this.width, this.height - 116, 72, 25);
-        this.addSelectableChild(this.soundList);
+        this.soundList = new SoundListWidget(this.client, soundListWidth, listHeight, LIST_TOP, 25);
+        this.soundList.place(PROFILE_W);
+        this.addDrawableChild(this.soundList);
 
-        this.modList = new ModListWidget(this.client, 120, this.height - 116, 72, 15, this);
-        this.modList.setLeftPos(this.width - 120);
-        this.addSelectableChild(this.modList);
+        if (mods) {
+            this.modList = new ModListWidget(this.client, listHeight, LIST_TOP, this);
+            this.modList.place(this.width - MOD_W);
+            this.addDrawableChild(this.modList);
+            if (!this.modList.hasMod(this.selectedMod)) this.selectedMod = "all";
+        } else {
+            this.modList = null;
+        }
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.mode.basic"), b -> {
+        int footerSpace = this.width - PROFILE_W - 56;
+        int fw = Math.max(40, Math.min(100, (footerSpace - 8) / 3));
+        int fx = PROFILE_W + Math.max(0, (footerSpace - (fw * 3 + 8)) / 2);
+        this.addDrawableChild(ButtonWidget.builder(modeText(), b -> {
             this.viewMode = (this.viewMode + 1) % 3;
-            String k = this.viewMode == 0 ? "basic" : (this.viewMode == 1 ? "advanced" : "mods");
-            b.setMessage(Text.translatable("text.soundcontrol.mode." + k));
-            this.soundList.loadEntries(this.viewMode);
-            refilter();
-        }).dimensions(this.width / 2 - 160, this.height - 28, 100, 20).build());
+            this.clearAndInit();
+        }).dimensions(fx, this.height - 28, fw, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, b -> close())
-            .dimensions(this.width / 2 - 50, this.height - 28, 100, 20).build());
+        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, b -> this.close())
+            .dimensions(fx + fw + 4, this.height - 28, fw, 20).build());
 
         this.addDrawableChild(ButtonWidget.builder(Text.translatable("text.soundcontrol.button.reset"), b -> {
             SoundConfig.resetSettings();
-            this.soundList.loadEntries(this.viewMode);
-            refilter();
-        }).dimensions(this.width / 2 + 60, this.height - 28, 80, 20).build());
+            reloadSounds();
+        }).dimensions(fx + (fw + 4) * 2, this.height - 28, fw, 20).build());
 
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("\uD83D\uDD52"),
-                b -> this.client.setScreen(new RecentSoundsPickerScreen(this)))
+        if (Compat.inWorld()) {
+            this.addDrawableChild(ButtonWidget.builder(Text.literal("⚓"),
+                    b -> Compat.setScreen(new SoundAnchorScreen(this)))
+                .dimensions(this.width - 50, this.height - 28, 20, 20)
+                .tooltip(Tooltip.of(Text.translatable("text.soundcontrol.anchors.title"))).build());
+        }
+
+        this.addDrawableChild(ButtonWidget.builder(Text.literal("🕒"),
+                b -> Compat.setScreen(new RecentSoundsPickerScreen(this)))
             .dimensions(this.width - 26, this.height - 28, 20, 20)
-            .tooltip(net.minecraft.client.gui.tooltip.Tooltip.of(
-                Text.translatable("text.soundcontrol.recent.title")))
-            .build());
+            .tooltip(Tooltip.of(Text.translatable("text.soundcontrol.recent.title"))).build());
 
         this.setInitialFocus(this.searchBox);
-        if (this.initialViewMode >= 0) { this.viewMode = this.initialViewMode; this.initialViewMode = -1; }
+        reloadSounds();
+    }
+
+    private Text filterText() {
+        return Text.translatable("text.soundcontrol.filter." + new String[]{"all", "edited", "favorites"}[this.filterMode]);
+    }
+
+    private Text modeText() {
+        return Text.translatable("text.soundcontrol.mode." + new String[]{"basic", "advanced", "mods"}[this.viewMode]);
+    }
+
+    private void setCategory(SoundCategory category) { this.currentCategory = category; refilter(); }
+
+    private void reloadSounds() {
         this.soundList.loadEntries(this.viewMode);
-        if (!this.initialSearch.isEmpty()) { this.searchBox.setText(this.initialSearch); this.initialSearch = ""; }
-        if (!this.modList.children().isEmpty())
-            this.selectedMod = ((ModListWidget.ModEntry) this.modList.children().get(0)).getModId();
         refilter();
     }
 
     public void refreshAfterProfileChange() {
-        this.soundList.loadEntries(this.viewMode); refilter();
+        if (this.profileList != null) this.profileList.reload();
+        if (this.modList != null) this.modList.reload();
+        if (this.soundList != null) reloadSounds();
     }
 
     public void setSelectedMod(String id) { this.selectedMod = id; refilter(); }
     public String getSelectedMod() { return this.selectedMod; }
 
-    private void refilter() {
+    void refilter() {
         if (this.soundList != null)
-            this.soundList.filter(this.searchBox.getText(), this.currentCategory,
-                this.selectedMod, this.viewMode, this.filterMode);
+            this.soundList.filter(this.query, this.currentCategory, this.selectedMod, this.viewMode, this.filterMode);
     }
 
     private static void openConfigFolder() {
         try {
-            net.minecraft.util.Util.getOperatingSystem().open(SoundConfig.CONFIGS_DIR.toURI());
-        } catch (Exception e) {
-            try {
-                String os = System.getProperty("os.name").toLowerCase();
-                if (os.contains("win")) {
-                    new ProcessBuilder("explorer.exe", SoundConfig.CONFIGS_DIR.getAbsolutePath()).start();
-                } else if (os.contains("mac")) {
-                    new ProcessBuilder("open", SoundConfig.CONFIGS_DIR.getAbsolutePath()).start();
-                } else {
-                    new ProcessBuilder("xdg-open", SoundConfig.CONFIGS_DIR.getAbsolutePath()).start();
-                }
-            } catch (Exception ignored) {}
-        }
-    }
-
-    @Override
-    public void renderBackground(DrawContext ctx) {
-        ctx.fill(0, 0, this.width, this.height, 0xC0101010);
+            String path = SoundConfig.CONFIGS_DIR.toAbsolutePath().toString();
+            String os = System.getProperty("os.name").toLowerCase(java.util.Locale.ROOT);
+            if (os.contains("win")) new ProcessBuilder("explorer.exe", path).start();
+            else if (os.contains("mac")) new ProcessBuilder("open", path).start();
+            else new ProcessBuilder("xdg-open", path).start();
+        } catch (Exception ignored) {}
     }
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        this.renderBackground(ctx);
+        ctx.fill(0, 0, this.width, this.height, BACKDROP);
+        ctx.fill(0, LIST_TOP, PROFILE_W, listBottom(), PANEL);
+        ctx.fill(PROFILE_W, LIST_TOP, this.width - (this.modList != null ? MOD_W : 0), listBottom(), LIST_PANEL);
+        if (this.modList != null) ctx.fill(this.width - MOD_W, LIST_TOP, this.width, listBottom(), PANEL);
         super.render(ctx, mouseX, mouseY, delta);
 
-        this.soundList.render(ctx, mouseX, mouseY, delta);
-
-        // The sound list spans the full screen and paints a translucent background.
-        // Draw the profile panel after it so that background cannot darken profile buttons.
-        ctx.fill(0, 72, PROFILE_W, this.height - 44, 0x80000000);
-        ctx.drawTextWithShadow(this.textRenderer,
-            Text.translatable("text.soundcontrol.profiles.title"),
-            6, 56, 0xFFCCCCDD);
-
-        this.profileList.render(ctx, mouseX, mouseY, delta);
-        this.profileList.tick();
-
-        if (this.viewMode == 2) this.modList.render(ctx, mouseX, mouseY, delta);
-        this.searchBox.render(ctx, mouseX, mouseY, delta);
-
         ctx.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFFFF);
+        ctx.drawText(this.textRenderer, Text.translatable("text.soundcontrol.profiles.title"), 6, 56, 0xFFCCCCDD, true);
+        if (this.modList != null) {
+            ctx.drawText(this.textRenderer, Text.translatable("text.soundcontrol.modlist.title"), this.width - MOD_W + 6, 56, 0xFFCCCCDD, true);
+        }
 
         long remaining = SoundConfig.getSwitchCooldownRemaining();
         if (remaining > 0) {
-            String cdText = String.format("%.1fs", remaining / 1000.0);
-            ctx.drawCenteredTextWithShadow(this.textRenderer,
-                Text.literal(cdText), PROFILE_W / 2, this.height - 50, 0xFFFF8800);
+            ctx.drawCenteredTextWithShadow(this.textRenderer, Text.literal(String.format(java.util.Locale.ROOT, "%.1fs", remaining / 1000.0)),
+                PROFILE_W / 2, this.height - 54, 0xFFFF8800);
         }
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (this.viewMode == 2 && this.modList != null && this.modList.isMouseOver(mouseX, mouseY)) {
-            if (this.modList.mouseClicked(mouseX, mouseY, button)) {
-                this.setFocused(this.modList);
-                if (button == 0) this.setDragging(true);
-                return true;
-            }
-        }
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
-        if (this.viewMode == 2 && this.modList != null && this.modList.isMouseOver(mouseX, mouseY)) {
-            if (this.modList.mouseScrolled(mouseX, mouseY, verticalAmount)) {
-                return true;
-            }
-        }
-        return super.mouseScrolled(mouseX, mouseY, verticalAmount);
+    public void tick() {
+        super.tick();
+        if (this.profileList != null) this.profileList.tick();
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc()) { close(); return true; }
-        if (this.searchBox.keyPressed(keyCode, scanCode, modifiers) || this.searchBox.isActive()) return true;
+        int key = keyCode;
+        if (key == 256 && this.shouldCloseOnEsc()) { this.close(); return true; }
+        if (this.searchBox.isFocused() && key != 258) return this.searchBox.keyPressed(keyCode, scanCode, modifiers) || true;
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override public boolean shouldPause() { return false; }
+
+    @Override
+    public void removed() {
+        SoundConfig.flush();
+    }
+
+    @Override
+    public void close() {
+        Compat.setScreen(this.parent);
+    }
 }
